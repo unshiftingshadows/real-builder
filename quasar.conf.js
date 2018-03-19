@@ -4,17 +4,19 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'axios'
+      // 'axios',
+      'firebase',
+      'vuelidate'
     ],
     css: [
       'app.styl'
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons'
+      'material-icons',
       // 'ionicons',
       // 'mdi',
-      // 'fontawesome'
+      'fontawesome'
     ],
     supportIE: false,
     vendor: {
@@ -40,7 +42,7 @@ module.exports = function (ctx) {
     devServer: {
       // https: true,
       // port: 8080,
-      open: true // opens browser window automatically
+      open: false // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
     framework: {
@@ -48,17 +50,43 @@ module.exports = function (ctx) {
         'QLayout',
         'QLayoutHeader',
         'QLayoutDrawer',
+        'QLayoutFooter',
+        'QTabs',
+        'QTab',
+        'QTabPane',
+        'QRouteTab',
+        'QScrollArea',
         'QPageContainer',
         'QPage',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
+        'QBtnDropdown',
+        'QBtnGroup',
         'QIcon',
+        'QChip',
+        'QSpinner',
         'QList',
         'QListHeader',
+        'QCollapsible',
         'QItem',
         'QItemMain',
-        'QItemSide'
+        'QItemSide',
+        'QItemTile',
+        'QCard',
+        'QCardMain',
+        'QCardTitle',
+        'QCardMedia',
+        'QCardActions',
+        'QInput',
+        'QSelect',
+        'QRating',
+        'QChipsInput',
+        'QCheckbox',
+        'QModal',
+        'QPopover',
+        'QVideo',
+        'QResizeObservable'
       ],
       directives: [
         'Ripple'
