@@ -1,0 +1,55 @@
+<template>
+  <div>
+    <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
+    <q-resize-observable @resize="onResize" />
+    <media-list :items="resources" :width="size.width/2" />
+  </div>
+</template>
+
+<script>
+import MediaList from 'components/MediaList.vue'
+
+export default {
+  components: {
+    MediaList
+  },
+  // name: 'ComponentName',
+  data () {
+    return {
+      type: this.$route.name,
+      id: this.$route.params.id,
+      resources: [],
+      size: {
+        width: 0,
+        height: 0
+      }
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      console.log(this.type)
+      // this.database.resources('topic', this.id, (res) => {
+      //   this.resources = res
+      // })
+    },
+    resType (type) {
+      var items = []
+      this.resources.forEach(item => {
+        if (item.type === type) {
+          items.push(item.media)
+        }
+      })
+      return items
+    },
+    onResize (size) {
+      this.size = size
+    }
+  }
+}
+</script>
+
+<style>
+</style>

@@ -5,6 +5,8 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       // 'axios',
+      // 'bible',
+      'database',
       'firebase',
       'vuelidate'
     ],
@@ -73,6 +75,7 @@ module.exports = function (ctx) {
         'QItemMain',
         'QItemSide',
         'QItemTile',
+        'QItemSeparator',
         'QCard',
         'QCardMain',
         'QCardTitle',
@@ -83,6 +86,7 @@ module.exports = function (ctx) {
         'QRating',
         'QChipsInput',
         'QCheckbox',
+        'QAutocomplete',
         'QModal',
         'QPopover',
         'QVideo',

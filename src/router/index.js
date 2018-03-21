@@ -30,7 +30,7 @@ Router.beforeEach((to, from, next) => {
         console.log('no user')
         next('login')
       } else {
-        console.log(user)
+        // console.log(user)
         next()
       }
     })
