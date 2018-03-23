@@ -1,7 +1,7 @@
 import axios from 'axios'
 import firebase from 'firebase'
 
-axios.defaults.baseURL = 'https://database.real-curriculum.com'
+axios.defaults.baseURL = 'https://database.unshiftingshadows.com/builder'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 function add (type, data, callback) {

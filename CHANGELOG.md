@@ -1,6 +1,10 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.4 - 2018-03-23
+### Changed
+- updated database plugin to use new database url
+
 ## 0.0.3 - 2018-03-21
 ### Added
 - database plugin
