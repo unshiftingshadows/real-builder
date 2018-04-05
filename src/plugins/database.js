@@ -84,6 +84,25 @@ function bible (ref, callback) {
       })
       .catch((err) => {
         console.log(err)
+        callback()
+      })
+  })
+}
+
+function resources (type, id, callback) {
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    axios.post('/resources', {
+      type: type,
+      id: id,
+      token: idToken
+    })
+      .then((res) => {
+        console.log(res.data)
+        callback(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+        callback()
       })
   })
 }
@@ -95,6 +114,7 @@ export default ({ app, router, Vue }) => {
     list: list,
     view: view,
     search: search,
-    bible: bible
+    bible: bible,
+    resources: resources
   }
 }

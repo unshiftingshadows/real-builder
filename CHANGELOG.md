@@ -1,6 +1,18 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.6 - 2018-04-05
+### Added
+- resources option for database plugin
+- resources for connected topics are now shown in OLessons
+- AddResearch component for adding new topics to a lesson
+
+### Changed
+- right drawer only opens for OLessons
+- left drawer closes on OLessons
+- right drawer is now the proper size
+- bricks layout for right drawer resources now functions properly
+
 ## 0.0.5 - 2018-04-05
 ### Added
 - ModuleList and modules folder

@@ -1,5 +1,5 @@
 <template>
-  <q-layout> <!-- Be sure to play with the Layout demo on docs -->
+  <q-layout view="hHr LpR lFf"> <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
     <q-layout-header reveal>
@@ -14,6 +14,14 @@
         <q-toolbar-title>
           <img src="statics/logo.png" style="max-height: 40px" />
         </q-toolbar-title>
+        <q-btn
+          flat
+          round
+          dense
+          icon="menu"
+          @click="rightDrawer = !rightDrawer"
+          v-if="showRightDrawer"
+        />
       </q-toolbar>
     </q-layout-header>
 
@@ -81,9 +89,10 @@
     <q-layout-drawer
       side="right"
       v-model="rightDrawer"
-      content-class="bg-grey-9"
+      content-class="bg-grey-9 lg-drawer"
+      :breakpoint="1200"
     >
-      <q-scroll-area>
+      <q-scroll-area class="fit q-pa-sm">
         <resources />
       </q-scroll-area>
     </q-layout-drawer>
@@ -106,8 +115,19 @@ export default {
   // name: 'LayoutName',
   data () {
     return {
-      leftDrawer: true,
-      rightDrawer: true
+      leftDrawer: this.$route.name !== 'olesson',
+      rightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      pageType: this.$route.name
+    }
+  },
+  watch: {
+    '$route.name': function (val) {
+      console.log('page change')
+      this.pageType = val
+      this.leftDrawer = val !== 'olesson'
+      this.rightDrawer = val === 'olesson' && this.$q.platform.is.desktop
+      this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
     }
   },
   methods: {
@@ -122,4 +142,15 @@ export default {
 </script>
 
 <style>
+
+.lg-drawer {
+  width: 100%
+}
+
+@media screen and (min-width: 1200px) {
+  .lg-drawer {
+    width: 35%
+  }
+}
+
 </style>

@@ -71,7 +71,8 @@ export default {
         width: this.width
       },
       selectedTypes: [
-        'book'
+        'book',
+        'quote'
       ],
       types: [
         {
@@ -118,7 +119,7 @@ export default {
       this.showItems = this.items.filter(this.checkType)
     },
     'items': function (value) {
-      this.showItems = value.filter(this.checkType)
+      this.showItems = value
       this.pack()
     },
     'width': function () {
