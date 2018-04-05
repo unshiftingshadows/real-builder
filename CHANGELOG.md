@@ -1,6 +1,25 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.5 - 2018-04-05
+### Added
+- ModuleList and modules folder
+- Point, Text, Question, Activity, Bible modules (full functioning)
+- Quote, Video, Image, Composition modules (just shells)
+- vuefire plugin
+- wordcounts and estimated time are generated for each module on save
+- collaboration is possible by locking modules being edited by others
+- drag and drop for modules is implemented
+- all module data is synced back to Firebase
+
+### Changed
+- updated README file
+- OLesson now uses ModuleList
+
+### Fixed
+- AddMedia page now uses this.$database instead of this.database
+- Login page and builder layout now use this.$firebase instead of this.firebase
+
 ## 0.0.4 - 2018-03-23
 ### Changed
 - updated database plugin to use new database url

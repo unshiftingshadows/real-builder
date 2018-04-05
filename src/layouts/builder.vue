@@ -113,7 +113,7 @@ export default {
   methods: {
     logout () {
       console.log('signing out')
-      this.firebase.auth.signOut().then(() => {
+      this.$firebase.auth.signOut().then(() => {
         this.$router.replace('login')
       })
     }

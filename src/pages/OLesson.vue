@@ -1,11 +1,11 @@
 <template>
   <q-page padding>
     <div class="row gutter-md items-center">
-      <div class="col-12">
+      <div class="col-xs-12 col-md-8">
         <h3>{{ lesson.title }}</h3>
       </div>
       <div class="col-xs-12 col-md-4">
-        <q-input v-model="seriesName" label="Series" dark>
+        <q-input v-model="seriesName" float-label="Series" dark>
           <q-autocomplete
             @search="search"
             :min-characters="3"
@@ -13,8 +13,8 @@
           />
         </q-input>
       </div>
-      <div class="col-xs-12 col-md-8">
-        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="2" dark />
+      <div class="col-12">
+        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" dark />
       </div>
       <div class="col-xs-12 col-md-6">
         <q-chips-input v-model="bibleRefs" float-label="Bible References" dark />
@@ -26,7 +26,7 @@
         <bible-passage-list :passages="bibleRefs" />
       </div>
       <div class="col-12">
-        <editor />
+        <module-list type="olesson" :id="id" />
       </div>
     </div>
   </q-page>
@@ -35,12 +35,12 @@
 <script>
 import * as Bible from '../statics/bible.js'
 import BiblePassageList from 'components/BiblePassageList.vue'
-import Editor from 'components/Editor.vue'
+import ModuleList from 'components/ModuleList.vue'
 
 export default {
   components: {
     BiblePassageList,
-    Editor
+    ModuleList
   },
   // name: 'PageName',
   data () {

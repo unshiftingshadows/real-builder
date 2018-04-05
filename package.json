@@ -18,6 +18,7 @@
     "vue-bricks": "^1.0.7",
     "vue-firestore": "^0.2.6",
     "vue2-editor": "^2.4.2",
+    "vuedraggable": "^2.16.0",
     "vuefire": "^1.4.5",
     "vuelidate": "^0.6.2"
   },

@@ -8,6 +8,7 @@ module.exports = function (ctx) {
       // 'bible',
       'database',
       'firebase',
+      'vuefire',
       'vuelidate'
     ],
     css: [
@@ -43,7 +44,7 @@ module.exports = function (ctx) {
     },
     devServer: {
       // https: true,
-      // port: 8080,
+      port: 8081,
       open: false // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
@@ -93,11 +94,13 @@ module.exports = function (ctx) {
         'QResizeObservable'
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'ActionSheet'
       ]
     },
     // animations: 'all' --- includes all animations

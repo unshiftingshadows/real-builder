@@ -12,11 +12,17 @@ const fbapp = firebase.initializeApp({
   messagingSenderId: '644396278678'
 })
 
+function dbref (type, selection, id) {
+  return fbapp.database().ref(type + 's/' + id + '/' + selection)
+}
+
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
   Vue.use(VueFire)
   Vue.use(VueFirestore)
-  Vue.prototype.firebase = {
-    auth: fbapp.auth()
+  Vue.prototype.$firebase = {
+    auth: fbapp.auth(),
+    db: fbapp.database(),
+    ref: dbref
   }
 }

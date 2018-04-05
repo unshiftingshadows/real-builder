@@ -6,7 +6,7 @@
         <q-input type="text" float-label="Title" v-model="title" dark />
       </div>
       <div class="col-12">
-        <q-btn color="primary" class="float-right" @click.native="add()">Add {{ type }}</q-btn>
+        <q-btn color="primary" class="float-right" @click.native="add">Add {{ type }}</q-btn>
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@ export default {
       var obj = {
         title: this.title
       }
-      this.database.add('rseries', obj, (res) => {
+      this.$database.add('rseries', obj, (res) => {
         this.modalFin()
         Notify.create({
           message: 'REAL Series created!',
@@ -63,7 +63,7 @@ export default {
       var obj = {
         title: this.title
       }
-      this.database.add('oseries', obj, (res) => {
+      this.$database.add('oseries', obj, (res) => {
         this.modalFin()
         Notify.create({
           message: 'Other Series created!',
@@ -74,10 +74,11 @@ export default {
       })
     },
     addOLesson () {
+      console.log('adding...')
       var obj = {
         title: this.title
       }
-      this.database.add('olesson', obj, (res) => {
+      this.$database.add('olesson', obj, (res) => {
         this.modalFin()
         Notify.create({
           message: 'Other Lesson created!',

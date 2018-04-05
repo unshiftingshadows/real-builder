@@ -2,7 +2,8 @@
   <div>
     <vue-editor
       :editorToolbar="toolbarContent"
-      v-model="content"
+      :value="text"
+      @input="$emit('update:text', $event)"
     />
   </div>
 </template>
