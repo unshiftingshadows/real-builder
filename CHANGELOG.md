@@ -1,6 +1,11 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.7 - 2018-04-06
+### Added
+- research function in database plugin
+- research can now be added to or deleted from OLessons
+
 ## 0.0.6 - 2018-04-05
 ### Added
 - resources option for database plugin

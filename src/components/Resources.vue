@@ -2,7 +2,7 @@
   <div>
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
     <q-resize-observable @resize="onResize" />
-    <add-research :currentResearch="research" :id="id" :type="type" />
+    <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
     <media-list :items="resources" :width="size.width/2" />
   </div>
 </template>
@@ -35,6 +35,7 @@ export default {
   watch: {
     '$route.name': function (val) {
       this.type = val
+      this.init()
     }
   },
   methods: {

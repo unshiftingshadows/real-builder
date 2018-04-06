@@ -107,6 +107,27 @@ function resources (type, id, callback) {
   })
 }
 
+function research (action, type, id, researchtype, researchid, callback) {
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    axios.post('/research', {
+      action: action,
+      type: type,
+      id: id,
+      researchid: researchid,
+      researchtype: researchtype,
+      token: idToken
+    })
+      .then((res) => {
+        console.log(res.data)
+        callback(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+        callback()
+      })
+  })
+}
+
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
   Vue.prototype.$database = {
@@ -115,6 +136,7 @@ export default ({ app, router, Vue }) => {
     view: view,
     search: search,
     bible: bible,
-    resources: resources
+    resources: resources,
+    research: research
   }
 }
