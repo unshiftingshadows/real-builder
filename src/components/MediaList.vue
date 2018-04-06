@@ -20,6 +20,7 @@
         >
           <template slot-scope="scope">
             <q-card color="primary" inline v-bind:class="[scope.item.type] + 'l'" class="media-cardl" @click.native="openItem(scope.item.media, scope.item.type)">
+              <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
               <q-card-media v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'image'">
                 <img :src="scope.item.media.thumbURL" />
               </q-card-media>
@@ -38,7 +39,7 @@
       </div>
     </div>
     <q-modal v-model="resourceOpen" content-classes="resource-modal">
-      <resource-preview :type="resourceType" :resource="resource" />
+      <resource-preview :type="resourceType" :resource="resource" :addModule="addModule" :close="closeResource" />
     </q-modal>
   </div>
 </template>
@@ -53,7 +54,7 @@ export default {
     ResourcePreview
   },
   // name: 'ComponentName',
-  props: ['items', 'width'],
+  props: ['items', 'width', 'addModule'],
   data () {
     return {
       showItems: [],
@@ -138,34 +139,16 @@ export default {
     openItem (item, type) {
       console.log(item)
       console.log(type)
-      switch (type) {
-        case 'book':
-          this.resource = item
-          this.resourceType = type
-          this.resourceOpen = true
-          break
-        case 'movie':
-          // this.$router.push({ name: 'movie', params: { id: id } })
-          break
-        case 'article':
-          // this.$router.push({ name: 'article', params: { id: id } })
-          break
-        case 'video':
-          // this.$router.push({ name: 'video', params: { id: id } })
-          break
-        case 'image':
-          // this.$router.push({ name: 'image', params: { id: id } })
-          break
-        case 'note':
-          // this.$router.push({ name: 'note', params: { id: id } })
-          break
-        case 'quote':
-          // this.$router.push({ name: 'note', params: { id: id } })
-          break
-        default:
-          console.error('Incorrect item type for routing')
-          break
+      if (this.types.map(function (e) { return e.value }).includes(type)) {
+        this.resource = item
+        this.resourceType = type
+        this.resourceOpen = true
+      } else {
+        console.error('Incorrect item type for routing...')
       }
+    },
+    closeResource () {
+      this.resourceOpen = false
     },
     pack () {
       this.$refs.bricks.pack()

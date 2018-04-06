@@ -1,6 +1,16 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.8 - 2018-04-06
+### Added
+- quotes, ideas, outlines, and illustrations can now be added as modules from the Resources drawer
+- Quote module filled out
+- OLesson info is updated on blur (main idea, bible refs, and tags)
+
+### Changed
+- changed edit function for modules to edit, save, and close in order to differentiate between all those functions
+- added buttons in all module "editing views" for saving and deleting the modules
+
 ## 0.0.7 - 2018-04-06
 ### Added
 - research function in database plugin

@@ -3,7 +3,7 @@
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
     <q-resize-observable @resize="onResize" />
     <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
-    <media-list :items="resources" :width="size.width/2" />
+    <media-list :items="resources" :width="size.width/2" :addModule="addModule" />
   </div>
 </template>
 
@@ -63,6 +63,25 @@ export default {
     },
     onResize (size) {
       this.size = size
+    },
+    addModule (id, type) {
+      var newRef = this.$firebase.ref(this.type, 'modules', this.id).push()
+      switch (type) {
+        case 'quote':
+          newRef.set({
+            type: 'quote',
+            mediaid: id,
+            editing: false,
+            slide: false,
+            order: 'new',
+            time: 0,
+            wordcount: 0
+          })
+          break
+        default:
+          console.error('incorrect new module type')
+          return false
+      }
     }
   }
 }

@@ -16,10 +16,14 @@
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
-        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="dark" size="1rem" @click.native="edit('')" />
+        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="dark" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.title" float-label="Title" dark />
+            <q-input v-model="data.title" float-label="Title" dark @keyup.enter="save(id)" />
+          </div>
+          <div class="col-12">
+            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
       </q-card-main>
@@ -30,7 +34,7 @@
 <script>
 export default {
   name: 'mod-point',
-  props: [ 'id', 'data', 'edit', 'remove' ],
+  props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {}
   }

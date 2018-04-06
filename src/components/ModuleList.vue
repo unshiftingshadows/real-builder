@@ -35,7 +35,7 @@
     <!-- This is where other modules will be populated -->
     <div class="col-12">
       <draggable :list="modules" @start="drag=true" @end="onDrag">
-          <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="moduleEdit" :remove="moduleDelete" class="module-card" />
+          <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="moduleEdit" :save="moduleSave" :close="moduleClose" :remove="moduleDelete" class="module-card" />
       </draggable>
     </div>
     <!-- This button should always be just below the last user-made module -->
@@ -153,6 +153,7 @@ export default {
       modules: {
         source: this.$firebase.ref(this.type, 'modules', this.id).orderByChild('order'),
         readyCallback: function (val) {
+          console.log('callback called')
           var check = this.modules.find((element) => {
             return element.editing === this.$firebase.auth.currentUser.uid
           })
@@ -174,7 +175,9 @@ export default {
   data () {
     return {
       editingId: false,
-      drag: false
+      save: false,
+      drag: false,
+      modules: []
     }
   },
   watch: {
@@ -188,6 +191,35 @@ export default {
       }
       if (newid !== '') {
         this.startEdit(newid)
+      }
+    },
+    nextModOrder: function (newOrder, oldOrder) {
+      console.log('new modules', newOrder)
+      console.log('old modules', oldOrder)
+      if (newOrder !== oldOrder && oldOrder !== 0) {
+        console.log('different!')
+        var index = this.modules.map(function (e) { return e.order }).indexOf('new')
+        if (index !== -1) {
+          console.log('new module', this.modules[index])
+          this.$database.view(this.modules[index].type, this.modules[index].mediaid, (res) => {
+            console.log('new module res', res)
+            var text = ''
+            if (this.modules[index].type === 'quote' || this.modules[index].type === 'idea' || this.modules[index].type === 'illustration') {
+              text = res.resource.text
+            } else if (this.modules[index].type === 'outline') {
+              text = res.resource.points.join(' ')
+            }
+            var wordcount = this.getWordCount(text)
+            var time = this.getEstTime(wordcount)
+            console.log('wordcount', wordcount)
+            console.log('time', time)
+            this.$firebase.ref(this.type, 'modules', this.id).child(this.modules[index]['.key']).update({
+              wordcount: wordcount,
+              time: time,
+              order: this.nextModOrder
+            })
+          })
+        }
       }
     }
   },
@@ -348,28 +380,40 @@ export default {
       console.log('close', id)
       if (id) {
         if (id === 'hook' || id === 'application' || id === 'prayer') {
-          this.structure[id].editing = false
-          if (id === 'hook' || id === 'prayer') {
-            this.structure[id].wordcount = this.getWordCount(this.structure[id].text)
-            this.structure[id].time = this.getEstTime(this.structure[id].wordcount)
+          if (this.save) {
+            this.structure[id].editing = false
+            if (id === 'hook' || id === 'prayer') {
+              this.structure[id].wordcount = this.getWordCount(this.structure[id].text)
+              this.structure[id].time = this.getEstTime(this.structure[id].wordcount)
+            } else {
+              this.strucutre.application.wordcount = this.getWordCount(this.structure.application.thought + ' ' + this.structure.application.today + ' ' + this.structure.application.thisweek)
+              this.structure.application.time = this.getEstTime(this.structure.application.wordcount)
+            }
+            // Save changes
+            this.$firebase.ref(this.type, 'structure', this.id).child(id).update(this.structure[id])
+            this.save = false
           } else {
-            this.strucutre.application.wordcount = this.getWordCount(this.structure.application.thought + ' ' + this.structure.application.today + ' ' + this.structure.application.thisweek)
-            this.structure.application.time = this.getEstTime(this.structure.application.wordcount)
+            // Close without saving changes
+            this.$firebase.ref(this.type, 'structure', this.id).child(id).update({ editing: false })
           }
-          // Save changes
-          this.$firebase.ref(this.type, 'structure', this.id).child(id).update(this.structure[id])
         } else {
-          var updatedMod = {...this.getModuleById(id)}
-          updatedMod.editing = false
-          delete updatedMod['.key']
-          if (updatedMod.type === 'text' || updatedMod.type === 'bible' || updatedMod === 'quote') {
-            // If needing to set wordcount and time
-            updatedMod.wordcount = this.getWordCount(updatedMod.text)
-            updatedMod.time = this.getEstTime(updatedMod.wordcount)
+          if (this.save) {
+            var updatedMod = {...this.getModuleById(id)}
+            updatedMod.editing = false
+            delete updatedMod['.key']
+            if (updatedMod.type === 'text' || updatedMod.type === 'bible') {
+              // If needing to set wordcount and time
+              updatedMod.wordcount = this.getWordCount(updatedMod.text)
+              updatedMod.time = this.getEstTime(updatedMod.wordcount)
+            }
+            console.log('updated', updatedMod)
+            // Save changes
+            this.$firebase.ref(this.type, 'modules', this.id).child(id).set(updatedMod)
+            this.save = false
+          } else {
+            // Close without saving changes
+            this.$firebase.ref(this.type, 'modules', this.id).child(id).update({ editing: false })
           }
-          console.log('updated', updatedMod)
-          // Save changes
-          this.$firebase.ref(this.type, 'modules', this.id).child(id).set(updatedMod)
         }
       } else {
       }
@@ -386,6 +430,14 @@ export default {
     },
     moduleEdit (id) {
       this.editingId = id
+    },
+    moduleSave (id) {
+      console.log('save')
+      this.save = true
+      this.editingId = ''
+    },
+    moduleClose () {
+      this.editingId = ''
     },
     moduleDelete (id) {
       this.$firebase.ref(this.type, 'modules', this.id).child(id).remove()
@@ -406,10 +458,7 @@ export default {
     getEstTime (wordcount) {
       return Math.ceil(wordcount / 120)
     },
-    onDrag (val) {
-      this.drag = false
-      console.log('dragged', val)
-      console.log('ran')
+    reorder () {
       var allMods = {}
       // Needs to update the 'order' prop of all modules
       var pointCount = 1
@@ -428,6 +477,12 @@ export default {
       })
       console.log(allMods)
       this.$firebase.ref(this.type, 'modules', this.id).update(allMods)
+    },
+    onDrag (val) {
+      this.drag = false
+      console.log('dragged', val)
+      console.log('ran')
+      this.reorder()
     }
   }
 }

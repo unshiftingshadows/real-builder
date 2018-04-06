@@ -14,13 +14,13 @@
         </q-input>
       </div>
       <div class="col-12">
-        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" dark />
+        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" dark @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="bibleRefs" float-label="Bible References" dark />
+        <q-chips-input v-model="bibleRefs" float-label="Bible References" dark @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="lesson.tags" float-label="Tags" dark />
+        <q-chips-input v-model="lesson.tags" float-label="Tags" dark @blur="update" />
       </div>
       <div class="col-12">
         <bible-passage-list :passages="bibleRefs" />
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { Notify } from 'quasar'
 import * as Bible from '../statics/bible.js'
 import BiblePassageList from 'components/BiblePassageList.vue'
 import ModuleList from 'components/ModuleList.vue'
@@ -93,9 +94,21 @@ export default {
     },
     update () {
       // Call update function from database
-      // this.database.update('olesson', this.id, data, (res) => {
-      // })
       console.log('update!')
+      var obj = {
+        mainIdea: this.lesson.mainIdea,
+        bibleRefs: this.bibleRefParse,
+        tags: this.lesson.tags,
+        seriesID: this.lesson.seriesID
+      }
+      this.$database.update('olesson', this.id, obj, (res) => {
+        console.log(res)
+        Notify.create({
+          type: 'positive',
+          message: 'Lesson Updated!',
+          position: 'bottom-left'
+        })
+      })
     }
   }
 }

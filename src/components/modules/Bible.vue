@@ -20,10 +20,14 @@
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
-        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="updateRef" />
+        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.bibleRef" float-label="Bible Ref" dark />
+            <q-input v-model="data.bibleRef" float-label="Bible Ref" dark @keyup.enter="preSave" />
+          </div>
+          <div class="col-12">
+            <q-btn color="primary" @click.native="preSave">Save</q-btn>
+            <q-btn color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
       </q-card-main>
@@ -34,19 +38,19 @@
 <script>
 export default {
   name: 'mod-bible',
-  props: [ 'id', 'data', 'edit', 'remove' ],
+  props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {
       passages: []
     }
   },
   methods: {
-    updateRef () {
+    preSave () {
       this.$database.bible(this.data.bibleRef, (data) => {
         console.log(data)
         this.data.text = data.passages[0]
         this.data.bibleRef = data.canonical
-        this.edit('')
+        this.save(this.id)
       })
     }
   }
