@@ -13,7 +13,9 @@ const fbapp = firebase.initializeApp({
 })
 
 function dbref (type, selection, id) {
-  return fbapp.database().ref(type + 's/' + id + '/' + selection)
+  var cur = type.charAt(0)
+  var media = type.slice(1)
+  return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
 }
 
 // leave the export, even if you don't use it

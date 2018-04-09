@@ -31,7 +31,18 @@ Router.beforeEach((to, from, next) => {
         next('login')
       } else {
         // console.log(user)
-        next()
+        // Check if REAL page
+        if (to.matched.some(record => record.meta.requiresREAL)) {
+          firebase.database().ref('/users/' + firebase.auth().currentUser.uid + '/realUser').once('value', (realUser) => {
+            console.log('realuser', realUser.val())
+            if (realUser.val()) {
+              next()
+            } else {
+              console.log('not real user')
+              next('odashboard')
+            }
+          })
+        } else next()
       }
     })
   } else next()

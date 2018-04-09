@@ -46,8 +46,10 @@ export default {
   },
   methods: {
     preSave () {
-      this.$database.bible(this.data.bibleRef, (data) => {
+      this.$database.bible(this.data.bibleRef, 'esv', (data) => {
         console.log(data)
+        // NOTE: This needs to be moved to the server side -- not all versions will
+        //       follow this same format
         this.data.text = data.passages[0]
         this.data.bibleRef = data.canonical
         this.save(this.id)

@@ -46,34 +46,47 @@
     <q-layout-drawer
       side="left"
       v-model="leftDrawer"
-      content-class="bg-grey-9 sm-drawer"
+      content-class="bg-grey-9"
     >
       <!-- QScrollArea is optional -->
       <q-scroll-area class="fit q-pa-sm">
-        <q-item to="/odashboard">
-          <q-item-tile icon="fa-home" />
-          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Dashboard</q-tooltip>
-        </q-item>
-        <q-item-separator />
-        <q-item :to="{ name: 'olist', params: { type: 'sermons' }}">
-          <q-item-tile icon="fa-comment" />
-          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Sermons</q-tooltip>
-        </q-item>
-        <q-item :to="{ name: 'olist', params: { type: 'lessons' }}">
-          <q-item-tile icon="fa-file" />
-          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Lessons</q-tooltip>
+        <q-item to="/dashboard">
+          <q-item-side icon="fa-home" />
+          <q-item-main label="Dashboard" />
         </q-item>
         <q-item-separator />
         <q-item>
-          <q-item-tile icon="fa-cog" />
+          <q-item-main label="REAL Curriculum" />
+        </q-item>
+        <q-item :to="{ name: 'rlist', params: { type: 'series' }}">
+          <q-item-side icon="fa-folder" />
+          <q-item-main label="Series" />
+        </q-item>
+        <q-item-separator />
+        <q-item>
+          <q-item-main label="Other Curriculum" />
+        </q-item>
+        <q-item :to="{ name: 'olist', params: { type: 'series' }}">
+          <q-item-side icon="fa-folder" />
+          <q-item-main label="Series" />
+        </q-item>
+        <q-item :to="{ name: 'olist', params: { type: 'lessons' }}">
+          <q-item-side icon="fa-file" />
+          <q-item-main label="Lessons" />
+        </q-item>
+        <q-item-separator />
+        <q-item>
+          <q-item-side icon="fa-cog" />
+          <q-item-main label="Settings" />
         </q-item>
         <q-item link @click.native="logout">
-          <q-item-tile icon="fa-sign-out-alt fab" />
+          <q-item-side icon="fa-sign-out-alt fab" />
+          <q-item-main label="Log Out" />
         </q-item>
       </q-scroll-area>
     </q-layout-drawer>
 
-    <q-layout-drawer
+    <!-- <q-layout-drawer
       side="right"
       v-model="rightDrawer"
       content-class="bg-grey-9 lg-drawer"
@@ -82,7 +95,7 @@
       <q-scroll-area class="fit q-pa-sm">
         <resources v-if="$route.name === 'olesson'" />
       </q-scroll-area>
-    </q-layout-drawer>
+    </q-layout-drawer> -->
 
     <q-page-container>
       <!-- This is where pages get injected -->
@@ -103,8 +116,8 @@ export default {
   data () {
     return {
       leftDrawer: this.$route.name !== 'olesson',
-      rightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
-      showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      // rightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      // showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
       pageType: this.$route.name
     }
   },
@@ -113,8 +126,8 @@ export default {
       console.log('page change')
       this.pageType = val
       this.leftDrawer = val !== 'olesson'
-      this.rightDrawer = val === 'olesson' && this.$q.platform.is.desktop
-      this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
+      // this.rightDrawer = val === 'olesson' && this.$q.platform.is.desktop
+      // this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
     }
   },
   methods: {
@@ -130,17 +143,13 @@ export default {
 
 <style>
 
-.sm-drawer {
-  width: 75px
-}
-
 .lg-drawer {
-  width: 100%;
+  width: 100%
 }
 
 @media screen and (min-width: 1200px) {
   .lg-drawer {
-    width: 35%;
+    width: 35%
   }
 }
 

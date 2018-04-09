@@ -90,6 +90,7 @@ module.exports = function (ctx) {
         'QAutocomplete',
         'QModal',
         'QPopover',
+        'QTooltip',
         'QVideo',
         'QResizeObservable'
       ],

@@ -41,6 +41,9 @@ export default {
         case 'olessons':
           this.addOLesson()
           break
+        case 'osermons':
+          this.addOSermon()
+          break
         default:
           console.error('Incorrect add type')
       }
@@ -86,6 +89,21 @@ export default {
           positon: 'bottom-left'
         })
         this.$router.push({ name: 'olesson', params: { id: res._id } })
+      })
+    },
+    addOSermon () {
+      console.log('adding...')
+      var obj = {
+        title: this.title
+      }
+      this.$database.add('osermon', obj, (res) => {
+        this.modalFin()
+        Notify.create({
+          message: 'Other Sermon created!',
+          type: 'positive',
+          positon: 'bottom-left'
+        })
+        this.$router.push({ name: 'osermon', params: { id: res._id } })
       })
     }
   }

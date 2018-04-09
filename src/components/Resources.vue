@@ -3,17 +3,19 @@
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
     <q-resize-observable @resize="onResize" />
     <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
-    <media-list :items="resources" :width="size.width/2" :addModule="addModule" />
+    <n-q-list :items="resources" :width="size.width/2" :addModule="addModule" />
   </div>
 </template>
 
 <script>
 import MediaList from 'components/MediaList.vue'
+import NQList from 'components/NQList.vue'
 import AddResearch from 'components/AddResearch.vue'
 
 export default {
   components: {
     MediaList,
+    NQList,
     AddResearch
   },
   // name: 'ComponentName',
@@ -40,6 +42,9 @@ export default {
   },
   methods: {
     init () {
+      // Check if NQ user to determine what resources to get ---
+      //    NQ user --> get from $database.resources
+      //    Non-NQ user --> get from $database.list?
       console.log(this.type)
       this.resources = []
       this.$database.resources(this.type, this.id, (res) => {

@@ -1,6 +1,25 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.9 - 2018-04-08
+### Added
+- separate Dashboard pages for REAL and Other
+- OSermon page (same as OLesson currently)
+- can add OSermon
+- OList displays list of sermons
+- real layout to separate users
+- routes that separate real and other pages and the logic to restrict real pages to only real users
+- NQList component to separate calls for NQ research media and simple builder media
+
+### Changed
+- firebase saves modules in o/lessons/ rather than olesson/
+- database bible call requires version
+- MediaList component should be used for simple builder media - not NQ media
+- left drawer has been condensed to icons with tooltips to save on realestate
+
+### Fixed
+- Resources component doesn't load unless on 'olesson' route
+
 ## 0.0.8 - 2018-04-06
 ### Added
 - quotes, ideas, outlines, and illustrations can now be added as modules from the Resources drawer

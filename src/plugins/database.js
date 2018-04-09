@@ -22,6 +22,7 @@ function add (type, data, callback) {
 }
 
 function list (type, callback) {
+  console.log('list', type)
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
     axios.post('/list', {
       type: type,
@@ -90,10 +91,11 @@ function search (type, terms, options, callback) {
   })
 }
 
-function bible (ref, callback) {
+function bible (ref, version, callback) {
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
     axios.post('/bible', {
       ref: ref,
+      version: version,
       token: idToken
     })
       .then((res) => {

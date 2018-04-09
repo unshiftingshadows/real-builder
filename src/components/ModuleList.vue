@@ -237,6 +237,7 @@ export default {
     init () {
     },
     showAdd () {
+      // NOTE: Need to split list for lessons vs sermons
       this.$q.actionSheet({
         title: 'Add Module',
         grid: true,

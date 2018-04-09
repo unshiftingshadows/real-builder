@@ -56,6 +56,9 @@ export default {
         case 'lessons':
           this.$router.push({ name: 'olesson', params: { id: id } })
           break
+        case 'sermons':
+          this.$router.push({ name: 'osermon', params: { id: id } })
+          break
         default:
           console.error('Incorrect item type for routing')
       }
