@@ -5,12 +5,7 @@
         <q-btn label="Pack" color="primary" @click.native="pack" />
       </div>
       <div class="col-12">
-        <q-select
-          multiple
-          v-model="selectedTypes"
-          :options="types"
-          dark
-        />
+        <q-input v-model="searchTerms" dark />
       </div>
       <div class="col-12">
         <bricks
@@ -19,20 +14,20 @@
           :sizes="sizes"
         >
           <template slot-scope="scope">
-            <q-card color="primary" inline v-bind:class="[scope.item.type] + 'l'" class="media-cardl" @click.native="openItem(scope.item.media, scope.item.type)">
+            <q-card color="primary" inline v-bind:class="[scope.item.type] + 'l'" class="media-cardl" @click.native="openItem(scope.item._id, scope.item.type)">
               <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
-              <q-card-media v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'image'">
-                <img :src="scope.item.media.thumbURL" />
+              <q-card-media v-if="scope.item.type == 'video' || scope.item.type == 'image'">
+                <img :src="scope.item.thumbURL" />
               </q-card-media>
-              <q-card-title v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'discourse' || scope.item.type == 'note'">
-                  {{ scope.item.media.title }}
-                  <span v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'discourse'" v-for="author in scope.item.media.author" :key="author" slot="subtitle">{{ author }}</span>
-                  <span v-if="scope.item.type == 'note'" slot="subtitle">{{ scope.item.media.text }}</span>
-                </q-card-title>
-                <q-card-main v-if="scope.item.type == 'quote'">
-                  <p>{{ scope.item.media.text }}</p>
-                  <p class="q-body-2"><span v-for="author in scope.item.media.mediaid.author" :key="author">{{ author }} | </span>{{ scope.item.media.mediaid.title }}</p>
-                </q-card-main>
+              <q-card-title v-if="scope.item.type == 'video' || scope.item.type === 'lyric'">
+                {{ scope.item.title }}
+              </q-card-title>
+              <q-card-main v-if="scope.item.type === 'quote' || scope.item.type === 'illustration'">
+                <p v-if="scope.item.type === 'illustration'"><b>{{ scope.item.title }}</b></p>
+                <p>{{ scope.item.text }}</p>
+                <p class="q-body-2" v-if="scope.item.type === 'quote'">{{ scope.item.author }} - {{ scope.item.mediaTitle }}</p>
+                <p class="q-body-2" v-if="scope.item.type === 'illustration'">{{ scope.item.author }}</p>
+              </q-card-main>
             </q-card>
           </template>
         </bricks>
@@ -54,11 +49,11 @@ export default {
     ResourcePreview
   },
   // name: 'ComponentName',
-  props: ['items', 'width', 'addModule'],
+  props: ['width', 'addModule'],
   data () {
     return {
+      items: [],
       showItems: [],
-      isImage: this.type === 'images',
       resourceOpen: false,
       resourceType: '',
       resource: '',
@@ -77,14 +72,6 @@ export default {
       ],
       types: [
         {
-          label: 'Book',
-          value: 'book'
-        },
-        {
-          label: 'Movie',
-          value: 'movie'
-        },
-        {
           label: 'Image',
           value: 'image'
         },
@@ -93,24 +80,16 @@ export default {
           value: 'video'
         },
         {
-          label: 'Article',
-          value: 'article'
-        },
-        {
-          label: 'Note',
-          value: 'note'
-        },
-        {
           label: 'Quote',
           value: 'quote'
         },
         {
-          label: 'Outline',
-          value: 'outline'
+          label: 'Illustration',
+          value: 'illustration'
         },
         {
-          label: 'Idea',
-          value: 'idea'
+          label: 'Lyric',
+          value: 'lyric'
         }
       ]
     }
@@ -127,9 +106,6 @@ export default {
       this.pack()
     }
   },
-  // mounted () {
-  //   this.showItems = this.items.filter(this.checkType)
-  // },
   updated () {
     console.log('updated')
     console.log(this.$refs.bricks)
@@ -155,6 +131,11 @@ export default {
     },
     checkType (item) {
       return this.selectedTypes.includes(item.type)
+    },
+    search () {
+      this.$database.search('omedia', this.searchTerms, {}, (res) => {
+        this.items = res
+      })
     }
   }
 }

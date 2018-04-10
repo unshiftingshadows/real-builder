@@ -18,6 +18,10 @@ function dbref (type, selection, id) {
   return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
 }
 
+function user (uid) {
+  return fbapp.database().ref('/users/' + uid)
+}
+
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
   Vue.use(VueFire)
@@ -25,6 +29,7 @@ export default ({ app, router, Vue }) => {
   Vue.prototype.$firebase = {
     auth: fbapp.auth(),
     db: fbapp.database(),
-    ref: dbref
+    ref: dbref,
+    user: user
   }
 }

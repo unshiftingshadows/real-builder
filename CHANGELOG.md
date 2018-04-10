@@ -1,6 +1,26 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.10 - 2018-04-09
+### Added
+- get user db values from firebase plugin
+- user value from firebase into root component (App) for access from all components
+- menu option available for realUser to switch to REAL Curriculum builder
+- small logo for menu item
+- builder layout menu items for media types
+
+### Changed
+- setup tooltips for real layout
+- OList now checks types from a list to determine whether the list should show content or media
+- names and paths for dashboards changed to better reflect a readable url
+- renamed MediaList to MediaSearch to better reflect what that component does
+- MediaSearch setup to receive search terms and return matching media from the database, currently setup for only non-NQ media
+- Resources shows components based on whether a NQ or non-NQ user
+- right drawer does not open automatically when writing for a non-NQ user (might change for all users?)
+
+### Fixed
+- default route for non-NQ users switched to dashboard rather than odashboard
+
 ## 0.0.9 - 2018-04-08
 ### Added
 - separate Dashboard pages for REAL and Other

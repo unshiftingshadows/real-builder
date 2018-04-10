@@ -39,7 +39,7 @@ Router.beforeEach((to, from, next) => {
               next()
             } else {
               console.log('not real user')
-              next('odashboard')
+              next('dashboard')
             }
           })
         } else next()

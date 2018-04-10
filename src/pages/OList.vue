@@ -12,8 +12,14 @@
         </q-card-main>
       </q-card>
     </div>
-    <q-modal ref="addModal" v-model="showAdd" content-classes="add-media-modal">
+    <q-modal ref="addContentModal" v-model="showAddContent" content-classes="add-media-modal">
       <add-content :modal-fin="closeAdd" :type="'o' + type" ref="addContent" />
+    </q-modal>
+    <q-modal ref="addMediaModal" v-model="showAddMedia" content-classes="add-media-modal">
+      <!-- TODO: Add add-media component to manage adding new medias -->
+    </q-modal>
+    <q-modal ref="showMediaModal" v-model="showMedia" content-classes="add-media-modal">
+      <!-- TODO: Add variable components to show and edit media -->
     </q-modal>
   </q-page>
 </template>
@@ -28,10 +34,14 @@ export default {
   // name: 'PageName',
   data () {
     return {
+      contentTypes: ['rseries', 'oseries', 'olessons', 'osermons'],
+      mediaTypes: ['quotes', 'images', 'illustrations', 'lyrics', 'videos'],
       type: this.$route.params.type,
       items: [],
       loading: false,
-      showAdd: false
+      showAddContent: false,
+      showAddMedia: false,
+      showMedia: false
     }
   },
   mounted () {
@@ -64,10 +74,17 @@ export default {
       }
     },
     openAdd () {
-      this.showAdd = true
+      if (this.contentTypes.includes(this.type)) {
+        this.showAddContent = true
+      } else if (this.mediaTypes.includes(this.type)) {
+        this.showAddMedia = true
+      } else {
+        console.error('incorrect type to add')
+      }
     },
     closeAdd () {
-      this.showAdd = false
+      this.showAddContent = false
+      this.showAddContent = false
     }
   }
 }

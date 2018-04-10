@@ -46,42 +46,27 @@
     <q-layout-drawer
       side="left"
       v-model="leftDrawer"
-      content-class="bg-grey-9"
+      content-class="bg-grey-9 sm-drawer"
     >
       <!-- QScrollArea is optional -->
       <q-scroll-area class="fit q-pa-sm">
-        <q-item to="/dashboard">
+        <q-item to="/realdashboard">
           <q-item-side icon="fa-home" />
-          <q-item-main label="Dashboard" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">REAL Dashboard</q-tooltip>
         </q-item>
         <q-item-separator />
-        <q-item>
-          <q-item-main label="REAL Curriculum" />
-        </q-item>
         <q-item :to="{ name: 'rlist', params: { type: 'series' }}">
           <q-item-side icon="fa-folder" />
-          <q-item-main label="Series" />
-        </q-item>
-        <q-item-separator />
-        <q-item>
-          <q-item-main label="Other Curriculum" />
-        </q-item>
-        <q-item :to="{ name: 'olist', params: { type: 'series' }}">
-          <q-item-side icon="fa-folder" />
-          <q-item-main label="Series" />
-        </q-item>
-        <q-item :to="{ name: 'olist', params: { type: 'lessons' }}">
-          <q-item-side icon="fa-file" />
-          <q-item-main label="Lessons" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Series</q-tooltip>
         </q-item>
         <q-item-separator />
         <q-item>
           <q-item-side icon="fa-cog" />
-          <q-item-main label="Settings" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Settings</q-tooltip>
         </q-item>
         <q-item link @click.native="logout">
           <q-item-side icon="fa-sign-out-alt fab" />
-          <q-item-main label="Log Out" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Log Out</q-tooltip>
         </q-item>
       </q-scroll-area>
     </q-layout-drawer>
@@ -142,6 +127,10 @@ export default {
 </script>
 
 <style>
+
+.sm-drawer {
+  width: 75px
+}
 
 .lg-drawer {
   width: 100%

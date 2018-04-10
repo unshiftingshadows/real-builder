@@ -2,19 +2,24 @@
   <div>
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
     <q-resize-observable @resize="onResize" />
-    <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
-    <n-q-list :items="resources" :width="size.width/2" :addModule="addModule" />
+    <div v-if="$root.user.nqUser">
+      <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
+      <n-q-list :items="resources" :width="size.width/2" :addModule="addModule" />
+    </div>
+    <div v-if="!$root.user.nqUser">
+      <media-search :width="size.width/2" :addModule="addModule" />
+    </div>
   </div>
 </template>
 
 <script>
-import MediaList from 'components/MediaList.vue'
+import MediaSearch from 'components/MediaSearch.vue'
 import NQList from 'components/NQList.vue'
 import AddResearch from 'components/AddResearch.vue'
 
 export default {
   components: {
-    MediaList,
+    MediaSearch,
     NQList,
     AddResearch
   },
@@ -42,20 +47,23 @@ export default {
   },
   methods: {
     init () {
+      console.log(this.type)
       // Check if NQ user to determine what resources to get ---
       //    NQ user --> get from $database.resources
       //    Non-NQ user --> get from $database.list?
-      console.log(this.type)
-      this.resources = []
-      this.$database.resources(this.type, this.id, (res) => {
-        console.log('response', res)
-        this.research = res.research
-        res.research.forEach((research) => {
-          this.resources = this.resources.concat(research.media.resources)
+      if (!this.$root.user.nqUser) {
+      } else {
+        this.resources = []
+        this.$database.resources(this.type, this.id, (res) => {
+          console.log('response', res)
+          this.research = res.research
+          res.research.forEach((research) => {
+            this.resources = this.resources.concat(research.media.resources)
+          })
+          // Once media is also implemented
+          // this.resources.push(res.media)
         })
-        // Once media is also implemented
-        // this.resources.push(res.media)
-      })
+      }
     },
     resType (type) {
       var items = []
