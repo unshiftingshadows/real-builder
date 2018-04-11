@@ -5,7 +5,7 @@
         <q-btn label="Pack" color="primary" @click.native="pack" />
       </div>
       <div class="col-12">
-        <q-input v-model="searchTerms" dark />
+        <q-input v-model="searchTerms" />
       </div>
       <div class="col-12">
         <bricks
@@ -52,6 +52,7 @@ export default {
   props: ['width', 'addModule'],
   data () {
     return {
+      searchTerms: '',
       items: [],
       showItems: [],
       resourceOpen: false,

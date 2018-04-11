@@ -5,7 +5,7 @@
         <h3>{{ lesson.title }}</h3>
       </div>
       <div class="col-xs-12 col-md-4">
-        <q-input v-model="seriesName" float-label="Series" dark>
+        <q-input v-model="seriesName" float-label="Series">
           <q-autocomplete
             @search="search"
             :min-characters="3"
@@ -14,13 +14,13 @@
         </q-input>
       </div>
       <div class="col-12">
-        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" dark @blur="update" />
+        <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="bibleRefs" float-label="Bible References" dark @blur="update" />
+        <q-chips-input v-model="bibleRefs" float-label="Bible References" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="lesson.tags" float-label="Tags" dark @blur="update" />
+        <q-chips-input v-model="lesson.tags" float-label="Tags" @blur="update" />
       </div>
       <div class="col-12">
         <bible-passage-list :passages="bibleRefs" />

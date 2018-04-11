@@ -19,7 +19,12 @@ function dbref (type, selection, id) {
 }
 
 function user (uid) {
-  return fbapp.database().ref('/users/' + uid)
+  if (uid) {
+    console.log('valid uid', uid)
+    return fbapp.database().ref('/users/' + uid)
+  } else {
+    return fbapp.database().ref('/users/' + fbapp.auth().currentUser.uid)
+  }
 }
 
 // leave the export, even if you don't use it

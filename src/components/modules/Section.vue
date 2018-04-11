@@ -2,7 +2,7 @@
   <q-card color="primary">
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
-        <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="dark" size="1rem">
+        <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" size="1rem">
           <q-popover>
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Edit</q-item>
@@ -16,10 +16,10 @@
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
-        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="dark" size="1rem" @click.native="close" />
+        <q-icon link class="float-right cursor-pointer" name="fas fa-times" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.title" float-label="Title" dark @keyup.enter="save(id)" />
+            <q-input v-model="data.title" float-label="Title" @keyup.enter="save(id)" />
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="save(id)">Save</q-btn>
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'mod-point',
+  name: 'mod-section',
   props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {}

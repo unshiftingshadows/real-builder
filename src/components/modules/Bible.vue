@@ -1,5 +1,5 @@
 <template>
-  <q-card color="dark">
+  <q-card>
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
         <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="primary" size="1rem">
@@ -23,7 +23,7 @@
         <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.bibleRef" float-label="Bible Ref" dark @keyup.enter="preSave" />
+            <q-input v-model="data.bibleRef" float-label="Bible Ref" @keyup.enter="preSave" />
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="preSave">Save</q-btn>

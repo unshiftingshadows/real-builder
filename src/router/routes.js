@@ -7,10 +7,12 @@ export default [
     component: () => import('layouts/builder'),
     children: [
       { path: 'dashboard', name: 'dashboard', component: () => import('pages/ODashboard') },
-      { path: 'olist/:type', name: 'olist', component: () => import('pages/OList') },
-      { path: 'oseries/:id', name: 'oseries', component: () => import('pages/OSeries') },
-      { path: 'olesson/:id', name: 'olesson', component: () => import('pages/OLesson') },
-      { path: 'osermon/:id', name: 'osermon', component: () => import('pages/OSermon') }
+      { path: 'list/:type', name: 'olist', component: () => import('pages/OList') },
+      { path: 'series/:id', name: 'oseries', component: () => import('pages/OSeries') },
+      { path: 'lesson/:id', name: 'olesson', component: () => import('pages/OLesson') },
+      { path: 'sermon/:id', name: 'osermon', component: () => import('pages/OSermon') },
+      { path: 'scratch/:id', name: 'oscratch', component: () => import('pages/OScratchPad') },
+      { path: 'settings', name: 'osettings', component: () => import('pages/Settings') }
     ],
     meta: {
       requiresAuth: true,
@@ -19,12 +21,13 @@ export default [
   },
 
   {
-    path: '/',
+    path: '/real',
     component: () => import('layouts/real'),
     children: [
-      { path: 'realdashboard', name: 'realdashboard', component: () => import('pages/RDashboard') },
-      { path: 'rlist/:type', name: 'rlist', component: () => import('pages/RList') },
-      { path: 'rseries/:id', name: 'rseries', component: () => import('pages/RSeries') }
+      { path: 'dashboard', name: 'realdashboard', component: () => import('pages/RDashboard') },
+      { path: 'list/:type', name: 'rlist', component: () => import('pages/RList') },
+      { path: 'series/:id', name: 'rseries', component: () => import('pages/RSeries') },
+      { path: 'settings', name: 'rsettings', component: () => import('pages/Settings') }
     ],
     meta: {
       requiresAuth: true,
@@ -36,7 +39,7 @@ export default [
     path: '/login',
     component: () => import('layouts/default'),
     children: [
-      { path: '', component: () => import('pages/Login') }
+      { path: '', name: 'login', component: () => import('pages/Login') }
     ]
   },
 

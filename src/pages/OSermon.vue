@@ -14,13 +14,13 @@
         </q-input>
       </div>
       <div class="col-12">
-        <q-input v-model="sermon.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" dark @blur="update" />
+        <q-input v-model="sermon.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="bibleRefs" float-label="Bible References" dark @blur="update" />
+        <q-chips-input v-model="bibleRefs" float-label="Bible References" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="sermon.tags" float-label="Tags" dark @blur="update" />
+        <q-chips-input v-model="sermon.tags" float-label="Tags" @blur="update" />
       </div>
       <div class="col-12">
         <bible-passage-list :passages="bibleRefs" />

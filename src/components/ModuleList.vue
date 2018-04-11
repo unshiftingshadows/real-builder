@@ -2,10 +2,10 @@
   <div class="row gutter-sm">
     <div class="col-12" v-if="structure.hook">
       <!-- Hook module -->
-      <q-card color="dark">
+      <q-card>
         <div v-if="!structure.hook.editing || structure.hook.editing !== $firebase.auth.currentUser.uid">
           <q-card-title>
-            <q-icon v-if="!structure.hook.editing" class="float-right cursor-pointer" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'hook'" />
+            <q-icon v-if="!structure.hook.editing" class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'hook'" />
             <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ structure.hook.time }} minutes&nbsp;&nbsp;&nbsp;</span>
             Hook
             <span slot="subtitle" v-if="structure.hook.title !== ''">{{ structure.hook.title }}</span>
@@ -16,13 +16,13 @@
         </div>
         <div v-if="structure.hook.editing === $firebase.auth.currentUser.uid">
           <q-card-title>
-            <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
+            <q-icon link class="float-right cursor-sectioner" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
             Hook
           </q-card-title>
           <q-card-main>
             <div class="row gutter-sm">
               <div class="col-12">
-                <q-input v-model="structure.hook.title" float-label="Subtitle" dark />
+                <q-input v-model="structure.hook.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
                 <editor :text.sync="structure.hook.text" />
@@ -34,7 +34,7 @@
     </div>
     <!-- This is where other modules will be populated -->
     <div class="col-12">
-      <draggable :list="modules" @start="drag=true" @end="onDrag">
+      <draggable :list="modules" @start="drag=true" @end="onDrag" ref="draggable" :options="{ disabled: editingId !== '' }">
           <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="moduleEdit" :save="moduleSave" :close="moduleClose" :remove="moduleDelete" class="module-card" />
       </draggable>
     </div>
@@ -44,10 +44,10 @@
     </div>
     <div class="col-12" v-if="structure.application">
       <!-- Application module -->
-      <q-card color="dark">
+      <q-card>
         <div v-if="!structure.application.editing">
           <q-card-title>
-            <q-icon class="float-right cursor-pointer" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'application'" />
+            <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'application'" />
             <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ structure.application.time }} minutes&nbsp;&nbsp;&nbsp;</span>
             Application
             <span slot="subtitle" v-if="structure.application.title !== ''">{{ structure.hook.title }}</span>
@@ -58,22 +58,22 @@
         </div>
         <div v-if="structure.application.editing">
           <q-card-title>
-            <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
+            <q-icon link class="float-right cursor-sectioner" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
             Application
           </q-card-title>
           <q-card-main>
             <div class="row gutter-sm">
               <div class="col-12">
-                <q-input v-model="structure.application.title" float-label="Subtitle" dark />
+                <q-input v-model="structure.application.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
-                <q-input v-model="structure.application.thought" float-label="Questions to Consider" type="textarea" :max-height="100" :min-rows="1" dark />
+                <q-input v-model="structure.application.thought" float-label="Questions to Consider" type="textarea" :max-height="100" :min-rows="1" />
               </div>
               <div class="col-12">
-                <q-input v-model="structure.application.today" float-label="Today" type="textarea" :max-height="100" :min-rows="1" dark />
+                <q-input v-model="structure.application.today" float-label="Today" type="textarea" :max-height="100" :min-rows="1" />
               </div>
               <div class="col-12">
-                <q-input v-model="structure.application.thisweek" float-label="This Week" type="textarea" :max-height="100" :min-rows="1" dark />
+                <q-input v-model="structure.application.thisweek" float-label="This Week" type="textarea" :max-height="100" :min-rows="1" />
               </div>
             </div>
           </q-card-main>
@@ -82,10 +82,10 @@
     </div>
     <div class="col-12" v-if="structure.prayer">
       <!-- Prayer module -->
-      <q-card color="dark">
+      <q-card>
         <div v-if="!structure.prayer.editing">
           <q-card-title>
-            <q-icon class="float-right cursor-pointer" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'prayer'" />
+            <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'prayer'" />
             <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ structure.prayer.time }} minutes&nbsp;&nbsp;&nbsp;</span>
             Prayer
             <span slot="subtitle" v-if="structure.hook.title !== ''">{{ structure.prayer.title }}</span>
@@ -96,13 +96,13 @@
         </div>
         <div v-if="structure.prayer.editing">
           <q-card-title>
-            <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
+            <q-icon link class="float-right cursor-sectioner" name="fas fa-times" color="primary" size="1rem" @click.native="editingId = ''" />
             Prayer
           </q-card-title>
           <q-card-main>
             <div class="row gutter-sm">
               <div class="col-12">
-                <q-input v-model="structure.prayer.title" float-label="Subtitle" dark />
+                <q-input v-model="structure.prayer.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
                 <editor :text.sync="structure.prayer.text" />
@@ -118,7 +118,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import Editor from 'components/Editor.vue'
-import ModPoint from 'components/modules/Point.vue'
+import ModSection from 'components/modules/Section.vue'
 import ModQuote from 'components/modules/Quote.vue'
 import ModText from 'components/modules/Text.vue'
 import ModBible from 'components/modules/Bible.vue'
@@ -132,7 +132,7 @@ export default {
   components: {
     Draggable,
     Editor,
-    ModPoint,
+    ModSection,
     ModQuote,
     ModText,
     ModBible,
@@ -190,6 +190,7 @@ export default {
         this.closeEdit(oldid)
       }
       if (newid !== '') {
+        console.log(this.$refs)
         this.startEdit(newid)
       }
     },
@@ -207,7 +208,7 @@ export default {
             if (this.modules[index].type === 'quote' || this.modules[index].type === 'idea' || this.modules[index].type === 'illustration') {
               text = res.resource.text
             } else if (this.modules[index].type === 'outline') {
-              text = res.resource.points.join(' ')
+              text = res.resource.sections.join(' ')
             }
             var wordcount = this.getWordCount(text)
             var time = this.getEstTime(wordcount)
@@ -227,9 +228,9 @@ export default {
     nextModOrder: function () {
       return this.modules.length
     },
-    nextPointOrder: function () {
+    nextSectionOrder: function () {
       return this.modules.filter((val) => {
-        return val.type === 'point'
+        return val.type === 'section'
       }).length + 1
     }
   },
@@ -243,12 +244,12 @@ export default {
         grid: true,
         actions: [
           {
-            label: 'Point',
+            label: 'Section',
             color: 'primary',
             icon: 'fa-list-ol',
             handler: () => {
-              console.log('point!')
-              this.addModule('point')
+              console.log('section!')
+              this.addModule('section')
             }
           },
           {
@@ -297,14 +298,14 @@ export default {
       }
       var newRef = this.$firebase.ref(this.type, 'modules', this.id).push()
       switch (type) {
-        case 'point':
+        case 'section':
           newRef.set({
-            type: 'point',
+            type: 'section',
             title: '',
             editing: this.$firebase.auth.currentUser.uid,
             slide: false,
             order: this.nextModOrder,
-            number: this.nextPointOrder,
+            number: this.nextSectionOrder,
             time: 0,
             wordcount: 0
           })
@@ -418,16 +419,6 @@ export default {
         }
       } else {
       }
-      // Close edting for all modules
-      // this.structure.hook.editing = false
-      // this.structure.application.editing = false
-      // this.structure.prayer.editing = false
-      // console.log('length', this.modules)
-      // if (this.modules['.value'] !== null) {
-      //   for (var mod in this.modules) {
-      //     this.modules[mod].editing = false
-      //   }
-      // }
     },
     moduleEdit (id) {
       this.editingId = id
@@ -462,16 +453,16 @@ export default {
     reorder () {
       var allMods = {}
       // Needs to update the 'order' prop of all modules
-      var pointCount = 1
+      var sectionCount = 1
       this.modules.forEach((mod, index) => {
         var updatedMod = {...mod}
         updatedMod.order = index
         delete updatedMod['.key']
-        if (mod.type === 'point') {
-          console.log('pointCount', pointCount)
-          console.log('point', updatedMod)
-          updatedMod.number = pointCount
-          pointCount = pointCount + 1
+        if (mod.type === 'section') {
+          console.log('sectionCount', sectionCount)
+          console.log('section', updatedMod)
+          updatedMod.number = sectionCount
+          sectionCount = sectionCount + 1
         }
         allMods[mod['.key']] = updatedMod
         // console.log('reorder', updatedMod)

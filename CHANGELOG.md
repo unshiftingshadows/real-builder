@@ -1,6 +1,27 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.11 - 2018-04-10
+### Added
+- Settings page
+- light and dark theme set by user preferences in Settings
+- Scratch Pads for writing down notes or ideas that could be turned into a sermon or lesson in the future
+- users can now add and list all media types (save uploaded images)
+- media added is directly appended onto the list
+
+### Changed
+- changed point to module
+- all modules are not draggable when editing any module
+- menu icons are the default until hover or active when they become the primary color
+- menu item backgrounds are inherited rather than changing for hover and active
+- adding content, olist, others now use singular types instead of plurarl
+
+### Fixed
+- right drawer closes on refresh for non-NQ users
+
+### Removed
+- bible plugin, to reduce confusion (it wasn't functional)
+
 ## 0.0.10 - 2018-04-09
 ### Added
 - get user db values from firebase plugin

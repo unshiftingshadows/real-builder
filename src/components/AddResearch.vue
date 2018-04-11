@@ -18,7 +18,7 @@
         </div>
         <div class="col-12">
           <p>Add Research</p>
-          <q-input v-model="searchTerm" float-label="Search" dark @keyup.enter="search" />
+          <q-input v-model="searchTerm" float-label="Search" @keyup.enter="search" />
           <q-list>
             <div v-if="searching">
               <q-spinner color="primary" size="2rem" class="absolute-center" />

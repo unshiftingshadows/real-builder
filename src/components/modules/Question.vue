@@ -1,5 +1,5 @@
 <template>
-  <q-card color="dark">
+  <q-card>
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
         <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="primary" size="1rem">
@@ -20,13 +20,13 @@
         <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.title" float-label="Title" dark />
+            <q-input v-model="data.title" float-label="Title" />
           </div>
           <div class="col-12">
-            <q-input type="number" v-model="data.time" float-label="Estimated Time (in minutes)" dark />
+            <q-input type="number" v-model="data.time" float-label="Estimated Time (in minutes)" />
           </div>
           <div class="col-12">
-            <q-input v-model="data.text" float-label="Question" type="textarea" :max-height="100" :min-rows="1" dark />
+            <q-input v-model="data.text" float-label="Question" type="textarea" :max-height="100" :min-rows="1" />
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="save(id)">Save</q-btn>

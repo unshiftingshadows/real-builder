@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-card class="absolute-center" style="width:500px">
+    <q-card color="tertiary" class="absolute-center" style="width:500px">
       <q-card-title align="center">
         <h4>Login</h4>
       </q-card-title>

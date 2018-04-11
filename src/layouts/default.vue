@@ -10,7 +10,7 @@
           @click="leftDrawer = !leftDrawer"
         /> -->
         <q-toolbar-title>
-          <img src="statics/logo.png" style="max-height: 200px; display: block; margin-left: auto; margin-right: auto;" />
+          <img src="statics/logo.png" style="max-height: 150px; display: block; margin-left: auto; margin-right: auto;" />
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>

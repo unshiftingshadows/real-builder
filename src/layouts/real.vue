@@ -46,11 +46,11 @@
     <q-layout-drawer
       side="left"
       v-model="leftDrawer"
-      content-class="bg-grey-9 sm-drawer"
+      content-class="sm-drawer"
     >
       <!-- QScrollArea is optional -->
       <q-scroll-area class="fit q-pa-sm">
-        <q-item to="/realdashboard">
+        <q-item to="/real/dashboard">
           <q-item-side icon="fa-home" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">REAL Dashboard</q-tooltip>
         </q-item>
@@ -60,7 +60,7 @@
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Series</q-tooltip>
         </q-item>
         <q-item-separator />
-        <q-item>
+        <q-item to="/real/settings">
           <q-item-side icon="fa-cog" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Settings</q-tooltip>
         </q-item>
@@ -126,20 +126,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus">
 
-.sm-drawer {
-  width: 75px
+@import "~variables"
+
+.menu-item:hover, .router-link-active {
+  background: inherit !important
 }
 
-.lg-drawer {
-  width: 100%
-}
-
-@media screen and (min-width: 1200px) {
-  .lg-drawer {
-    width: 35%
-  }
+.menu-item:hover > i, .router-link-active > i {
+  color: $primary !important
 }
 
 </style>
