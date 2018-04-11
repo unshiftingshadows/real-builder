@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="row gutter-sm">
-      <div class="col-12">
+      <!-- <div class="col-12">
         <q-btn label="Pack" color="primary" @click.native="pack" />
-      </div>
+      </div> -->
       <div class="col-12">
         <q-select
           multiple
@@ -13,29 +13,23 @@
         />
       </div>
       <div class="col-12">
-        <bricks
-          ref="bricks"
-          :data="showItems"
-          :sizes="sizes"
-        >
-          <template slot-scope="scope">
-            <q-card color="primary" inline v-bind:class="[scope.item.type] + 'l'" class="media-cardl" @click.native="openItem(scope.item.media, scope.item.type)">
-              <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
-              <q-card-media v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'image'">
-                <img :src="scope.item.media.thumbURL" />
-              </q-card-media>
-              <q-card-title v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'discourse' || scope.item.type == 'note'">
-                  {{ scope.item.media.title }}
-                  <span v-if="scope.item.type == 'book' || scope.item.type == 'movie' || scope.item.type == 'video' || scope.item.type == 'article' || scope.item.type == 'discourse'" v-for="author in scope.item.media.author" :key="author" slot="subtitle">{{ author }}</span>
-                  <span v-if="scope.item.type == 'note'" slot="subtitle">{{ scope.item.media.text }}</span>
-                </q-card-title>
-                <q-card-main v-if="scope.item.type == 'quote'">
-                  <p>{{ scope.item.media.text }}</p>
-                  <p class="q-body-2"><span v-for="author in scope.item.media.mediaid.author" :key="author">{{ author }} | </span>{{ scope.item.media.mediaid.title }}</p>
-                </q-card-main>
-            </q-card>
-          </template>
-        </bricks>
+        <div v-masonry transition-duration="0.3s" item-selection=".media-cardl">
+          <q-card v-masonry-tile v-for="item in showItems" :key="item._id" color="primary" v-bind:class="[item.type] + 'l'" class="media-cardl" @click.native="openItem(item.media, item.type)">
+            <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
+            <q-card-media v-if="item.type == 'book' || item.type == 'movie' || item.type == 'video' || item.type == 'article' || item.type == 'image'">
+              <img :src="item.media.thumbURL" />
+            </q-card-media>
+            <q-card-title v-if="item.type == 'book' || item.type == 'movie' || item.type == 'video' || item.type == 'article' || item.type == 'discourse' || item.type == 'note'">
+              {{ item.media.title }}
+              <span v-if="item.type == 'book' || item.type == 'movie' || item.type == 'video' || item.type == 'article' || item.type == 'discourse'" v-for="author in item.media.author" :key="author" slot="subtitle">{{ author }}</span>
+              <span v-if="item.type == 'note'" slot="subtitle">{{ item.media.text }}</span>
+            </q-card-title>
+            <q-card-main v-if="item.type == 'quote'">
+              <p>{{ item.media.text }}</p>
+              <p class="q-body-2"><span v-for="author in item.media.mediaid.author" :key="author">{{ author }} | </span>{{ item.media.mediaid.title }}</p>
+            </q-card-main>
+          </q-card>
+        </div>
       </div>
     </div>
     <q-modal v-model="resourceOpen" content-classes="resource-modal">
@@ -45,12 +39,10 @@
 </template>
 
 <script>
-import Bricks from 'vue-bricks'
 import ResourcePreview from 'components/ResourcePreview.vue'
 
 export default {
   components: {
-    Bricks,
     ResourcePreview
   },
   // name: 'ComponentName',
@@ -77,6 +69,10 @@ export default {
       ],
       types: [
         {
+          label: 'All',
+          value: 'all'
+        },
+        {
           label: 'Book',
           value: 'book'
         },
@@ -101,6 +97,18 @@ export default {
           value: 'note'
         },
         {
+          label: 'Document',
+          value: 'document'
+        },
+        {
+          label: 'Discourse',
+          value: 'discourse'
+        },
+        {
+          label: 'Composition',
+          value: 'composition'
+        },
+        {
           label: 'Quote',
           value: 'quote'
         },
@@ -111,6 +119,10 @@ export default {
         {
           label: 'Idea',
           value: 'idea'
+        },
+        {
+          label: 'Illustration',
+          value: 'illustration'
         }
       ]
     }
@@ -121,10 +133,10 @@ export default {
     },
     'items': function (value) {
       this.showItems = value
-      this.pack()
+      // this.pack()
     },
     'width': function () {
-      this.pack()
+      // this.pack()
     }
   },
   // mounted () {
@@ -132,8 +144,8 @@ export default {
   // },
   updated () {
     console.log('updated')
-    console.log(this.$refs.bricks)
-    this.pack()
+    // console.log(this.$refs.bricks)
+    // this.pack()
   },
   methods: {
     openItem (item, type) {
@@ -150,9 +162,9 @@ export default {
     closeResource () {
       this.resourceOpen = false
     },
-    pack () {
-      this.$refs.bricks.pack()
-    },
+    // pack () {
+    //   this.$refs.bricks.pack()
+    // },
     checkType (item) {
       return this.selectedTypes.includes(item.type)
     }
@@ -162,8 +174,8 @@ export default {
 
 <style>
 .media-cardl {
-  /* margin: 10px; */
-  /* width: 100%; */
+  margin: 5px;
+  width: 95%;
   cursor: pointer;
 }
 .image-cardl {
@@ -176,28 +188,21 @@ export default {
 }
 @media screen and (min-width: 800px) {
   .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 300px;
+    width: 31%;
   }
 }
 @media screen and (min-width: 1200px) {
   .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 200px;
+    width: 45%;
   }
-}
-@media screen and (min-width: 1500px) {
-  .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 250px;
+  .resource-modal {
+    min-width: 650px;
+    width: 650px;
   }
 }
 .resource-modal {
   /* padding: 30px; */
   width: 100%;
   height: 100%;
-}
-@media screen and (min-width: 1200px) {
-  .resource-modal {
-    min-width: 650px;
-    width: 650px;
-  }
 }
 </style>

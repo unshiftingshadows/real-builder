@@ -35,6 +35,7 @@ export default ({ app, router, Vue }) => {
     auth: fbapp.auth(),
     db: fbapp.database(),
     ref: dbref,
-    user: user
+    user: user,
+    imagesRef: fbapp.storage().ref('images')
   }
 }

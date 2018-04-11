@@ -22,8 +22,15 @@
         <q-input type="text" float-label="Wiki Title" v-model="imageTitle" />
       </div>
       <div class="col-12" v-if="imageType === 'upload'">
-        <!-- Add module for drag and drop or select files -->
-        <!-- Verify that it is an image file first (.jpg, .png, .gif, .pdf?) -->
+        <FilePond
+          name="image-upload"
+          ref="image-upload"
+          labelIdle="Drop files here..."
+          allowMultiple="false"
+          acceptedFileTypes="image/jpeg, image/png"
+          :files="images"
+          :server="imageServer"
+        />
       </div>
       <div class="col-12" v-if="imageType === 'link'">
         <q-input type="text" float-label="Image URL" v-model="imageURL" />
@@ -40,8 +47,18 @@
 
 <script>
 import { Notify } from 'quasar'
+import FilePond, { registerPlugin } from 'vue-filepond'
+import FilePondImagePreview from 'filepond-plugin-image-preview'
+
+registerPlugin(FilePondImagePreview)
+
+import 'filepond/dist/filepond.css'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 export default {
+  components: {
+    FilePond
+  },
   props: ['type', 'modalFin'],
   // name: 'ComponentName',
   data () {
@@ -52,6 +69,7 @@ export default {
       videoURL: '',
       imageType: '',
       imageTitle: '',
+      images: [],
       imageURL: '',
       imageOptions: [
         {
@@ -67,6 +85,52 @@ export default {
           value: 'link'
         }
       ],
+      imageServer: {
+        process: (fieldName, file, metadata, load, error, progress, abort) => {
+          // Should do custom file upload or local storing here
+          this.$database.add('image', { service: 'upload' }, (res) => {
+            var uploadProcess = this.$firebase.imagesRef.child(res._id).put(file)
+            uploadProcess.on('state_changed', (snapshot) => {
+              progress(false, snapshot.bytesTransferred, snapshot.totalBytes)
+            }, (err) => {
+              error(err)
+            }, () => {
+              load(uploadProcess.snapshot.ref.name)
+              uploadProcess.snapshot.ref.getDownloadURL().then((url) => {
+                res.thumbURL = url
+                res.imageURL = url
+                res.pageURL = url
+                this.modalFin(res)
+              })
+            })
+          })
+
+          // Can call the error method if something is wrong, should exit after
+          // error('oh my goodness');
+
+          // Should call the progress method to update the progress to 100% before calling load
+          // (endlessMode, processedSize, totalSize)
+          // progress(true, 0, 1024);
+
+          // Should call the load method when done and pass the returned server file id
+          // the unique server file id is used by revert and restore functions
+          // load('unique-file-id');
+
+          // Should expose an abort method so the request can be cancelled
+          return {
+            abort: () => {
+              // User tapped abort, cancel our ongoing actions here
+
+              // Let FilePond know the request has been cancelled
+              abort()
+            }
+          }
+        },
+        revert: './revert',
+        restore: './restore/',
+        load: './load/',
+        fetch: './fetch/'
+      },
       types: ['quote', 'image', 'illustration', 'lyric', 'video']
     }
   },

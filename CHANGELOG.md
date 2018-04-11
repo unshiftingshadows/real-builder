@@ -1,6 +1,26 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.12 - 2018-04-11
+### Added
+- FilePond for uploading images
+- FilePondImagePreview for previewing images to be uploaded
+- Uploaded images are stored in Firebase Storage
+- viewing/editing is now possible for all media
+- non-NQ Quotes can now be added to lessons!
+- masonry plugin
+
+### Changed
+- OList now generates download urls for uploaded images when listing them all -- all uploaded images will probably end up at the end of the list currently...
+- swapped out vue-bricks components with v-masonry instead -- much faster and easier to use
+- right drawer is always closed by default
+- left drawer is always open by default
+- right drawer shows a masonry layout with searching and filtering for non-NQ users
+- right drawer media for non-NQ users uses the same modal as viewing/editing from the OList
+
+### Removed
+- vue-bricks
+
 ## 0.0.11 - 2018-04-10
 ### Added
 - Settings page

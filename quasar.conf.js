@@ -8,6 +8,7 @@ module.exports = function (ctx) {
       // 'bible',
       'database',
       'firebase',
+      'masonry',
       'vuefire',
       'vuelidate'
     ],
@@ -90,6 +91,7 @@ module.exports = function (ctx) {
         'QCheckbox',
         'QAutocomplete',
         'QModal',
+        'QModalLayout',
         'QPopover',
         'QTooltip',
         'QVideo',

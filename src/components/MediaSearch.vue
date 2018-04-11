@@ -2,51 +2,56 @@
   <div>
     <div class="row gutter-sm">
       <div class="col-12">
-        <q-btn label="Pack" color="primary" @click.native="pack" />
+        <q-input v-model="searchTerms" @keyup.enter="search" />
       </div>
       <div class="col-12">
-        <q-input v-model="searchTerms" />
+        <q-select
+          :value="selectedTypes"
+          @change="val => { selectedTypes = val }"
+          multiple
+          :options="types"
+        />
       </div>
       <div class="col-12">
-        <bricks
-          ref="bricks"
-          :data="showItems"
-          :sizes="sizes"
-        >
-          <template slot-scope="scope">
-            <q-card color="primary" inline v-bind:class="[scope.item.type] + 'l'" class="media-cardl" @click.native="openItem(scope.item._id, scope.item.type)">
-              <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
-              <q-card-media v-if="scope.item.type == 'video' || scope.item.type == 'image'">
-                <img :src="scope.item.thumbURL" />
-              </q-card-media>
-              <q-card-title v-if="scope.item.type == 'video' || scope.item.type === 'lyric'">
-                {{ scope.item.title }}
-              </q-card-title>
-              <q-card-main v-if="scope.item.type === 'quote' || scope.item.type === 'illustration'">
-                <p v-if="scope.item.type === 'illustration'"><b>{{ scope.item.title }}</b></p>
-                <p>{{ scope.item.text }}</p>
-                <p class="q-body-2" v-if="scope.item.type === 'quote'">{{ scope.item.author }} - {{ scope.item.mediaTitle }}</p>
-                <p class="q-body-2" v-if="scope.item.type === 'illustration'">{{ scope.item.author }}</p>
-              </q-card-main>
-            </q-card>
-          </template>
-        </bricks>
+        <div v-masonry transition-duration="0.3" item-selection=".media-cardl">
+          <q-card v-for="item in showItems" :key="item._id" color="primary" inline v-bind:class="[item.type] + 'l'" class="media-cardl" @click.native="openItem(item, item.type)">
+            <!-- <q-icon name="fas fa-plus" color="positive" class="float-right cursor-pointer" style="margin-top: 5px; margin-right: 5px;" /> -->
+            <q-card-media v-if="item.type == 'video' || item.type == 'image'">
+              <img :src="item.thumbURL" />
+            </q-card-media>
+            <q-card-title v-if="item.type == 'video' || item.type === 'lyric'">
+              {{ item.title }}
+            </q-card-title>
+            <q-card-main v-if="item.type === 'quote' || item.type === 'illustration'">
+              <p v-if="item.type === 'illustration'"><b>{{ item.title }}</b></p>
+              <p>{{ item.text }}</p>
+              <p class="q-body-2" v-if="item.type === 'quote' && (item.author || item.mediaTitle)">{{ item.author }} - {{ item.mediaTitle }}</p>
+              <p class="q-body-2" v-if="item.type === 'illustration'">{{ item.author }}</p>
+            </q-card-main>
+          </q-card>
+        </div>
       </div>
     </div>
-    <q-modal v-model="resourceOpen" content-classes="resource-modal">
-      <resource-preview :type="resourceType" :resource="resource" :addModule="addModule" :close="closeResource" />
+    <q-modal v-model="mediaOpen" content-classes="media-modal" v-if="types.map(e => { return e.value }).includes(mediaType)">
+      <component v-bind:is="'media-' + mediaType" :data="media" :addModule="addModule" :open="mediaOpen" :close="closeMedia" />
     </q-modal>
   </div>
 </template>
 
 <script>
-import Bricks from 'vue-bricks'
-import ResourcePreview from 'components/ResourcePreview.vue'
+import MediaQuote from 'components/media/Quote.vue'
+import MediaImage from 'components/media/Image.vue'
+import MediaIllustration from 'components/media/Illustration.vue'
+import MediaLyric from 'components/media/Lyric.vue'
+import MediaVideo from 'components/media/Video.vue'
 
 export default {
   components: {
-    Bricks,
-    ResourcePreview
+    MediaQuote,
+    MediaImage,
+    MediaIllustration,
+    MediaLyric,
+    MediaVideo
   },
   // name: 'ComponentName',
   props: ['width', 'addModule'],
@@ -55,9 +60,9 @@ export default {
       searchTerms: '',
       items: [],
       showItems: [],
-      resourceOpen: false,
-      resourceType: '',
-      resource: '',
+      mediaOpen: false,
+      mediaType: '',
+      media: '',
       sizes: [
         { columns: 1, gutter: 20 },
         { mq: '800px', columns: 2, gutter: 20 },
@@ -67,11 +72,12 @@ export default {
       cardStyle: {
         width: this.width
       },
-      selectedTypes: [
-        'book',
-        'quote'
-      ],
+      selectedTypes: ['image', 'video', 'quote', 'illustration', 'lyric'],
       types: [
+        // {
+        //   label: 'All',
+        //   value: 'all'
+        // },
         {
           label: 'Image',
           value: 'image'
@@ -101,34 +107,23 @@ export default {
     },
     'items': function (value) {
       this.showItems = value
-      this.pack()
-    },
-    'width': function () {
-      this.pack()
     }
-  },
-  updated () {
-    console.log('updated')
-    console.log(this.$refs.bricks)
-    this.pack()
   },
   methods: {
     openItem (item, type) {
       console.log(item)
       console.log(type)
       if (this.types.map(function (e) { return e.value }).includes(type)) {
-        this.resource = item
-        this.resourceType = type
-        this.resourceOpen = true
+        this.mediaOpen = true
+        this.media = item
+        this.mediaType = type
       } else {
         console.error('Incorrect item type for routing...')
       }
     },
-    closeResource () {
-      this.resourceOpen = false
-    },
-    pack () {
-      this.$refs.bricks.pack()
+    closeMedia () {
+      this.mediaOpen = false
+      this.media = {}
     },
     checkType (item) {
       return this.selectedTypes.includes(item.type)
@@ -144,8 +139,8 @@ export default {
 
 <style>
 .media-cardl {
-  /* margin: 10px; */
-  /* width: 100%; */
+  margin: 5px;
+  width: 100%;
   cursor: pointer;
 }
 .image-cardl {
@@ -156,30 +151,17 @@ export default {
 .image-cardl:hover {
   opacity: 1;
 }
+.media-modal {
+  padding: 30px;
+}
 @media screen and (min-width: 800px) {
-  .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 300px;
+  .imagel, .videol, .lyricl, .illustrationl, .quotel {
+    width: 31%;
   }
 }
 @media screen and (min-width: 1200px) {
-  .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 200px;
-  }
-}
-@media screen and (min-width: 1500px) {
-  .bookl, .moviel, .imagel, .videol, .articlel, .notel, .quotel {
-    width: 250px;
-  }
-}
-.resource-modal {
-  /* padding: 30px; */
-  width: 100%;
-  height: 100%;
-}
-@media screen and (min-width: 1200px) {
-  .resource-modal {
-    min-width: 650px;
-    width: 650px;
+  .imagel, .videol, .lyricl, .illustrationl, .quotel {
+    width: 45%;
   }
 }
 </style>

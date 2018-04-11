@@ -72,7 +72,7 @@
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Scratch Pad</q-tooltip>
         </q-item>
         <q-item-separator />
-        <div v-if="!$root.user.nqUser">
+        <div v-if="$root.user.nqUser === false">
           <q-item :to="{ name: 'olist', params: { type: 'quote' }}" class="menu-item">
             <q-item-tile icon="fa-quote-left" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Quotes</q-tooltip>
@@ -94,7 +94,7 @@
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Videos</q-tooltip>
           </q-item>
         </div>
-        <q-item-separator v-if="!$root.user.nqUser" />
+        <q-item-separator v-if="$root.user.nqUser === false" />
         <q-item to="/settings" class="menu-item">
           <q-item-tile icon="fa-cog" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Settings</q-tooltip>
@@ -135,8 +135,8 @@ export default {
   // name: 'LayoutName',
   data () {
     return {
-      leftDrawer: this.$route.name !== 'olesson',
-      rightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop && this.$root.user.nqUser,
+      leftDrawer: true,
+      rightDrawer: false,
       showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
       pageType: this.$route.name
     }
@@ -145,13 +145,13 @@ export default {
     '$route.name': function (val) {
       console.log('page change')
       this.pageType = val
-      this.leftDrawer = val !== 'olesson'
-      this.rightDrawer = val === 'olesson' && this.$q.platform.is.desktop && this.$root.user.nqUser
+      this.leftDrawer = true
+      this.rightDrawer = false
       this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
-    },
-    '$root.user.nqUser': function (val) {
-      this.rightDrawer = this.$route.name === 'olesson' && this.$q.platform.is.desktop && val
     }
+    // '$root.user.nqUser': function (val) {
+    //   this.rightDrawer = this.$route.name === 'olesson' && this.$q.platform.is.desktop && val
+    // }
   },
   methods: {
     logout () {
