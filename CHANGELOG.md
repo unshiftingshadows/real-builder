@@ -1,6 +1,10 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.13 - 2018-04-12
+### Changed
+- edited Bible module to match new server bible system
+
 ## 0.0.12 - 2018-04-11
 ### Added
 - FilePond for uploading images
