@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bible-passage-reference-parser": "^2.0.1",
     "filepond": "^1.2.10",
     "filepond-plugin-image-preview": "^1.0.8",
     "firebase": "^4.11.0",

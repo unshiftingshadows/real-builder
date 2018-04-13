@@ -73,23 +73,23 @@
         </q-item>
         <q-item-separator />
         <div v-if="$root.user.nqUser === false">
-          <q-item :to="{ name: 'olist', params: { type: 'quote' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'quote' }}" class="menu-item">
             <q-item-tile icon="fa-quote-left" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Quotes</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'olist', params: { type: 'image' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'image' }}" class="menu-item">
             <q-item-tile icon="fa-image" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Images</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'olist', params: { type: 'illustration' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'illustration' }}" class="menu-item">
             <q-item-tile icon="fa-paint-brush" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Illustrations</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'olist', params: { type: 'lyric' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'lyric' }}" class="menu-item">
             <q-item-tile icon="fa-music" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Lyrics</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'olist', params: { type: 'video' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'video' }}" class="menu-item">
             <q-item-tile icon="fa-play" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Videos</q-tooltip>
           </q-item>

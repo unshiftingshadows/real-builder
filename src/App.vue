@@ -33,12 +33,14 @@ export default {
       switch (val) {
         case 'dark':
           document.documentElement.style.setProperty('--background-color', '#333333')
+          document.documentElement.style.setProperty('--card-color', '#444444')
           document.documentElement.style.setProperty('--color', '#ffffff')
           document.documentElement.style.setProperty('--drawer-background', '#444444')
           document.documentElement.style.setProperty('--drawer-icons', '#ffffff')
           break
         case 'light':
           document.documentElement.style.setProperty('--background-color', '#ffffff')
+          document.documentElement.style.setProperty('--card-color', '#dddddd')
           document.documentElement.style.setProperty('--color', '#333333')
           document.documentElement.style.setProperty('--drawer-background', '#dddddd')
           document.documentElement.style.setProperty('--drawer-icons', '#444444')
@@ -99,7 +101,7 @@ export default {
 /* Style all cards */
 .q-card {
   color: var(--color);
-  background-color: var(--background-color);
+  background-color: var(--card-color);
 }
 
 /* Style drawer background color */

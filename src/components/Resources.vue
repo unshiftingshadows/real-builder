@@ -91,6 +91,50 @@ export default {
             wordcount: 0
           })
           break
+        case 'image':
+          newRef.set({
+            type: 'image',
+            mediaid: id,
+            editing: false,
+            slide: false,
+            order: 'new',
+            time: 0,
+            wordcount: 0
+          })
+          break
+        case 'video':
+          newRef.set({
+            type: 'video',
+            mediaid: id,
+            editing: false,
+            slide: false,
+            order: 'new',
+            time: 0,
+            wordcount: 0
+          })
+          break
+        case 'lyric':
+          newRef.set({
+            type: 'lyric',
+            mediaid: id,
+            editing: false,
+            slide: false,
+            order: 'new',
+            time: 0,
+            wordcount: 0
+          })
+          break
+        case 'illustration':
+          newRef.set({
+            type: 'illustration',
+            mediaid: id,
+            editing: false,
+            slide: false,
+            order: 'new',
+            time: 0,
+            wordcount: 0
+          })
+          break
         default:
           console.error('incorrect new module type')
           return false

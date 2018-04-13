@@ -127,6 +127,8 @@ import ModQuestion from 'components/modules/Question.vue'
 import ModVideo from 'components/modules/Video.vue'
 import ModImage from 'components/modules/Image.vue'
 import ModComposition from 'components/modules/Composition.vue'
+import ModLyric from 'components/modules/Lyric.vue'
+import ModIllustration from 'components/modules/Illustration.vue'
 
 export default {
   components: {
@@ -140,7 +142,9 @@ export default {
     ModQuestion,
     ModVideo,
     ModImage,
-    ModComposition
+    ModComposition,
+    ModLyric,
+    ModIllustration
   },
   props: ['type', 'id'],
   // name: 'ComponentName',
@@ -327,6 +331,7 @@ export default {
             type: 'bible',
             text: '',
             bibleRef: '',
+            translation: this.$root.user.translation,
             editing: this.$firebase.auth.currentUser.uid,
             slide: false,
             order: this.nextModOrder,

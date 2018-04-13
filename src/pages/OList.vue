@@ -12,63 +12,27 @@
         </q-card-main>
       </q-card>
     </div>
-    <div v-if="!loading && mediaTypes.includes(type)">
-      <div v-masonry transition-duration="0.3s" item-selectior=".media-item">
-        <q-card inline v-masonry-tile v-for="item in items" :key="item._id" class="media-card media-item" @click.native="openItem(item._id, item)">
-          <q-card-media v-if="type === 'image' || type === 'video'">
-            <img :src="item.thumbURL" />
-            <q-card-title slot="overlay" v-if="type === 'video'">{{ item.title }}</q-card-title>
-          </q-card-media>
-          <q-card-title v-if="type === 'lyric' || type === 'illustration'">{{ item.title }}</q-card-title>
-          <q-card-main v-if="type !== 'image' && type !== 'video'">
-            <p>{{ item.text }}</p>
-          </q-card-main>
-        </q-card>
-      </div>
-    </div>
     <q-modal ref="addContentModal" v-model="showAddContent" content-classes="add-media-modal" v-if="contentTypes.includes(type)">
       <add-content :modal-fin="closeAddContent" :type="'o' + type" ref="addContent" />
-    </q-modal>
-    <q-modal ref="addMediaModal" v-model="showAddMedia" content-classes="add-media-modal" v-if="mediaTypes.includes(type)">
-      <add-media :modal-fin="closeAddMedia" :type="type" ref="addMedia" />
-    </q-modal>
-    <q-modal ref="showMediaModal" v-model="showMedia" content-classes="add-media-modal" v-if="mediaTypes.includes(type)">
-      <component v-bind:is="'media-' + type" :data="openMedia" :open="showMedia" :close="closeMedia" @hide="closeMedia" />
     </q-modal>
   </q-page>
 </template>
 
 <script>
 import AddContent from 'components/AddContent.vue'
-import AddMedia from 'components/AddMedia.vue'
-import MediaQuote from 'components/media/Quote.vue'
-import MediaImage from 'components/media/Image.vue'
-import MediaIllustration from 'components/media/Illustration.vue'
-import MediaLyric from 'components/media/Lyric.vue'
-import MediaVideo from 'components/media/Video.vue'
 
 export default {
   components: {
-    AddContent,
-    AddMedia,
-    MediaQuote,
-    MediaImage,
-    MediaIllustration,
-    MediaLyric,
-    MediaVideo
+    AddContent
   },
   // name: 'PageName',
   data () {
     return {
       contentTypes: ['series', 'lesson', 'sermon', 'scratch'],
-      mediaTypes: ['quote', 'image', 'illustration', 'lyric', 'video'],
       type: this.$route.params.type,
       items: [],
       loading: false,
-      showAddContent: false,
-      showAddMedia: false,
-      showMedia: false,
-      openMedia: {}
+      showAddContent: false
     }
   },
   mounted () {
@@ -86,22 +50,7 @@ export default {
       this.items = []
       this.$database.list('o' + type, (data) => {
         console.log('data', data, this)
-        if (this.type === 'image') {
-          data.forEach((image) => {
-            if (image.service === 'upload') {
-              this.$firebase.imagesRef.child(image._id).getDownloadURL().then((url) => {
-                image.thumbURL = url
-                image.imageURL = url
-                image.pageURL = url
-                this.items.push(image)
-              })
-            } else {
-              this.items.push(image)
-            }
-          })
-        } else {
-          this.items = data
-        }
+        this.items = data
         this.loading = false
       })
     },
@@ -110,32 +59,17 @@ export default {
       console.log(this.type)
       if (this.contentTypes.includes(this.type)) {
         this.$router.push({ name: 'o' + this.type, params: { id: id } })
-      } else if (this.mediaTypes.includes(this.type)) {
-        console.log('open media')
-        this.openMedia = item
-        this.showMedia = true
       }
     },
     openAdd () {
       if (this.contentTypes.includes(this.type)) {
         this.showAddContent = true
-      } else if (this.mediaTypes.includes(this.type)) {
-        this.showAddMedia = true
       } else {
         console.error('incorrect type to add')
       }
     },
     closeAddContent () {
       this.showAddContent = false
-    },
-    closeAddMedia (newItem) {
-      this.showAddMedia = false
-      this.items.push(newItem)
-    },
-    closeMedia () {
-      console.log('close media')
-      this.showMedia = false
-      this.openMedia = {}
     }
   }
 }
@@ -149,11 +83,6 @@ export default {
   cursor: pointer;
 }
 
-.add-media-modal {
-  padding: 30px;
-  width: 100%;
-}
-
 @media screen and (min-width: 800px) {
   .media-card {
     width: 47%;
@@ -162,10 +91,6 @@ export default {
 @media screen and (min-width: 1200px) {
   .media-card {
     width: 31%;
-  }
-  .add-media-modal {
-    min-width: 500px;
-    width: 500px;
   }
 }
 

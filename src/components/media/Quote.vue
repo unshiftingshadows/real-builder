@@ -9,9 +9,9 @@
         <p>{{ quote.mediaid.title }} | {{ quote.mediaid.author }}</p>
       </div>
       <div class="col-12" v-if="quote.tags.length > 0 || quote.bibleRefs.length > 0">
-        <q-chip v-if="quote.tags.length > 0" v-for="tag in quote.tags" :key="tag">{{ tag }}</q-chip>
-        <!-- |
-        <q-chip v-if="quote.bibleRefs.length > 0" v-for="bibleRef in quote.bibleRefs" :key="bibleRef">{{ bibleRef }}</q-chip> -->
+        <q-chip v-if="quote.tags.length > 0" v-for="tag in quote.tags" :key="tag" color="primary">{{ tag }}</q-chip>
+        |
+        <q-chip v-if="readableRefs.length > 0" v-for="ref in readableRefs" :key="ref" color="secondary">{{ ref }}</q-chip>
       </div>
       <div class="col-12">
         <q-btn color="primary" @click.native="editing = true">Edit</q-btn>
@@ -30,6 +30,14 @@
       </div>
       <div class="col-12">
         <q-chips-input v-model="quote.tags" float-label="Tags" />
+      </div>
+      <div class="col-12">
+        <q-chips-input
+          color="secondary"
+          v-model="readableRefs"
+          float-label="Bible References"
+          @input="addRef"
+        />
       </div>
       <div class="col-12">
         <q-btn color="primary" @click.native="save">Save</q-btn>
@@ -54,7 +62,8 @@ export default {
           title: '',
           author: ''
         }
-      }
+      },
+      readableRefs: []
     }
   },
   watch: {
@@ -63,13 +72,21 @@ export default {
       if (val !== {}) {
         this.editing = false
         this.quote = val
+        this.readableRefs = val.bibleRefs.map(e => { return this.$bible.readable(e) })
       }
     }
   },
   mounted () {
-    this.quote = this.data
+    this.init()
   },
   methods: {
+    init () {
+      this.quote = this.data
+    },
+    addRef (newRef) {
+      this.quote.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
+      this.readableRefs = newRef.map(e => { return this.$bible.readable(e) })
+    },
     save () {
       this.$database.update('quote', this.quote._id, this.quote, (res) => {
         Notify.create({

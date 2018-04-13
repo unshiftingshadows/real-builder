@@ -17,14 +17,20 @@
         <q-input v-model="sermon.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="bibleRefs" float-label="Bible References" @blur="update" />
+        <q-chips-input
+          color="secondary"
+          v-model="readableRefs"
+          float-label="Bible References"
+          @blur="update"
+          @input="addRef"
+        />
       </div>
       <div class="col-xs-12 col-md-6">
         <q-chips-input v-model="sermon.tags" float-label="Tags" @blur="update" />
       </div>
-      <div class="col-12">
+      <!-- <div class="col-12">
         <bible-passage-list :passages="bibleRefs" />
-      </div>
+      </div> -->
       <div class="col-12">
         <module-list type="osermon" :id="id" />
       </div>
@@ -34,13 +40,12 @@
 
 <script>
 import { Notify } from 'quasar'
-import * as Bible from '../statics/bible.js'
-import BiblePassageList from 'components/BiblePassageList.vue'
+// import BiblePassageList from 'components/BiblePassageList.vue'
 import ModuleList from 'components/ModuleList.vue'
 
 export default {
   components: {
-    BiblePassageList,
+    // BiblePassageList,
     ModuleList
   },
   // name: 'PageName',
@@ -48,19 +53,11 @@ export default {
     return {
       id: this.$route.params.id,
       sermon: {
-        tags: []
+        tags: [],
+        bibleRefs: []
       },
       seriesName: '',
-      bibleRefParse: [],
-      bibleRefs: []
-    }
-  },
-  watch: {
-    bibleRefs: function (userRefList) {
-      userRefList.forEach((ref) => {
-        var refObj = Bible.parseBibleRef(ref)
-        this.bibleRefParse.push(refObj)
-      })
+      readableRefs: []
     }
   },
   mounted () {
@@ -70,10 +67,12 @@ export default {
     init () {
       this.$database.view('osermon', this.id, (data) => {
         this.sermon = data
-        data.bibleRefs.forEach((ref) => {
-          this.bibleRefs.push(Bible.stringBibleRef(ref))
-        })
+        this.readableRefs = data.bibleRefs.map(e => { return this.$bible.readable(e) })
       })
+    },
+    addRef (newRef) {
+      this.sermon.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
+      this.readableRefs = newRef.map(e => { return this.$bible.readable(e) })
     },
     search (terms, done) {
       var obj = {
@@ -97,7 +96,7 @@ export default {
       console.log('update!')
       var obj = {
         mainIdea: this.sermon.mainIdea,
-        bibleRefs: this.bibleRefParse,
+        bibleRefs: this.sermon.bibleRefs,
         tags: this.sermon.tags,
         seriesID: this.sermon.seriesID
       }

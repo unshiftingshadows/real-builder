@@ -23,14 +23,17 @@
       <q-card-main>
         <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
-          <div class="col-12">
+          <!-- <div class="col-12">
             <q-input v-model="media.text" float-label="Quote" type="textarea" :max-height="100" :min-rows="1" />
           </div>
           <div class="col-12">
             <q-input v-model="media.notes" float-label="Notes" type="textarea" :max-height="100" :min-rows="1" />
+          </div> -->
+          <div class="col-12">
+            <p>To edit quotes...use the media links on the left to edit the original quote directly</p>
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="preSave">Save</q-btn>
+            <!-- <q-btn color="primary" @click.native="preSave">Save</q-btn> -->
             <q-btn color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>

@@ -12,7 +12,7 @@
         </q-icon>
         <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ data.time }} minutes&nbsp;&nbsp;&nbsp;</span>
         <q-icon name="fas fa-book" color="primary" size="2rem" />&nbsp;&nbsp;&nbsp;
-        {{ data.bibleRef }}
+        {{ data.bibleRef }} <span class="q-caption">{{ data.translation }}</span>
       </q-card-title>
       <q-card-main>
         <p>{{ data.text }}</p>
@@ -24,6 +24,13 @@
         <div class="row gutter-sm">
           <div class="col-12">
             <q-input v-model="data.bibleRef" float-label="Bible Ref" @keyup.enter="preSave" />
+          </div>
+          <div class="col-12">
+            <q-select
+              v-model="translation"
+              float-label="Default Translation"
+              :options="translationOptions"
+            />
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="preSave">Save</q-btn>
@@ -41,17 +48,57 @@ export default {
   props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {
-      passages: []
+      passages: [],
+      translation: this.data.translation,
+      translationOptions: [
+        {
+          label: 'English Standard Version - ESV',
+          value: 'esv'
+        },
+        {
+          label: 'New American Standard Bible - NASB',
+          value: 'nas'
+        },
+        {
+          label: 'New International Version - NIV',
+          value: 'niv'
+        },
+        {
+          label: 'New King James Version - NKJV',
+          value: 'nkj'
+        },
+        {
+          label: 'New English Translation - NET',
+          value: 'net'
+        },
+        {
+          label: 'Lexham English Bible - LEB',
+          value: 'leb'
+        },
+        {
+          label: 'King James Version - KVJ',
+          value: 'kjv'
+        },
+        {
+          label: 'American Standard Version - ASV',
+          value: 'asv'
+        },
+        {
+          label: 'World English Bible - WEB',
+          value: 'web'
+        }
+      ]
     }
   },
   methods: {
     preSave () {
-      this.$database.bible(this.data.bibleRef, 'leb', (data) => {
+      this.$database.bible(this.data.bibleRef, this.translation, (data) => {
         console.log(data)
         // NOTE: This needs to be moved to the server side -- not all versions will
         //       follow this same format
         this.data.text = data.text
-        // this.data.bibleRef = data.canonical
+        this.data.translation = this.translation
+        this.data.bibleRef = this.$bible.readable(this.data.bibleRef)
         this.save(this.id)
       })
     }

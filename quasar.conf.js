@@ -5,7 +5,7 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       // 'axios',
-      // 'bible',
+      'bible',
       'database',
       'firebase',
       'masonry',

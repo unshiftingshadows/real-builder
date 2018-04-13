@@ -10,18 +10,26 @@
             </q-list>
           </q-popover>
         </q-icon>
-        <q-icon name="fas fa-image" color="primary" size="2rem" />&nbsp;&nbsp;&nbsp;
+        <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ data.time }} minutes&nbsp;&nbsp;&nbsp;</span>
+        <q-icon name="fas fa-music" color="primary" size="2rem" />&nbsp;&nbsp;&nbsp;
+        {{ media.title }} | {{ media.author }}
       </q-card-title>
-      <q-card-media>
-        <img :src="media.imageURL" style="width: 100%;" />
-      </q-card-media>
+      <q-card-main>
+        <p>{{ media.text }}</p>
+      </q-card-main>
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
         <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
+          <!-- <div class="col-12">
+            <q-input v-model="media.text" float-label="Lyric" type="textarea" :max-height="100" :min-rows="1" />
+          </div>
           <div class="col-12">
-            <p>To edit images...use the media links on the left to edit the original image directly</p>
+            <q-input v-model="media.notes" float-label="Notes" type="textarea" :max-height="100" :min-rows="1" />
+          </div> -->
+          <div class="col-12">
+            <p>To edit lyrics...use the media links on the left to edit the original lyric directly</p>
           </div>
           <div class="col-12">
             <!-- <q-btn color="primary" @click.native="preSave">Save</q-btn> -->
@@ -34,13 +42,20 @@
 </template>
 
 <script>
+import Editor from 'components/Editor.vue'
+
 export default {
-  name: 'mod-image',
+  components: {
+    Editor
+  },
+  name: 'mod-lyric',
   props: [ 'id', 'data', 'edit', 'save', 'remove', 'close' ],
   data () {
     return {
       media: {
-        imageURL: ''
+        text: '',
+        author: '',
+        title: ''
       }
     }
   },

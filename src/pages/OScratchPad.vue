@@ -11,7 +11,13 @@
         <q-chips-input v-model="scratch.tags" float-label="Tags" @blur="update" />
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-chips-input v-model="bibleRefs" float-label="Bible Refs" @blur="update" />
+        <q-chips-input
+          color="secondary"
+          v-model="readableRefs"
+          float-label="Bible References"
+          @blur="update"
+          @input="addRef"
+        />
       </div>
     </div>
   </q-page>
@@ -19,7 +25,6 @@
 
 <script>
 import { Notify } from 'quasar'
-import * as Bible from '../statics/bible.js'
 import Editor from 'components/Editor.vue'
 
 export default {
@@ -31,18 +36,10 @@ export default {
     return {
       id: this.$route.params.id,
       scratch: {
-        tags: []
+        tags: [],
+        bibleRefs: []
       },
-      bibleRefParse: [],
-      bibleRefs: []
-    }
-  },
-  watch: {
-    bibleRefs: function (userRefList) {
-      userRefList.forEach((ref) => {
-        var refObj = Bible.parseBibleRef(ref)
-        this.bibleRefParse.push(refObj)
-      })
+      readableRefs: []
     }
   },
   mounted () {
@@ -52,17 +49,19 @@ export default {
     init () {
       this.$database.view('oscratch', this.id, (data) => {
         this.scratch = data
-        data.bibleRefs.forEach((ref) => {
-          this.bibleRefs.push(Bible.stringBibleRef(ref))
-        })
+        this.readableRefs = data.bibleRefs.map(e => { return this.$bible.readable(e) })
       })
+    },
+    addRef (newRef) {
+      this.scratch.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
+      this.readableRefs = newRef.map(e => { return this.$bible.readable(e) })
     },
     update () {
       console.log('update!')
       var obj = {
         text: this.scratch.text,
         tags: this.scratch.tags,
-        bibleRefs: this.bibleRefParse
+        bibleRefs: this.scratch.bibleRefs
       }
       this.$database.update('oscratch', this.id, obj, (res) => {
         console.log(res)

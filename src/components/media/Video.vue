@@ -9,12 +9,13 @@
         <p>{{ video.title }}</p>
       </div>
       <div class="col-12" v-if="video.tags.length > 0 || video.bibleRefs.length > 0">
-        <q-chip v-if="video.tags.length > 0" v-for="tag in video.tags" :key="tag">{{ tag }}</q-chip>
-        <!-- |
-        <q-chip v-if="video.bibleRefs.length > 0" v-for="bibleRef in video.bibleRefs" :key="bibleRef">{{ bibleRef }}</q-chip> -->
+        <q-chip v-if="video.tags.length > 0" v-for="tag in video.tags" :key="tag" color="primary">{{ tag }}</q-chip>
+        |
+        <q-chip v-if="readableRefs.length > 0" v-for="ref in readableRefs" :key="ref" color="secondary">{{ ref }}</q-chip>
       </div>
       <div class="col-12">
         <q-btn color="primary" @click.native="editing = true">Edit</q-btn>
+        <q-btn color="primary" v-if="addModule !== undefined" @click.native="add">Add</q-btn>
       </div>
     </div>
     <div class="row gutter-sm" v-if="editing">
@@ -28,6 +29,14 @@
         <q-chips-input v-model="video.tags" float-label="Tags" />
       </div>
       <div class="col-12">
+        <q-chips-input
+          color="secondary"
+          v-model="readableRefs"
+          float-label="Bible References"
+          @input="addRef"
+        />
+      </div>
+      <div class="col-12">
         <q-btn color="primary" @click.native="save">Save</q-btn>
       </div>
     </div>
@@ -38,7 +47,7 @@
 import { Notify } from 'quasar'
 
 export default {
-  props: ['data', 'open', 'close'],
+  props: ['data', 'open', 'close', 'addModule'],
   name: 'media-video',
   data () {
     return {
@@ -46,7 +55,8 @@ export default {
       video: {
         tags: [],
         bibleRefs: []
-      }
+      },
+      readableRefs: []
     }
   },
   watch: {
@@ -55,6 +65,7 @@ export default {
       if (val !== {}) {
         this.editing = false
         this.video = val
+        this.readableRefs = val.bibleRefs.map(e => { return this.$bible.readable(e) })
       }
     }
   },
@@ -62,6 +73,13 @@ export default {
     this.video = this.data
   },
   methods: {
+    init () {
+      this.video = this.data
+    },
+    addRef (newRef) {
+      this.video.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
+      this.readableRefs = newRef.map(e => { return this.$bible.readable(e) })
+    },
     save () {
       this.$database.update('video', this.video._id, this.video, (res) => {
         Notify.create({
@@ -71,6 +89,10 @@ export default {
         })
         this.editing = false
       })
+    },
+    add () {
+      this.addModule(this.video._id, 'video', this.video)
+      this.close()
     }
   }
 }

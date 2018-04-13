@@ -9,12 +9,13 @@
         <p>{{ lyric.text }}</p>
       </div>
       <div class="col-12" v-if="lyric.tags.length > 0 || lyric.bibleRefs.length > 0">
-        <q-chip v-if="lyric.tags.length > 0" v-for="tag in lyric.tags" :key="tag">{{ tag }}</q-chip>
-        <!-- |
-        <q-chip v-if="lyric.bibleRefs.length > 0" v-for="bibleRef in lyric.bibleRefs" :key="bibleRef">{{ bibleRef }}</q-chip> -->
+        <q-chip v-if="lyric.tags.length > 0" v-for="tag in lyric.tags" :key="tag" color="primary">{{ tag }}</q-chip>
+        |
+        <q-chip v-if="readableRefs.length > 0" v-for="ref in readableRefs" :key="ref" color="secondary">{{ ref }}</q-chip>
       </div>
       <div class="col-12">
         <q-btn color="primary" @click.native="editing = true">Edit</q-btn>
+        <q-btn color="primary" v-if="addModule !== undefined" @click.native="add">Add</q-btn>
       </div>
     </div>
     <div class="row gutter-sm" v-if="editing">
@@ -28,6 +29,14 @@
         <q-chips-input v-model="lyric.tags" float-label="Tags" />
       </div>
       <div class="col-12">
+        <q-chips-input
+          color="secondary"
+          v-model="readableRefs"
+          float-label="Bible References"
+          @input="addRef"
+        />
+      </div>
+      <div class="col-12">
         <q-btn color="primary" @click.native="save">Save</q-btn>
       </div>
     </div>
@@ -38,7 +47,7 @@
 import { Notify } from 'quasar'
 
 export default {
-  props: ['data', 'open', 'close'],
+  props: ['data', 'open', 'close', 'addModule'],
   name: 'media-lyric',
   data () {
     return {
@@ -49,7 +58,8 @@ export default {
         author: '',
         text: '',
         mediaTitle: ''
-      }
+      },
+      readableRefs: []
     }
   },
   watch: {
@@ -58,13 +68,21 @@ export default {
       if (val !== {}) {
         this.editing = false
         this.lyric = val
+        this.readableRefs = val.bibleRefs.map(e => { return this.$bible.readable(e) })
       }
     }
   },
   mounted () {
-    this.lyric = this.data
+    this.init()
   },
   methods: {
+    init () {
+      this.lyric = this.data
+    },
+    addRef (newRef) {
+      this.lyric.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
+      this.readableRefs = newRef.map(e => { return this.$bible.readable(e) })
+    },
     save () {
       this.$database.update('lyric', this.lyric._id, this.lyric, (res) => {
         Notify.create({
@@ -74,6 +92,10 @@ export default {
         })
         this.editing = false
       })
+    },
+    add () {
+      this.addModule(this.lyric._id, 'lyric', this.lyric)
+      this.close()
     }
   }
 }

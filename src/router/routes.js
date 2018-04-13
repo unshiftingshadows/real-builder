@@ -8,6 +8,7 @@ export default [
     children: [
       { path: 'dashboard', name: 'dashboard', component: () => import('pages/ODashboard') },
       { path: 'list/:type', name: 'olist', component: () => import('pages/OList') },
+      { path: 'media/:type', name: 'omedia', component: () => import('pages/OMedia') },
       { path: 'series/:id', name: 'oseries', component: () => import('pages/OSeries') },
       { path: 'lesson/:id', name: 'olesson', component: () => import('pages/OLesson') },
       { path: 'sermon/:id', name: 'osermon', component: () => import('pages/OSermon') },

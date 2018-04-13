@@ -152,9 +152,13 @@ export default {
   opacity: 1;
 }
 .media-modal {
+  width: 100%;
   padding: 30px;
 }
 @media screen and (min-width: 800px) {
+  .media-modal {
+    width: 500px;
+  }
   .imagel, .videol, .lyricl, .illustrationl, .quotel {
     width: 31%;
   }

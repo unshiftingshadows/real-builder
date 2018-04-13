@@ -1,6 +1,19 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.14 - 2018-04-13
+### Added
+- setting for preferred Bible translation
+- Bible module now has an option for translation
+- OMedia to handle media lists that were being done in OList, just to add clarity
+
+### Changed
+- Quotes in Sermons/Lessons need to be edited from either the media drawer inside the sermon/lesson or from the media lists on the left menu -- this will be changed eventually
+- Remove Bible Passage list from sermons/lessons - not sure that's exactly what is helpful when building a lesson/sermon
+- all media now uses the osis form for BibleRefs
+- tag chips for media are colored as primary
+- bibleRef chips for media are colored as secondary 
+
 ## 0.0.13 - 2018-04-12
 ### Changed
 - edited Bible module to match new server bible system

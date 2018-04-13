@@ -37,11 +37,24 @@
           </q-card-main>
         </q-card>
       </div>
-      <div class="col-12">
-        <q-card v-if="$root.user.realUser">
+      <div class="col-12" v-if="$root.user.realUser">
+        <q-card>
           <q-card-title>REAL Curriculum Author</q-card-title>
           <q-card-main>
             <p>You are a REAL Curriculum author.</p>
+          </q-card-main>
+        </q-card>
+      </div>
+      <div class="col-12">
+        <q-card>
+          <q-card-title>Other Settings</q-card-title>
+          <q-card-main>
+            <q-select
+              v-model="$root.user.translation"
+              float-label="Default Translation"
+              :options="translationOptions"
+              @input="translationChange"
+            />
           </q-card-main>
         </q-card>
       </div>
@@ -63,6 +76,44 @@ export default {
           label: 'Dark',
           value: 'dark'
         }
+      ],
+      translationOptions: [
+        {
+          label: 'English Standard Version - ESV',
+          value: 'esv'
+        },
+        {
+          label: 'New American Standard Bible - NASB',
+          value: 'nas'
+        },
+        {
+          label: 'New International Version - NIV',
+          value: 'niv'
+        },
+        {
+          label: 'New King James Version - NKJV',
+          value: 'nkj'
+        },
+        {
+          label: 'New English Translation - NET',
+          value: 'net'
+        },
+        {
+          label: 'Lexham English Bible - LEB',
+          value: 'leb'
+        },
+        {
+          label: 'King James Version - KVJ',
+          value: 'kjv'
+        },
+        {
+          label: 'American Standard Version - ASV',
+          value: 'asv'
+        },
+        {
+          label: 'World English Bible - WEB',
+          value: 'web'
+        }
       ]
     }
   },
@@ -71,6 +122,12 @@ export default {
       console.log('change...', val)
       this.$firebase.user().update({
         theme: this.$root.user.theme
+      })
+    },
+    translationChange (val) {
+      console.log('change...', val)
+      this.$firebase.user().update({
+        translation: this.$root.user.translation
       })
     }
   }
