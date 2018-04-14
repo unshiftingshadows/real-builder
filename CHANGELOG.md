@@ -1,6 +1,10 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.15 - 2018-04-14
+### Added
+- small piece of code to App.vue to disable FastClick -- important for editores in pwas to work properly
+
 ## 0.0.14 - 2018-04-13
 ### Added
 - setting for preferred Bible translation
