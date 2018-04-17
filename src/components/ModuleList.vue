@@ -39,9 +39,7 @@
       </draggable>
     </div>
     <!-- This button should always be just below the last user-made module -->
-    <div class="col-12 relative-position" style="height: 70px">
-      <q-btn round color="primary" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
-    </div>
+    <add-module :next-mod-order="nextModOrder" :next-section-order="nextSectionOrder" :edit="moduleEdit" :close="moduleClose" />
     <div class="col-12" v-if="structure.application">
       <!-- Application module -->
       <q-card>
@@ -118,6 +116,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import Editor from 'components/Editor.vue'
+import AddModule from 'components/AddModule.vue'
 import ModSection from 'components/modules/Section.vue'
 import ModQuote from 'components/modules/Quote.vue'
 import ModText from 'components/modules/Text.vue'
@@ -134,6 +133,7 @@ export default {
   components: {
     Draggable,
     Editor,
+    AddModule,
     ModSection,
     ModQuote,
     ModText,
@@ -240,133 +240,6 @@ export default {
   },
   methods: {
     init () {
-    },
-    showAdd () {
-      // NOTE: Need to split list for lessons vs sermons
-      this.$q.actionSheet({
-        title: 'Add Module',
-        grid: true,
-        actions: [
-          {
-            label: 'Section',
-            color: 'primary',
-            icon: 'fa-list-ol',
-            handler: () => {
-              console.log('section!')
-              this.addModule('section')
-            }
-          },
-          {
-            label: 'Text',
-            color: 'primary',
-            icon: 'fa-align-left',
-            handler: () => {
-              console.log('text!')
-              this.addModule('text')
-            }
-          },
-          {
-            label: 'Bible',
-            color: 'primary',
-            icon: 'fa-book',
-            handler: () => {
-              console.log('bible!')
-              this.addModule('bible')
-            }
-          },
-          {
-            label: 'Activity',
-            color: 'primary',
-            icon: 'fa-trophy',
-            handler: () => {
-              console.log('activity!')
-              this.addModule('activity')
-            }
-          },
-          {
-            label: 'Question',
-            color: 'primary',
-            icon: 'fa-question',
-            handler: () => {
-              console.log('question!')
-              this.addModule('question')
-            }
-          }
-        ]
-      })
-    },
-    addModule (type) {
-      console.log('add module')
-      if (this.editingId !== '') {
-        this.closeEdit(this.editingId)
-      }
-      var newRef = this.$firebase.ref(this.type, 'modules', this.id).push()
-      switch (type) {
-        case 'section':
-          newRef.set({
-            type: 'section',
-            title: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            number: this.nextSectionOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'text':
-          newRef.set({
-            type: 'text',
-            title: '',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'bible':
-          newRef.set({
-            type: 'bible',
-            text: '',
-            bibleRef: '',
-            translation: this.$root.user.translation,
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'activity':
-          newRef.set({
-            type: 'activity',
-            title: '',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'question':
-          newRef.set({
-            type: 'question',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        default:
-          console.error('incorrect new module type')
-          return false
-      }
-      this.editingId = newRef.key
     },
     startEdit (id) {
       console.log('edit', id)

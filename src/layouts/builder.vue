@@ -49,7 +49,7 @@
       content-class="sm-drawer"
     >
       <!-- QScrollArea is optional -->
-      <q-scroll-area class="fit q-pa-sm">
+      <q-scroll-area class="fit q-pa-sm" v-if="$root.user.prefs">
         <q-item to="/dashboard" class="menu-item">
           <q-item-tile icon="fa-home" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Dashboard</q-tooltip>
@@ -59,37 +59,37 @@
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">REAL Curriculum</q-tooltip>
         </q-item>
         <q-item-separator />
-        <q-item :to="{ name: 'olist', params: { type: 'sermon' }}" class="menu-item">
+        <q-item :to="{ name: 'olist', params: { type: 'sermon' }}" class="menu-item" v-if="$root.user.prefs.contentType.sermon">
           <q-item-tile icon="fa-comment" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Sermons</q-tooltip>
         </q-item>
-        <q-item :to="{ name: 'olist', params: { type: 'lesson' }}" class="menu-item">
+        <q-item :to="{ name: 'olist', params: { type: 'lesson' }}" class="menu-item" v-if="$root.user.prefs.contentType.lesson">
           <q-item-tile icon="fa-file" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Lessons</q-tooltip>
         </q-item>
-        <q-item :to="{ name: 'olist', params: { type: 'scratch' }}" class="menu-item">
+        <q-item :to="{ name: 'olist', params: { type: 'scratch' }}" class="menu-item" v-if="$root.user.prefs.contentType.scratch">
           <q-item-tile icon="fa-lightbulb" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Scratch Pad</q-tooltip>
         </q-item>
         <q-item-separator />
         <div v-if="$root.user.nqUser === false">
-          <q-item :to="{ name: 'omedia', params: { type: 'quote' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'quote' }}" class="menu-item" v-if="$root.user.prefs.mediaType.quote">
             <q-item-tile icon="fa-quote-left" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Quotes</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'omedia', params: { type: 'image' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'image' }}" class="menu-item" v-if="$root.user.prefs.mediaType.image">
             <q-item-tile icon="fa-image" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Images</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'omedia', params: { type: 'illustration' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'illustration' }}" class="menu-item" v-if="$root.user.prefs.mediaType.illustration">
             <q-item-tile icon="fa-paint-brush" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Illustrations</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'omedia', params: { type: 'lyric' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'lyric' }}" class="menu-item" v-if="$root.user.prefs.mediaType.lyric">
             <q-item-tile icon="fa-music" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Lyrics</q-tooltip>
           </q-item>
-          <q-item :to="{ name: 'omedia', params: { type: 'video' }}" class="menu-item">
+          <q-item :to="{ name: 'omedia', params: { type: 'video' }}" class="menu-item" v-if="$root.user.prefs.mediaType.video">
             <q-item-tile icon="fa-play" />
             <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Videos</q-tooltip>
           </q-item>

@@ -10,20 +10,37 @@
 import FastClick from 'fastclick'
 FastClick.notNeeded = true
 
+var initUser = {
+  nqUser: false,
+  realUser: false,
+  theme: '',
+  name: {
+    first: '',
+    last: ''
+  },
+  email: '',
+  prefs: {
+    bibleTranslation: 'esv',
+    contentType: {
+      sermon: true,
+      lesson: true,
+      scratch: true
+    },
+    mediaType: {
+      quote: true,
+      image: true,
+      illustration: true,
+      lyric: true,
+      video: true
+    }
+  }
+}
+
 export default {
   name: 'App',
   data () {
     return {
-      user: {
-        nqUser: false,
-        realUser: false,
-        theme: '',
-        name: {
-          first: '',
-          last: ''
-        },
-        email: ''
-      }
+      user: initUser
     }
   },
   mounted () {
@@ -62,7 +79,7 @@ export default {
         if (!user) {
           console.log('no user')
         } else {
-          this.$bindAsObject('user', this.$firebase.user(user.uid))
+          this.$bindAsObject('user', this.$firebase.user() || initUser)
         }
       })
     }

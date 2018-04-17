@@ -1,6 +1,14 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.16 - 2018-04-16
+### Added
+- users can now change their preferences of content and media types in Settings
+- users can now add media directly from the sermon/lesson page
+
+### Changed
+- moved all add module functionality to the AddModule component instead of the ModuleList component
+
 ## 0.0.15 - 2018-04-14
 ### Added
 - small piece of code to App.vue to disable FastClick -- important for editores in pwas to work properly

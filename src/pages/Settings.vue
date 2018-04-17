@@ -45,16 +45,32 @@
           </q-card-main>
         </q-card>
       </div>
-      <div class="col-12">
+      <div class="col-12" v-if="$root.user.prefs">
         <q-card>
           <q-card-title>Other Settings</q-card-title>
           <q-card-main>
             <q-select
-              v-model="$root.user.translation"
+              v-model="$root.user.prefs.bibleTranslation"
               float-label="Default Translation"
               :options="translationOptions"
-              @input="translationChange"
+              @input="prefChange"
             />
+            <div class="row" v-if="!$root.user.nqUser">
+              <div class="col-xs-12 col-md-6">
+                <h6>Content Types</h6>
+                <q-checkbox v-model="$root.user.prefs.contentType.sermon" label="Sermons" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.contentType.lesson" label="Lessons" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.contentType.scratch" label="Scratch Pads" @input="prefChange" />
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <h6>Media Types</h6>
+                <q-checkbox v-model="$root.user.prefs.mediaType.quote" label="Quotes" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.mediaType.image" label="Images" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.mediaType.illustration" label="Illustrations" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.mediaType.lyric" label="Lyrics" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.mediaType.video" label="Videos" @input="prefChange" />
+              </div>
+            </div>
           </q-card-main>
         </q-card>
       </div>
@@ -124,10 +140,37 @@ export default {
         theme: this.$root.user.theme
       })
     },
-    translationChange (val) {
-      console.log('change...', val)
+    // translationChange (val) {
+    //   console.log('change...', val)
+    //   this.$firebase.user().update({
+    //     prefs: {
+    //       bibleTranslation: this.$root.user.prefs.bibleTranslation
+    //     }
+    //   })
+    // },
+    // contentChange (val) {
+    //   console.log('val', val)
+    //   var obj = {}
+    //   obj[val] = true
+    //   // this.$firebase.user().update({
+    //   //   prefs: {
+    //   //     contentType: obj
+    //   //   }
+    //   // })
+    // },
+    // mediaChange (val) {
+    //   console.log('valu', val)
+    //   var obj = {}
+    //   obj[val] = true
+    //   // this.$firebase.user().update({
+    //   //   prefs: {
+    //   //     mediaType: obj
+    //   //   }
+    //   // })
+    // },
+    prefChange (val) {
       this.$firebase.user().update({
-        translation: this.$root.user.translation
+        prefs: this.$root.user.prefs
       })
     }
   }

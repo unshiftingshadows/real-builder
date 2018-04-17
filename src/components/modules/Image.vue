@@ -50,6 +50,13 @@ export default {
   methods: {
     init () {
       this.$database.view(this.data.type, this.data.mediaid, (res) => {
+        if (res.resource.service === 'upload') {
+          this.$firebase.imagesRef.child(res.resource._id).getDownloadURL().then((url) => {
+            res.resource.thumbURL = url
+            res.resource.imageURL = url
+            res.resource.pageURL = url
+          })
+        }
         this.media = res.resource
       })
     },

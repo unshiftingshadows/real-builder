@@ -39,11 +39,14 @@
 </template>
 
 <script>
+import { format } from 'quasar'
 import MediaQuote from 'components/media/Quote.vue'
 import MediaImage from 'components/media/Image.vue'
 import MediaIllustration from 'components/media/Illustration.vue'
 import MediaLyric from 'components/media/Lyric.vue'
 import MediaVideo from 'components/media/Video.vue'
+
+const { capitalize } = format
 
 export default {
   components: {
@@ -72,33 +75,33 @@ export default {
       cardStyle: {
         width: this.width
       },
-      selectedTypes: ['image', 'video', 'quote', 'illustration', 'lyric'],
-      types: [
-        // {
-        //   label: 'All',
-        //   value: 'all'
-        // },
-        {
-          label: 'Image',
-          value: 'image'
-        },
-        {
-          label: 'Video',
-          value: 'video'
-        },
-        {
-          label: 'Quote',
-          value: 'quote'
-        },
-        {
-          label: 'Illustration',
-          value: 'illustration'
-        },
-        {
-          label: 'Lyric',
-          value: 'lyric'
-        }
-      ]
+      selectedTypes: []
+      // types: [
+      //   // {
+      //   //   label: 'All',
+      //   //   value: 'all'
+      //   // },
+      //   {
+      //     label: 'Image',
+      //     value: 'image'
+      //   },
+      //   {
+      //     label: 'Video',
+      //     value: 'video'
+      //   },
+      //   {
+      //     label: 'Quote',
+      //     value: 'quote'
+      //   },
+      //   {
+      //     label: 'Illustration',
+      //     value: 'illustration'
+      //   },
+      //   {
+      //     label: 'Lyric',
+      //     value: 'lyric'
+      //   }
+      // ]
     }
   },
   watch: {
@@ -107,6 +110,24 @@ export default {
     },
     'items': function (value) {
       this.showItems = value
+    }
+  },
+  computed: {
+    types: function () {
+      var typesList = []
+      if (this.$root.user.prefs) {
+        for (let key in this.$root.user.prefs.mediaType) {
+          console.log('key', key)
+          console.log('value', this.$root.user.prefs.mediaType[key])
+          if (this.$root.user.prefs.mediaType[key]) {
+            typesList.push({
+              label: capitalize(key),
+              value: key
+            })
+          }
+        }
+      }
+      return typesList
     }
   },
   methods: {

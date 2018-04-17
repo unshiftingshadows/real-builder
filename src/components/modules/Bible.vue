@@ -28,7 +28,7 @@
           <div class="col-12">
             <q-select
               v-model="translation"
-              float-label="Default Translation"
+              float-label="Bible Translation"
               :options="translationOptions"
             />
           </div>
