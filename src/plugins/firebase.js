@@ -13,9 +13,18 @@ const fbapp = firebase.initializeApp({
 })
 
 function dbref (type, selection, id) {
+  console.log('run dbref')
   var cur = type.charAt(0)
   var media = type.slice(1)
-  return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
+  if (media !== 'series') {
+    return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
+  } else {
+    return fbapp.database().ref(cur + '/' + media + '/' + id + '/' + selection)
+  }
+}
+
+function lessons (seriesid) {
+  return fbapp.database().ref('r/lessons/' + seriesid)
 }
 
 function user (uid) {
@@ -36,6 +45,7 @@ export default ({ app, router, Vue }) => {
     db: fbapp.database(),
     ref: dbref,
     user: user,
-    imagesRef: fbapp.storage().ref('images')
+    imagesRef: fbapp.storage().ref('images'),
+    lessonsRef: lessons
   }
 }

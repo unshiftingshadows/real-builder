@@ -53,9 +53,6 @@ export default {
         case 'series':
           this.$router.push({ name: 'rseries', params: { id: id } })
           break
-        case 'lessons':
-          this.$router.push({ name: 'rlesson', params: { id: id } })
-          break
         default:
           console.error('Incorrect item type for routing')
       }

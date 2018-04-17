@@ -14,14 +14,14 @@
         <q-toolbar-title>
           <img src="statics/logo.png" style="max-height: 40px" />
         </q-toolbar-title>
-        <q-btn
+        <!-- <q-btn
           flat
           round
           dense
           icon="menu"
           @click="rightDrawer = !rightDrawer"
           v-if="showRightDrawer"
-        />
+        /> -->
       </q-toolbar>
     </q-layout-header>
 

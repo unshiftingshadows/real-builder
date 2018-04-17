@@ -1,6 +1,18 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.17 - 2018-04-17
+### Added
+- rseries works
+- can add lessons to RSeries
+- LessonList, AddLesson, and the module Lesson were all added for the RSeries to work properly
+
+### Changed
+- firebase plugin now removes the extra 's' when looking for series
+
+### Known Issues
+- draggable and reordering of lessons inside an RSeries doesn't work...
+
 ## 0.0.16 - 2018-04-16
 ### Added
 - users can now change their preferences of content and media types in Settings
