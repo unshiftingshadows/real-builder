@@ -75,7 +75,7 @@ export default {
       cardStyle: {
         width: this.width
       },
-      selectedTypes: []
+      selectedTypes: Object.keys(this.$root.user.prefs.mediaType)
       // types: [
       //   // {
       //   //   label: 'All',

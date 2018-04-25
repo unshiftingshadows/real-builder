@@ -113,7 +113,7 @@
       :breakpoint="1200"
     >
       <q-scroll-area class="fit q-pa-sm">
-        <resources v-if="$route.name === 'olesson'" />
+        <resources v-if="$route.name === 'olesson' || $route.name === 'osermon'" />
       </q-scroll-area>
     </q-layout-drawer>
 
@@ -137,7 +137,7 @@ export default {
     return {
       leftDrawer: true,
       rightDrawer: false,
-      showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      showRightDrawer: this.$route.name === 'olesson' || this.$route.name === 'osermon',
       pageType: this.$route.name
     }
   },
@@ -147,7 +147,7 @@ export default {
       this.pageType = val
       this.leftDrawer = true
       this.rightDrawer = false
-      this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
+      this.showRightDrawer = val === 'olesson' || val === 'osermon'
     }
     // '$root.user.nqUser': function (val) {
     //   this.rightDrawer = this.$route.name === 'olesson' && this.$q.platform.is.desktop && val

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.18 - 2018-04-24
+### Changed
+- resource drawer shows up for sermons and lessons
+
 ## 0.0.17 - 2018-04-17
 ### Added
 - rseries works
