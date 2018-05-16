@@ -23,7 +23,7 @@
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="save(id)">Save</q-btn>
-            <q-btn color="negative" @click.native="remove(id)">Delete</q-btn>
+            <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
       </q-card-main>

@@ -21,7 +21,7 @@
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
-        <q-icon link class="float-right cursor-pointer" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
+        <q-icon link class="float-right cursor-pointer" name="fas fa-times" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <!-- <div class="col-12">
             <q-input v-model="media.text" float-label="Quote" type="textarea" :max-height="100" :min-rows="1" />
@@ -34,7 +34,7 @@
           </div>
           <div class="col-12">
             <!-- <q-btn color="primary" @click.native="preSave">Save</q-btn> -->
-            <q-btn color="negative" @click.native="remove(id)">Delete</q-btn>
+            <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
       </q-card-main>

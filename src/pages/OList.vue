@@ -5,14 +5,18 @@
       <q-spinner color="primary" class="absolute-center" size="3rem" />
     </div>
     <div v-if="!loading && contentTypes.includes(type)">
-      <q-card inline v-for="item in items" :key="item._id" class="media-card" @click.native="openItem(item._id)">
+      <q-card inline v-for="item in items" :key="item._id" class="content-card" @click.native="openItem(item._id)">
         <q-card-title>{{ item.title }}</q-card-title>
         <q-card-main>
           <p>{{ item.mainIdea }}</p>
+          <br/>
+          <q-chip v-for="tag in item.tags" :key="tag" color="primary">{{ tag }}</q-chip>
+          &nbsp;|&nbsp;
+          <q-chip v-for="ref in item.bibleRefs" :key="ref" color="secondary">{{ $bible.readable(ref) }}</q-chip>
         </q-card-main>
       </q-card>
     </div>
-    <q-modal ref="addContentModal" v-model="showAddContent" content-classes="add-media-modal" v-if="contentTypes.includes(type)">
+    <q-modal ref="addContentModal" v-model="showAddContent" content-classes="add-content-modal" v-if="contentTypes.includes(type)">
       <add-content :modal-fin="closeAddContent" :type="'o' + type" ref="addContent" />
     </q-modal>
   </q-page>
@@ -77,20 +81,29 @@ export default {
 
 <style>
 
-.media-card {
+.content-card {
   margin: 10px;
   width: 95%;
   cursor: pointer;
 }
 
+.add-content-modal {
+  padding: 30px;
+  width: 100%;
+}
+
 @media screen and (min-width: 800px) {
-  .media-card {
+  .content-card {
     width: 47%;
   }
 }
 @media screen and (min-width: 1200px) {
-  .media-card {
+  .content-card {
     width: 31%;
+  }
+  .add-content-modal {
+    min-width: 500px;
+    width: 500px;
   }
 }
 

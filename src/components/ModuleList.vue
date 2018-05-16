@@ -27,6 +27,9 @@
               <div class="col-12">
                 <editor :text.sync="structure.hook.text" />
               </div>
+              <div class="col-12">
+                <q-btn color="primary" @click.native="moduleSave('hook')">Save</q-btn>
+              </div>
             </div>
           </q-card-main>
         </div>
@@ -73,6 +76,9 @@
               <div class="col-12">
                 <q-input v-model="structure.application.thisweek" float-label="This Week" type="textarea" :max-height="100" :min-rows="1" />
               </div>
+              <div class="col-12">
+                <q-btn color="primary" @click.native="moduleSave('application')">Save</q-btn>
+              </div>
             </div>
           </q-card-main>
         </div>
@@ -104,6 +110,9 @@
               </div>
               <div class="col-12">
                 <editor :text.sync="structure.prayer.text" />
+              </div>
+              <div class="col-12">
+                <q-btn color="primary" @click.native="moduleSave('prayer')">Save</q-btn>
               </div>
             </div>
           </q-card-main>

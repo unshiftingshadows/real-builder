@@ -1,6 +1,13 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.19 - 2018-05-16
+### Changed
+- updated the colors for icons in the modules
+- tags and bibleRefs are now shown on items in OList
+- Hook/Application/Prayer modules now have a save button
+- module delete buttons changed to outlines
+
 ## 0.0.18 - 2018-04-24
 ### Changed
 - resource drawer shows up for sermons and lessons
