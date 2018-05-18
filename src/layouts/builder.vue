@@ -157,7 +157,7 @@ export default {
     logout () {
       console.log('signing out')
       this.$firebase.auth.signOut().then(() => {
-        this.$router.replace('login')
+        this.$router.replace({ path: '/login' })
       })
     }
   }

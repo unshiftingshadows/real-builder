@@ -1,6 +1,11 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.20 - 2018-05-18
+### Added
+- unlinked temp page "AddUsers" for adding new users
+- firebase.json for deploying to hosting
+
 ## 0.0.19 - 2018-05-16
 ### Changed
 - updated the colors for icons in the modules

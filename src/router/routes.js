@@ -13,7 +13,8 @@ export default [
       { path: 'lesson/:id', name: 'olesson', component: () => import('pages/OLesson') },
       { path: 'sermon/:id', name: 'osermon', component: () => import('pages/OSermon') },
       { path: 'scratch/:id', name: 'oscratch', component: () => import('pages/OScratchPad') },
-      { path: 'settings', name: 'osettings', component: () => import('pages/Settings') }
+      { path: 'settings', name: 'osettings', component: () => import('pages/Settings') },
+      { path: 'addusers', name: 'addusers', component: () => import('pages/AddUsers') }
     ],
     meta: {
       requiresAuth: true,
