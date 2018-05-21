@@ -1,6 +1,12 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.21 - 2018-05-21
+### Fixed
+- application doesn't get stuck open any more after editing
+- hook, application, and prayer subtitles appear properly
+- the upload image box doesn't appear on all add media modals after uploading an image
+
 ## 0.0.20 - 2018-05-18
 ### Added
 - unlinked temp page "AddUsers" for adding new users

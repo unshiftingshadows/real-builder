@@ -17,23 +17,25 @@
           toggle-color="primary"
           :options="imageOptions"
         />
-      </div>
-      <div class="col-12" v-if="imageType === 'wiki'">
-        <q-input type="text" float-label="Wiki Title" v-model="imageTitle" />
-      </div>
-      <div class="col-12" v-if="imageType === 'upload'">
-        <FilePond
-          name="image-upload"
-          ref="image-upload"
-          labelIdle="Drop files here..."
-          allowMultiple="false"
-          acceptedFileTypes="image/jpeg, image/png"
-          :files="images"
-          :server="imageServer"
-        />
-      </div>
-      <div class="col-12" v-if="imageType === 'link'">
-        <q-input type="text" float-label="Image URL" v-model="imageURL" />
+        <br/>
+        <br/>
+        <div class="col-12" v-if="imageType === 'wiki'">
+          <q-input type="text" float-label="Wiki Title" v-model="imageTitle" />
+        </div>
+        <div class="col-12" v-if="imageType === 'upload'">
+          <FilePond
+            name="image-upload"
+            ref="image-upload"
+            labelIdle="Drop files here..."
+            allowMultiple="false"
+            acceptedFileTypes="image/jpeg, image/png"
+            :files="images"
+            :server="imageServer"
+          />
+        </div>
+        <div class="col-12" v-if="imageType === 'link'">
+          <q-input type="text" float-label="Image URL" v-model="imageURL" />
+        </div>
       </div>
       <div class="col-12" v-if="type === 'video'">
         <q-input type="text" float-label="Video URL" v-model="videoURL" />

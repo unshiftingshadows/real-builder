@@ -51,7 +51,7 @@
             <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'application'" />
             <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ structure.application.time }} minutes&nbsp;&nbsp;&nbsp;</span>
             Application
-            <span slot="subtitle" v-if="structure.application.title !== ''">{{ structure.hook.title }}</span>
+            <span slot="subtitle" v-if="structure.application.title !== ''">{{ structure.application.title }}</span>
           </q-card-title>
           <q-card-main>
             <p><span v-html="structure.application.text" /></p>
@@ -92,7 +92,7 @@
             <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'prayer'" />
             <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ structure.prayer.time }} minutes&nbsp;&nbsp;&nbsp;</span>
             Prayer
-            <span slot="subtitle" v-if="structure.hook.title !== ''">{{ structure.prayer.title }}</span>
+            <span slot="subtitle" v-if="structure.prayer.title !== ''">{{ structure.prayer.title }}</span>
           </q-card-title>
           <q-card-main>
             <p><span v-html="structure.prayer.text" /></p>
@@ -275,7 +275,7 @@ export default {
               this.structure[id].wordcount = this.getWordCount(this.structure[id].text)
               this.structure[id].time = this.getEstTime(this.structure[id].wordcount)
             } else {
-              this.strucutre.application.wordcount = this.getWordCount(this.structure.application.thought + ' ' + this.structure.application.today + ' ' + this.structure.application.thisweek)
+              this.structure.application.wordcount = this.getWordCount(this.structure.application.thought + ' ' + this.structure.application.today + ' ' + this.structure.application.thisweek)
               this.structure.application.time = this.getEstTime(this.structure.application.wordcount)
             }
             // Save changes
