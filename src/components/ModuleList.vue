@@ -1,8 +1,8 @@
 <template>
   <div class="row gutter-sm">
-    <div class="col-12" v-if="structure.hook">
+    <div class="col-12" v-if="structure && structure.hook && structure.hook.show">
       <!-- Hook module -->
-      <q-card>
+      <q-card v-bind:class="{ 'active-card': structure.hook.editing === $firebase.auth.currentUser.uid}">
         <div v-if="!structure.hook.editing || structure.hook.editing !== $firebase.auth.currentUser.uid">
           <q-card-title>
             <q-icon v-if="!structure.hook.editing" class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'hook'" />
@@ -25,7 +25,7 @@
                 <q-input v-model="structure.hook.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
-                <editor :text.sync="structure.hook.text" />
+                <editor :text.sync="structure.hook.text" :save="autoSave('hook')" />
               </div>
               <div class="col-12">
                 <q-btn color="primary" @click.native="moduleSave('hook')">Save</q-btn>
@@ -37,15 +37,15 @@
     </div>
     <!-- This is where other modules will be populated -->
     <div class="col-12">
-      <draggable :list="modules" @start="drag=true" @end="onDrag" ref="draggable" :options="{ disabled: editingId !== '' }">
-          <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="moduleEdit" :save="moduleSave" :close="moduleClose" :remove="moduleDelete" class="module-card" />
+      <draggable :list="modules" @start="drag=true" @end="onDrag" ref="draggable" :options="{ disabled: editingId !== '' || $q.platform.is.mobile }">
+          <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="moduleEdit" :save="moduleSave" :close="moduleClose" :remove="moduleDelete" class="module-card" v-bind:class="{ 'active-card': mod.editing === $firebase.auth.currentUser.uid}" />
       </draggable>
     </div>
     <!-- This button should always be just below the last user-made module -->
-    <add-module :next-mod-order="nextModOrder" :next-section-order="nextSectionOrder" :edit="moduleEdit" :close="moduleClose" />
-    <div class="col-12" v-if="structure.application">
+    <add-module :next-mod-order="nextModOrder" :next-section-order="nextSectionOrder" :edit="moduleEdit" :close="moduleClose" :content-type="type" />
+    <div class="col-12" v-if="structure && structure.application && structure.application.show">
       <!-- Application module -->
-      <q-card>
+      <q-card v-bind:class="{ 'active-card': structure.application.editing === $firebase.auth.currentUser.uid}">
         <div v-if="!structure.application.editing">
           <q-card-title>
             <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'application'" />
@@ -84,9 +84,9 @@
         </div>
       </q-card>
     </div>
-    <div class="col-12" v-if="structure.prayer">
+    <div class="col-12" v-if="structure && structure.prayer && structure.prayer.show">
       <!-- Prayer module -->
-      <q-card>
+      <q-card v-bind:class="{ 'active-card': structure.prayer.editing === $firebase.auth.currentUser.uid}">
         <div v-if="!structure.prayer.editing">
           <q-card-title>
             <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="editingId = 'prayer'" />
@@ -109,7 +109,7 @@
                 <q-input v-model="structure.prayer.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
-                <editor :text.sync="structure.prayer.text" />
+                <editor :text.sync="structure.prayer.text" :save="autoSave('prayer')" />
               </div>
               <div class="col-12">
                 <q-btn color="primary" @click.native="moduleSave('prayer')">Save</q-btn>
@@ -161,7 +161,15 @@ export default {
     return {
       structure: {
         source: this.$firebase.ref(this.type, 'structure', this.id),
-        asObject: true
+        asObject: true,
+        readyCallback: function (val) {
+          console.log('structure ready')
+          this.$emit('modules-init', {
+            hook: this.structure.hook.show,
+            application: this.structure.application.show,
+            prayer: this.structure.prayer.show
+          })
+        }
       },
       modules: {
         source: this.$firebase.ref(this.type, 'modules', this.id).orderByChild('order'),
@@ -187,10 +195,22 @@ export default {
   },
   data () {
     return {
-      editingId: false,
+      editingId: '',
       save: false,
       drag: false,
-      modules: []
+      modules: [],
+      structure: {
+        application: {
+          show: false
+        },
+        hook: {
+          show: false
+        },
+        prayer: {
+          show: false
+        }
+      },
+      deleting: false
     }
   },
   watch: {
@@ -199,12 +219,17 @@ export default {
       console.log('new', newid)
       if (!oldid) {
         console.log('no oldid...')
-      } else {
+      } else if (!this.deleting) {
         this.closeEdit(oldid)
+      } else {
+        this.deleting = false
       }
       if (newid !== '') {
         console.log(this.$refs)
+        this.$root.dim = true
         this.startEdit(newid)
+      } else {
+        this.$root.dim = false
       }
     },
     nextModOrder: function (newOrder, oldOrder) {
@@ -319,6 +344,8 @@ export default {
       this.editingId = ''
     },
     moduleDelete (id) {
+      this.deleting = true
+      this.editingId = ''
       this.$firebase.ref(this.type, 'modules', this.id).child(id).remove()
     },
     getModuleById (id) {
@@ -362,6 +389,13 @@ export default {
       console.log('dragged', val)
       console.log('ran')
       this.reorder()
+    },
+    // Auto save for structure modules only
+    autoSave (type) {
+      console.log('auto save text')
+      this.$firebase.ref(this.type, 'structure', this.id).child(type).update({
+        text: this.data.text
+      })
     }
   }
 }

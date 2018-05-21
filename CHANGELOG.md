@@ -1,6 +1,31 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.22 - 2018-05-21
+### Added
+- users can choose whether lessons/sermons default with hook/application/prayer
+- new lessons/sermons follow user's prefs for hook/application/prayer
+- options menu for lessons/sermons
+- lessons/sermons can be previewed
+- users can edit title of lesson/sermon/scratch
+- spinner when uploading media
+- spinner when changing bible module
+- close button for multiple modals to accomodate mobile screens
+- all but a single module dims when editing a module
+
+### Changed
+- bible modules now have properly colored input labels
+- section modules now have properly colored input labels
+- hid series seletor for sermons/lessons for now
+- centered logo in toolbar
+- removed left drawer toolbar button on desktops
+- content and media lists and previews now show proper capitalization for type names
+- disabled draggable on mobile
+- certain fields are auto-selected when opening a module to edit
+
+### Fixed
+- videos now show up properly in sermons/lessons
+
 ## 0.0.21 - 2018-05-21
 ### Fixed
 - application doesn't get stuck open any more after editing

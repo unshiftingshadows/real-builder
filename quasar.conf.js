@@ -89,6 +89,7 @@ module.exports = function (ctx) {
         'QRating',
         'QChipsInput',
         'QCheckbox',
+        'QToggle',
         'QAutocomplete',
         'QModal',
         'QModalLayout',
@@ -99,7 +100,8 @@ module.exports = function (ctx) {
       ],
       directives: [
         'Ripple',
-        'CloseOverlay'
+        'CloseOverlay',
+        'TouchHold'
       ],
       // Quasar plugins
       plugins: [

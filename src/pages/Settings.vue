@@ -57,6 +57,18 @@
             />
             <div class="row" v-if="!$root.user.nqUser">
               <div class="col-xs-12 col-md-6">
+                <h6>Sermon Structure</h6>
+                <q-checkbox v-model="$root.user.prefs.osermonStructure.hook" label="Hook" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.osermonStructure.application" label="Application" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.osermonStructure.prayer" label="Prayer" @input="prefChange" />
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <h6>Lesson Structure</h6>
+                <q-checkbox v-model="$root.user.prefs.olessonStructure.hook" label="Hook" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.olessonStructure.application" label="Application" @input="prefChange" /><br/>
+                <q-checkbox v-model="$root.user.prefs.olessonStructure.prayer" label="Prayer" @input="prefChange" />
+              </div>
+              <div class="col-xs-12 col-md-6">
                 <h6>Content Types</h6>
                 <q-checkbox v-model="$root.user.prefs.contentType.sermon" label="Sermons" @input="prefChange" /><br/>
                 <q-checkbox v-model="$root.user.prefs.contentType.lesson" label="Lessons" @input="prefChange" /><br/>

@@ -3,7 +3,7 @@
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
         <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="primary" size="1rem">
-          <q-popover>
+          <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Edit</q-item>
               <q-item link @click.native="remove(id)">Delete</q-item>
@@ -61,4 +61,20 @@ export default {
 </script>
 
 <style>
+
+.q-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 25px;
+  height: 0;
+  width: 100%;
+}
+.q-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 </style>

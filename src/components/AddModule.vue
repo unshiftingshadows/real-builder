@@ -15,7 +15,7 @@ export default {
     AddMedia
   },
   // name: 'ComponentName',
-  props: [ 'nextModOrder', 'nextSectionOrder', 'close', 'edit' ],
+  props: [ 'nextModOrder', 'nextSectionOrder', 'close', 'edit', 'contentType' ],
   data () {
     return {
       mediaTypes: ['quote', 'image', 'illustration', 'lyric', 'video'],
@@ -53,26 +53,30 @@ export default {
             console.log('bible!')
             this.addModule('bible')
           }
-        },
-        {
-          label: 'Activity',
-          color: 'primary',
-          icon: 'fa-trophy',
-          handler: () => {
-            console.log('activity!')
-            this.addModule('activity')
-          }
-        },
-        {
-          label: 'Question',
-          color: 'primary',
-          icon: 'fa-question',
-          handler: () => {
-            console.log('question!')
-            this.addModule('question')
-          }
         }
       ]
+      if (this.contentType === 'olesson') {
+        actions.push([
+          {
+            label: 'Activity',
+            color: 'primary',
+            icon: 'fa-trophy',
+            handler: () => {
+              console.log('activity!')
+              this.addModule('activity')
+            }
+          },
+          {
+            label: 'Question',
+            color: 'primary',
+            icon: 'fa-question',
+            handler: () => {
+              console.log('question!')
+              this.addModule('question')
+            }
+          }
+        ])
+      }
       if (this.$root.user.prefs.mediaType.quote) {
         actions.push({
           label: 'Quote',

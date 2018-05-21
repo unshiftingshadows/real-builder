@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h3>{{ type }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="openAdd()" /></h3>
+    <h3>{{ capitalizeTitle(type) }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="$refs.addMedia.show()" /></h3>
     <div v-if="loading">
       <q-spinner color="primary" class="absolute-center" size="3rem" />
     </div>
@@ -18,11 +18,9 @@
         </q-card>
       </div>
     </div>
-    <q-modal ref="addMediaModal" v-model="showAddMedia" content-classes="add-media-modal" v-if="mediaTypes.includes(type)">
-      <add-media :modal-fin="closeAddMedia" :type="type" ref="addMedia" />
-    </q-modal>
+    <add-media :type="type" ref="addMedia" v-if="mediaTypes.includes(type)" :add-new="addNewMedia" />
     <q-modal ref="showMediaModal" v-model="showMedia" content-classes="add-media-modal" v-if="mediaTypes.includes(type)">
-      <component v-bind:is="'media-' + type" :data="openMedia" :open="showMedia" :close="closeMedia" @hide="closeMedia" />
+      <component v-bind:is="'media-' + type" :data="openMedia" :open="showMedia" :close="closeMedia" @hide="closeMedia" v-if="showMedia" />
     </q-modal>
   </q-page>
 </template>
@@ -34,6 +32,8 @@ import MediaImage from 'components/media/Image.vue'
 import MediaIllustration from 'components/media/Illustration.vue'
 import MediaLyric from 'components/media/Lyric.vue'
 import MediaVideo from 'components/media/Video.vue'
+import { format } from 'quasar'
+const { capitalize } = format
 
 export default {
   components: {
@@ -99,21 +99,16 @@ export default {
         this.showMedia = true
       }
     },
-    openAdd () {
-      if (this.mediaTypes.includes(this.type)) {
-        this.showAddMedia = true
-      } else {
-        console.error('incorrect type to add')
-      }
-    },
-    closeAddMedia (newItem) {
-      this.showAddMedia = false
+    addNewMedia (newItem) {
       this.items.push(newItem)
     },
     closeMedia () {
       console.log('close media')
       this.showMedia = false
       this.openMedia = {}
+    },
+    capitalizeTitle (title) {
+      return capitalize(title)
     }
   }
 }

@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <q-modal ref="addMediaModal" v-model="showAddMedia" content-classes="add-media-modal">
+    <q-btn
+      color="primary"
+      @click.native="showAddMedia = false"
+      icon="fas fa-times"
+      class="float-right"
+      size="sm"
+    />
     <h4>Add {{ type }}</h4>
     <div class="row gutter-sm">
       <div class="col-12" v-if="type === 'quote'">
@@ -41,10 +48,11 @@
         <q-input type="text" float-label="Video URL" v-model="videoURL" />
       </div>
       <div class="col-12">
-        <q-btn color="primary" class="float-right" @click.native="add">Add {{ type }}</q-btn>
+        <q-btn color="primary" class="float-right" @click.native="add" :disabled="loading">Add {{ type }}</q-btn>
+        <q-spinner class="float-right" size="2rem" color="primary" style="margin-right: 20px;" v-if="loading" />
       </div>
     </div>
-  </div>
+  </q-modal>
 </template>
 
 <script>
@@ -61,10 +69,11 @@ export default {
   components: {
     FilePond
   },
-  props: ['type', 'modalFin'],
+  props: ['type', 'addNew'],
   // name: 'ComponentName',
   data () {
     return {
+      loading: false,
       quoteText: '',
       illustrationTitle: '',
       lyricTitle: '',
@@ -90,10 +99,11 @@ export default {
       imageServer: {
         process: (fieldName, file, metadata, load, error, progress, abort) => {
           // Should do custom file upload or local storing here
+          this.loading = true
           this.$database.add('image', { service: 'upload' }, (res) => {
             var uploadProcess = this.$firebase.imagesRef.child(res._id).put(file)
             uploadProcess.on('state_changed', (snapshot) => {
-              progress(false, snapshot.bytesTransferred, snapshot.totalBytes)
+              progress(true, snapshot.bytesTransferred, snapshot.totalBytes)
             }, (err) => {
               error(err)
             }, () => {
@@ -102,7 +112,9 @@ export default {
                 res.thumbURL = url
                 res.imageURL = url
                 res.pageURL = url
-                this.modalFin(res)
+                this.showAddMedia = false
+                this.loading = false
+                this.addNew(res)
               })
             })
           })
@@ -133,7 +145,8 @@ export default {
         load: './load/',
         fetch: './fetch/'
       },
-      types: ['quote', 'image', 'illustration', 'lyric', 'video']
+      types: ['quote', 'image', 'illustration', 'lyric', 'video'],
+      showAddMedia: false
     }
   },
   mounted () {
@@ -144,6 +157,7 @@ export default {
       this.text = ''
     },
     add () {
+      this.loading = true
       console.log('add')
       if (this.types.includes(this.type)) {
         var obj = {}
@@ -182,7 +196,9 @@ export default {
             console.error('invalid add media type')
         }
         this.$database.add(this.type, obj, (res) => {
-          this.modalFin(res)
+          this.showAddMedia = false
+          this.loading = false
+          this.addNew(res)
           Notify.create({
             message: this.type + ' created!',
             type: 'positive',
@@ -190,6 +206,9 @@ export default {
           })
         })
       }
+    },
+    show () {
+      this.showAddMedia = true
     }
   }
 }

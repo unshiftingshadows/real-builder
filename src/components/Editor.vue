@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { Notify } from 'quasar'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -28,7 +29,8 @@ export default {
         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         ['clean']
       ],
-      editCount: 0
+      editCount: 0,
+      saveInterval: null
     }
   },
   mounted () {
@@ -45,6 +47,20 @@ export default {
           this.editCount = 0
           this.save()
         } else this.editCount++
+      })
+    }
+    this.saveInterval = setInterval(this.autoSave, 300000)
+  },
+  beforeDestroy () {
+    clearInterval(this.saveInterval)
+  },
+  methods: {
+    autoSave () {
+      this.save()
+      Notify.create({
+        type: 'positive',
+        message: 'Auto saving...',
+        position: 'bottom-left'
       })
     }
   }

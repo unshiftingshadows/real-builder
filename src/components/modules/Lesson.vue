@@ -3,7 +3,7 @@
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
         <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="primary" size="1rem">
-          <q-popover>
+          <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Edit</q-item>
               <q-item link @click.native="remove(id)">Delete</q-item>

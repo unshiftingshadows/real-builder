@@ -1,5 +1,6 @@
 <template>
   <div id="q-app">
+    <div id="transparent-layer" v-if="dim"></div>
     <router-view />
   </div>
 </template>
@@ -21,6 +22,16 @@ var initUser = {
   email: '',
   prefs: {
     bibleTranslation: 'esv',
+    osermonStructure: {
+      hook: true,
+      application: true,
+      prayer: true
+    },
+    olessonStructure: {
+      hook: true,
+      application: true,
+      prayer: true
+    },
     contentType: {
       sermon: true,
       lesson: true,
@@ -40,7 +51,8 @@ export default {
   name: 'App',
   data () {
     return {
-      user: initUser
+      user: initUser,
+      dim: false
     }
   },
   mounted () {
@@ -149,6 +161,20 @@ export default {
   .lg-drawer {
     width: 35%;
   }
+}
+
+#transparent-layer {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.active-card {
+  z-index: 2;
+  position: relative;
 }
 
 </style>

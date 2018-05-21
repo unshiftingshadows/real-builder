@@ -3,7 +3,7 @@
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
       <q-card-title>
         <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" size="1rem">
-          <q-popover>
+          <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Edit</q-item>
               <q-item link @click.native="remove(id)">Delete</q-item>
@@ -23,19 +23,22 @@
         <q-icon link class="float-right cursor-pointer" name="fas fa-times" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
-            <q-input v-model="data.bibleRef" float-label="Bible Ref" @keyup.enter="preSave" dark />
+            <q-input v-model="data.bibleRef" float-label="Bible Ref" @keyup.enter="preSave" class="dark-label" dark autofocus />
           </div>
           <div class="col-12">
             <q-select
               v-model="translation"
               float-label="Bible Translation"
               :options="translationOptions"
+              class="dark-label"
               dark
             />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="preSave">Save</q-btn>
+            <q-btn color="primary" @click.native="preSave" :disabled="loading">Save</q-btn>
             <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
+            &nbsp;&nbsp;
+            <q-spinner color="primary" size="2rem" v-if="loading" />
           </div>
         </div>
       </q-card-main>
@@ -49,6 +52,7 @@ export default {
   props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {
+      loading: false,
       passages: [],
       translation: this.data.translation,
       translationOptions: [
@@ -93,6 +97,7 @@ export default {
   },
   methods: {
     preSave () {
+      this.loading = true
       this.$database.bible(this.data.bibleRef, this.translation, (data) => {
         console.log(data)
         // NOTE: This needs to be moved to the server side -- not all versions will
@@ -100,6 +105,7 @@ export default {
         this.data.text = data.text
         this.data.translation = this.translation
         this.data.bibleRef = this.$bible.readable(this.data.bibleRef)
+        this.loading = false
         this.save(this.id)
       })
     }
@@ -108,4 +114,9 @@ export default {
 </script>
 
 <style>
+
+.dark-label .q-if-label {
+  color: white !important;
+}
+
 </style>

@@ -10,9 +10,10 @@
           dense
           icon="menu"
           @click="leftDrawer = !leftDrawer"
+          v-if="!$q.platform.is.desktop"
         />
         <q-toolbar-title>
-          <img src="statics/logo.png" style="max-height: 40px" />
+          <img src="statics/logo.png" style="max-height: 40px; display: block; margin-left: auto; margin-right: auto;" />
         </q-toolbar-title>
         <q-btn
           flat

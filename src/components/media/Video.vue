@@ -53,6 +53,7 @@ export default {
     return {
       editing: false,
       video: {
+        embedURL: '',
         tags: [],
         bibleRefs: []
       },

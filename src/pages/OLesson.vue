@@ -1,17 +1,31 @@
 <template>
   <q-page padding>
     <div class="row gutter-md items-center">
-      <div class="col-xs-12 col-md-8">
+      <div class="col-xs-12">
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay @click.native="showPreview = true">Preview</q-item>
+              <q-item-separator />
+              <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.hook" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Application" v-model="structure.application" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.prayer" /></q-item>
+              <!-- <q-item v-close-overlay>Archive</q-item> -->
+              <!-- <q-item v-close-overlay>Share...</q-item> -->
+              <!-- <q-item v-close-overlay>Print...</q-item> -->
+              <!-- <q-item v-close-overlay>Present...</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
         <h3>{{ lesson.title }}</h3>
-      </div>
-      <div class="col-xs-12 col-md-4">
-        <q-input v-model="seriesName" float-label="Series">
+        <!-- <q-input v-model="seriesName" float-label="Series">
           <q-autocomplete
             @search="search"
             :min-characters="3"
             @selected="selected"
           />
-        </q-input>
+        </q-input> -->
       </div>
       <div class="col-12">
         <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" @blur="update" />
@@ -32,9 +46,50 @@
         <bible-passage-list :passages="bibleRefs" />
       </div> -->
       <div class="col-12">
-        <module-list type="olesson" :id="id" />
+        <module-list type="olesson" :id="id" @modules-init="modulesInit" />
       </div>
     </div>
+    <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="editTitle = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Edit Title</h4>
+        </div>
+        <div class="col-12">
+          <q-input v-model="lesson.title" />
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="update">Save</q-btn>
+        </div>
+      </div>
+    </q-modal>
+    <q-modal v-model="showPreview" ref="previewModal" content-classes="preview-modal" maximized>
+      <div class="row gutter-md justify-center" v-if="showPreview">
+        <div class="col-xs-12 col-md-8">
+          <q-btn
+            color="primary"
+            @click.native="showPreview = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h2>{{ lesson.title }}</h2>
+        </div>
+        <div class="col-xs-12 col-md-8">
+          <h3>Main Idea</h3>
+          <h6>{{ lesson.mainIdea }}</h6>
+        </div>
+        <div class="col-xs-12 col-md-8">
+          <render-modules :id="id" type="olesson" />
+        </div>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 
@@ -42,11 +97,13 @@
 import { Notify } from 'quasar'
 // import BiblePassageList from 'components/BiblePassageList.vue'
 import ModuleList from 'components/ModuleList.vue'
+import RenderModules from 'components/preview/RenderModules.vue'
 
 export default {
   components: {
     // BiblePassageList,
-    ModuleList
+    ModuleList,
+    RenderModules
   },
   // name: 'PageName',
   data () {
@@ -57,11 +114,30 @@ export default {
         bibleRefs: []
       },
       seriesName: '',
-      readableRefs: []
+      readableRefs: [],
+      editTitle: false,
+      structure: {
+        hook: true,
+        application: true,
+        prayer: true
+      },
+      updating: true,
+      showPreview: false
     }
   },
   mounted () {
     this.init()
+  },
+  watch: {
+    'structure.hook': function (newHook) {
+      this.$firebase.ref('olesson', 'structure', this.id).child('hook').update({ show: newHook })
+    },
+    'structure.application': function (newApplication) {
+      this.$firebase.ref('olesson', 'structure', this.id).child('application').update({ show: newApplication })
+    },
+    'structure.prayer': function (newPrayer) {
+      this.$firebase.ref('olesson', 'structure', this.id).child('prayer').update({ show: newPrayer })
+    }
   },
   methods: {
     init () {
@@ -69,6 +145,11 @@ export default {
         this.lesson = data
         this.readableRefs = data.bibleRefs.map(e => { return this.$bible.readable(e) })
       })
+    },
+    modulesInit (structure) {
+      this.updating = true
+      this.structure = structure
+      this.updating = false
     },
     addRef (newRef) {
       this.lesson.bibleRefs = newRef.map(e => { return this.$bible.parse(e) })
@@ -94,7 +175,9 @@ export default {
     update () {
       // Call update function from database
       console.log('update!')
+      this.editTitle = false
       var obj = {
+        title: this.lesson.title,
         mainIdea: this.lesson.mainIdea,
         bibleRefs: this.lesson.bibleRefs,
         tags: this.lesson.tags,
@@ -114,4 +197,17 @@ export default {
 </script>
 
 <style>
+
+.edit-title-modal, .preview-modal {
+  padding: 30px;
+  width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+  .edit-title-modal {
+    min-width: 500px;
+    width: 500px;
+  }
+}
+
 </style>

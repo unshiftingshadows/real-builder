@@ -2,6 +2,16 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-12">
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay>Convert to Sermon</q-item>
+              <q-item v-close-overlay>Convert to Lesson</q-item>
+              <!-- <q-item v-close-overlay>Archive</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
         <h3>{{ scratch.title }}</h3>
       </div>
       <div class="col-12">
@@ -20,6 +30,26 @@
         />
       </div>
     </div>
+    <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="editTitle = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Edit Title</h4>
+        </div>
+        <div class="col-12">
+          <q-input v-model="scratch.title" />
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="update">Save</q-btn>
+        </div>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 
@@ -39,7 +69,8 @@ export default {
         tags: [],
         bibleRefs: []
       },
-      readableRefs: []
+      readableRefs: [],
+      editTitle: false
     }
   },
   mounted () {
@@ -58,7 +89,9 @@ export default {
     },
     update () {
       console.log('update!')
+      this.editTitle = false
       var obj = {
+        title: this.scratch.title,
         text: this.scratch.text,
         tags: this.scratch.tags,
         bibleRefs: this.scratch.bibleRefs

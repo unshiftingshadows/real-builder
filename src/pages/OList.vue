@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h3>{{ type }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="openAdd()" /></h3>
+    <h3>{{ capitalizeTitle(type) }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="openAdd()" /></h3>
     <div v-if="loading">
       <q-spinner color="primary" class="absolute-center" size="3rem" />
     </div>
@@ -16,14 +16,14 @@
         </q-card-main>
       </q-card>
     </div>
-    <q-modal ref="addContentModal" v-model="showAddContent" content-classes="add-content-modal" v-if="contentTypes.includes(type)">
-      <add-content :modal-fin="closeAddContent" :type="'o' + type" ref="addContent" />
-    </q-modal>
+    <add-content :type="'o' + type" ref="addContent" v-if="contentTypes.includes(type)" />
   </q-page>
 </template>
 
 <script>
 import AddContent from 'components/AddContent.vue'
+import { format } from 'quasar'
+const { capitalize } = format
 
 export default {
   components: {
@@ -35,8 +35,7 @@ export default {
       contentTypes: ['series', 'lesson', 'sermon', 'scratch'],
       type: this.$route.params.type,
       items: [],
-      loading: false,
-      showAddContent: false
+      loading: false
     }
   },
   mounted () {
@@ -67,13 +66,13 @@ export default {
     },
     openAdd () {
       if (this.contentTypes.includes(this.type)) {
-        this.showAddContent = true
+        this.$refs.addContent.show()
       } else {
         console.error('incorrect type to add')
       }
     },
-    closeAddContent () {
-      this.showAddContent = false
+    capitalizeTitle (title) {
+      return capitalize(title)
     }
   }
 }
