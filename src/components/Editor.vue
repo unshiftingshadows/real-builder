@@ -35,20 +35,18 @@ export default {
   },
   mounted () {
     console.log('editor', this.$refs.editor)
-    if (this.save) {
-      this.$refs.editor.quill.on('selection-change', (range, oldRange, source) => {
-        if (range === null && oldRange !== null) {
-          this.editCount = 0
-          this.save()
-        }
-      })
-      this.$refs.editor.quill.on('text-change', (delta, oldDelta, source) => {
-        if (this.editCount >= 100) {
-          this.editCount = 0
-          this.save()
-        } else this.editCount++
-      })
-    }
+    this.$refs.editor.quill.on('selection-change', (range, oldRange, source) => {
+      if (range === null && oldRange !== null) {
+        this.editCount = 0
+        this.save()
+      }
+    })
+    this.$refs.editor.quill.on('text-change', (delta, oldDelta, source) => {
+      if (this.editCount >= 100) {
+        this.editCount = 0
+        this.save()
+      } else this.editCount++
+    })
     this.saveInterval = setInterval(this.autoSave, 300000)
   },
   beforeDestroy () {

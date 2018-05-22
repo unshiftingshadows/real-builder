@@ -1,8 +1,8 @@
 <template>
   <div class="row gutter-sm">
-    <!-- This is where lesson modules will be populated -->
+    <!-- This is where lesson lessons will be populated -->
     <div class="col-12">
-      <draggable :list="modules" @start="drag=true" @end="onDrag" ref="draggable" :options="{ disabled: editingId !== '' }">
+      <draggable :list="lessons" @start="drag=true" @end="onDrag" ref="draggable" :options="{ disabled: editingId !== '' }">
           <mod-lesson v-for="lesson in lessons" :key="lesson['.key']" :id="lesson['.key']" :data="lesson" :edit="lessonEdit" :save="lessonSave" :close="lessonClose" :remove="lessonDelete" class="lesson-card" />
       </draggable>
     </div>
@@ -24,7 +24,7 @@ export default {
     AddLesson,
     ModLesson
   },
-  props: ['type', 'id'],
+  props: ['id'],
   // name: 'ComponentName',
   firebase () {
     return {
@@ -32,7 +32,7 @@ export default {
         source: this.$firebase.lessonsRef(this.id).orderByChild('order'),
         readyCallback: function (val) {
           console.log('callback called')
-          var check = this.modules.find((element) => {
+          var check = this.lessons.find((element) => {
             return element.editing === this.$firebase.auth.currentUser.uid
           })
           if (check) {
@@ -52,10 +52,10 @@ export default {
   },
   data () {
     return {
-      editingId: false,
+      editingId: '',
       save: false,
       drag: false,
-      modules: []
+      lessons: []
     }
   },
   watch: {
@@ -132,7 +132,7 @@ export default {
     },
     reorder () {
       var allLessons = {}
-      // Needs to update the 'order' prop of all modules
+      // Needs to update the 'order' prop of all lessons
       this.lessons.forEach((lesson, index) => {
         var updatedLesson = {...lesson}
         updatedLesson.order = index

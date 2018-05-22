@@ -1,6 +1,33 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.23 - 2018-05-22
+### Added
+- Google analytics plugin
+- Google analytics events for
+    - adding content
+    - adding non-NQ media
+    - adding modules
+    - dragging/reordering modules
+    - deleting modules
+- users can now edit their info (name/email) in settings
+- users can now change their password in settings
+- users have to change password after first login
+- REAL series now updates main idea on blur
+- REAL series title can be edited through options menu
+
+### Changed
+- title is now required with new content
+- media all have required fields when adding new
+- logo on default layout works better on mobile devices
+
+### Fixed
+- hook/prayer modules don't crash
+- hook/prayer module editors don't try to auto save after every character
+- add media module modals (quite a mouthful) show up properly in sermons/lessons
+- adding new sermon/lesson/scratch presents a properly capitalized type in the Nofity popup
+- REAL series lessons can now be dragged properly
+
 ## 0.0.22 - 2018-05-21
 ### Added
 - users can choose whether lessons/sermons default with hook/application/prayer

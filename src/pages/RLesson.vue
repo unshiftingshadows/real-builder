@@ -1,11 +1,15 @@
 <template>
   <q-page padding>
     <div class="row gutter-md">
-      <div class="col-12">
+      <div class="col-xs-12 col-md-6">
+        <h3>{{ lesson.title }}</h3>
+      </div>
+      <div class="col-xs-12 col-md-6">
         <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
           <q-popover anchor="bottom right" self="top right">
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
               <!-- <q-item-separator /> -->
               <!-- <q-item v-close-overlay>Archive</q-item> -->
               <!-- <q-item v-close-overlay>Share...</q-item> -->
@@ -14,13 +18,10 @@
             </q-list>
           </q-popover>
         </q-btn>
-        <h3>{{ series.title }}</h3>
+        <p>{{ lesson.mainIdea }}</p>
       </div>
       <div class="col-12">
-        <q-input v-model="series.mainIdea" float-label="Main Idea" type="textarea" :max-height="150" :min-rows="3" @blur="update" />
-      </div>
-      <div class="col-12">
-        <lesson-list :id="id" />
+        <devo-list :id="id" :seriesid="seriesid" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -36,7 +37,27 @@
           <h4>Edit Title</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="series.title" />
+          <q-input v-model="lesson.title" />
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="update">Save</q-btn>
+        </div>
+      </div>
+    </q-modal>
+    <q-modal v-model="editMainIdea" ref="editMainIdeaModal" content-classes="edit-title-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="editMainIdea = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Edit Main Idea</h4>
+        </div>
+        <div class="col-12">
+          <q-input v-model="lesson.mainIdea" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="update">Save</q-btn>
@@ -48,24 +69,26 @@
 
 <script>
 import { Notify } from 'quasar'
-import LessonList from 'components/LessonList.vue'
+import DevoList from 'components/DevoList.vue'
 
 export default {
   components: {
-    LessonList
+    DevoList
   },
   // name: 'PageName',
   data () {
     return {
-      id: this.$route.params.seriesid,
-      series: {},
-      editTitle: false
+      seriesid: this.$route.params.seriesid,
+      id: this.$route.params.lessonid,
+      lesson: {},
+      editTitle: false,
+      editMainIdea: false
     }
   },
   firebase () {
     return {
-      series: {
-        source: this.$firebase.ref('rseries', '', this.$route.params.seriesid),
+      lesson: {
+        source: this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid),
         asObject: true,
         readyCallback: function (val) {
           console.log('ran!', val)
@@ -84,12 +107,12 @@ export default {
     },
     update () {
       this.editTitle = false
+      this.editMainIdea = false
       var obj = {
-        title: this.series.title,
-        mainIdea: this.series.mainIdea
+        title: this.lesson.title,
+        mainIdea: this.lesson.mainIdea
       }
-      this.$database.update('rseries', this.id, obj, (res) => {
-        console.log(res)
+      this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid).update(obj).then(() => {
         Notify.create({
           type: 'positive',
           message: 'Series updated!',

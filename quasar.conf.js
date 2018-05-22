@@ -4,6 +4,7 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
+      'analytics',
       // 'axios',
       'bible',
       'database',
@@ -84,6 +85,7 @@ module.exports = function (ctx) {
         'QCardTitle',
         'QCardMedia',
         'QCardActions',
+        'QField',
         'QInput',
         'QSelect',
         'QRating',

@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { Notify } from 'quasar'
+
 export default {
   // name: 'PageName',
   data () {
@@ -38,6 +40,11 @@ export default {
         this.email = ''
         this.first = ''
         this.last = ''
+        Notify.create({
+          type: 'positive',
+          message: 'New user added!',
+          position: 'bottom-left'
+        })
       })
     }
   }

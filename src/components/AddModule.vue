@@ -1,9 +1,7 @@
 <template>
   <div class="col-12 relative-position" style="height: 70px">
     <q-btn round color="primary" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
-    <q-modal ref="addMediaModal" v-model="showAddMedia" content-classes="add-media-modal" v-if="mediaTypes.includes(type)">
-      <add-media :modal-fin="finMedia" :type="type" ref="addMedia" />
-    </q-modal>
+    <add-media :type="type" ref="addMedia" :add-new="addNewMedia" />
   </div>
 </template>
 
@@ -85,7 +83,7 @@ export default {
           handler: () => {
             console.log('quote!')
             this.type = 'quote'
-            this.showAddMedia = true
+            this.$refs.addMedia.show()
           }
         })
       }
@@ -97,7 +95,7 @@ export default {
           handler: () => {
             console.log('image!')
             this.type = 'image'
-            this.showAddMedia = true
+            this.$refs.addMedia.show()
           }
         })
       }
@@ -109,7 +107,7 @@ export default {
           handler: () => {
             console.log('illustration!')
             this.type = 'illustration'
-            this.showAddMedia = true
+            this.$refs.addMedia.show()
           }
         })
       }
@@ -121,7 +119,7 @@ export default {
           handler: () => {
             console.log('lyric!')
             this.type = 'lyric'
-            this.showAddMedia = true
+            this.$refs.addMedia.show()
           }
         })
       }
@@ -133,7 +131,7 @@ export default {
           handler: () => {
             console.log('video!')
             this.type = 'video'
-            this.showAddMedia = true
+            this.$refs.addMedia.show()
           }
         })
       }
@@ -145,6 +143,8 @@ export default {
     },
     addModule (type, id) {
       console.log('add module')
+      // GA - Add module event
+      this.$ga.event('module', 'add', type)
       this.close()
       var newRef = this.$firebase.ref(this.$parent.type, 'modules', this.$parent.id).push()
       switch (type) {
@@ -273,7 +273,7 @@ export default {
         this.edit(newRef.key)
       }
     },
-    finMedia (media) {
+    addNewMedia (media) {
       this.showAddMedia = false
       this.addModule(this.type, media._id)
       this.type = ''

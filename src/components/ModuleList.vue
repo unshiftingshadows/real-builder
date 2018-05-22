@@ -25,7 +25,7 @@
                 <q-input v-model="structure.hook.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
-                <editor :text.sync="structure.hook.text" :save="autoSave('hook')" />
+                <editor :text.sync="structure.hook.text" :save="autoSave" />
               </div>
               <div class="col-12">
                 <q-btn color="primary" @click.native="moduleSave('hook')">Save</q-btn>
@@ -109,7 +109,7 @@
                 <q-input v-model="structure.prayer.title" float-label="Subtitle" />
               </div>
               <div class="col-12">
-                <editor :text.sync="structure.prayer.text" :save="autoSave('prayer')" />
+                <editor :text.sync="structure.prayer.text" :save="autoSave" />
               </div>
               <div class="col-12">
                 <q-btn color="primary" @click.native="moduleSave('prayer')">Save</q-btn>
@@ -174,13 +174,13 @@ export default {
       modules: {
         source: this.$firebase.ref(this.type, 'modules', this.id).orderByChild('order'),
         readyCallback: function (val) {
-          console.log('callback called')
-          var check = this.modules.find((element) => {
-            return element.editing === this.$firebase.auth.currentUser.uid
-          })
-          if (check) {
-            this.closeEdit(check['.key'])
-          }
+          // this.$root.dim = false
+          // var check = this.modules.find((element) => {
+          //   return element.editing === this.$firebase.auth.currentUser.uid
+          // })
+          // if (check) {
+          //   this.closeEdit(check['.key'])
+          // }
         }
       }
     }
@@ -188,11 +188,52 @@ export default {
   mounted () {
     // this.init()
   },
+  // NOTE: Issue here is that firebase unmounts before the beforeDestroy
+  //       method runs...kind of a problem...no immediate fix for saving
+  //       open components when a user moves from one page to another
+  //
+  //       For the time being, a basic function is used to ensure any module
+  //       is closed before changing pages...not necessarily saved though
   beforeDestroy () {
     if (this.editingId !== '') {
-      this.closeEdit(this.editingId)
+      this.$root.dim = false
+      if (this.editingId === 'hook' || this.editingId === 'application' || this.editingId === 'prayer') {
+        this.$firebase.ref(this.type, 'structure', this.id).child(this.editingId).update({ editing: false })
+      } else {
+        this.$firebase.ref(this.type, 'modules', this.id).child(this.editingId).update({ editing: false })
+      }
     }
   },
+  // beforeDestroy () {
+  //   if (this.editingId !== '') {
+  //     if (this.editingId === 'hook' || this.editingId === 'application' || this.editingId === 'prayer') {
+  //       console.log('structure close save', this)
+  //       this.structure[this.editingId].editing = false
+  //       if (this.editingId === 'hook' || this.editingId === 'prayer') {
+  //         this.structure[this.editingId].wordcount = this.getWordCount(this.structure[this.editingId].text)
+  //         this.structure[this.editingId].time = this.getEstTime(this.structure[this.editingId].wordcount)
+  //       } else {
+  //         this.structure.application.wordcount = this.getWordCount(this.structure.application.thought + ' ' + this.structure.application.today + ' ' + this.structure.application.thisweek)
+  //         this.structure.application.time = this.getEstTime(this.structure.application.wordcount)
+  //       }
+  //       // Save changes
+  //       this.$firebase.ref(this.type, 'structure', this.this.editingId).child(this.editingId).update(this.structure[this.editingId])
+  //     } else {
+  //       var updatedMod = {...this.getModuleById(this.editingId)}
+  //       updatedMod.editing = false
+  //       delete updatedMod['.key']
+  //       if (updatedMod.type === 'text' || updatedMod.type === 'bible') {
+  //         // If needing to set wordcount and time
+  //         updatedMod.wordcount = this.getWordCount(updatedMod.text)
+  //         updatedMod.time = this.getEstTime(updatedMod.wordcount)
+  //       }
+  //       console.log('updated', updatedMod)
+  //       // Save changes
+  //       this.$firebase.ref(this.type, 'modules', this.this.editingId).child(this.editingId).set(updatedMod)
+  //     }
+  //     this.$root.dim = false
+  //   }
+  // },
   data () {
     return {
       editingId: '',
@@ -344,6 +385,8 @@ export default {
       this.editingId = ''
     },
     moduleDelete (id) {
+      // GA - Delete module event
+      this.$ga.event('module', 'delete', this.getModuleById(id).type)
       this.deleting = true
       this.editingId = ''
       this.$firebase.ref(this.type, 'modules', this.id).child(id).remove()
@@ -386,15 +429,17 @@ export default {
     },
     onDrag (val) {
       this.drag = false
+      // GA - Dragged module event
+      this.$ga.event('module', 'dragged')
       console.log('dragged', val)
       console.log('ran')
       this.reorder()
     },
     // Auto save for structure modules only
-    autoSave (type) {
+    autoSave () {
       console.log('auto save text')
-      this.$firebase.ref(this.type, 'structure', this.id).child(type).update({
-        text: this.data.text
+      this.$firebase.ref(this.type, 'structure', this.id).child(this.editingId).update({
+        text: this.structure[this.editingId].text
       })
     }
   }

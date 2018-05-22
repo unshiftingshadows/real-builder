@@ -41,6 +41,7 @@ export default ({ app, router, Vue }) => {
   Vue.use(VueFire)
   Vue.use(VueFirestore)
   Vue.prototype.$firebase = {
+    emailCred: firebase.auth.EmailAuthProvider.credential,
     auth: fbapp.auth(),
     db: fbapp.database(),
     ref: dbref,

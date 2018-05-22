@@ -28,7 +28,8 @@ export default [
     children: [
       { path: 'dashboard', name: 'realdashboard', component: () => import('pages/RDashboard') },
       { path: 'list/:type', name: 'rlist', component: () => import('pages/RList') },
-      { path: 'series/:id', name: 'rseries', component: () => import('pages/RSeries') },
+      { path: 'series/:seriesid', name: 'rseries', component: () => import('pages/RSeries') },
+      { path: 'series/:seriesid/lesson/:lessonid', name: 'rlesson', component: () => import('pages/RLesson') },
       { path: 'settings', name: 'rsettings', component: () => import('pages/Settings') }
     ],
     meta: {

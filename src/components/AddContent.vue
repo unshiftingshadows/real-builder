@@ -10,7 +10,12 @@
     <h4>Add {{ readableType }}</h4>
     <div class="row gutter-sm">
       <div class="col-12">
-        <q-input type="text" float-label="Title" v-model="title" />
+        <q-field
+            :error="$v.title.$error"
+            error-label="Title is required"
+          >
+          <q-input type="text" float-label="Title" v-model="title" @blur="$v.title.$touch" />
+        </q-field>
       </div>
       <div class="col-12" v-if="type === 'osermon' || type === 'olesson'">
         <h5>Choose a template...</h5>
@@ -46,6 +51,7 @@
 
 <script>
 import { Notify, format } from 'quasar'
+import { required } from 'vuelidate/lib/validators'
 const { capitalize } = format
 
 export default {
@@ -57,6 +63,16 @@ export default {
       title: '',
       types: ['rseries', 'oseries', 'olesson', 'osermon', 'oscratch'],
       bibleRef: ''
+    }
+  },
+  validations: {
+    title: {
+      required
+    }
+  },
+  watch: {
+    'showAddContent': function () {
+      this.$v.title.$reset()
     }
   },
   computed: {
@@ -72,6 +88,11 @@ export default {
       this.title = ''
     },
     add (template) {
+      this.$v.title.$touch()
+      if (this.$v.title.$error) {
+        this.$q.notify('Please review fields again')
+        return
+      }
       if (this.types.includes(this.type)) {
         var obj = {
           title: this.title,
@@ -79,9 +100,11 @@ export default {
           prefs: this.$root.user.prefs[this.type + 'Structure']
         }
         this.$database.add(this.type, obj, (res) => {
+          // GA - Add content event
+          this.$ga.event('content', 'add', this.type)
           this.showAddContent = false
           Notify.create({
-            message: this.type + ' created!',
+            message: this.readableType + ' created!',
             type: 'positive',
             position: 'bottom-left'
           })

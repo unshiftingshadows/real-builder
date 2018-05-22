@@ -47,7 +47,7 @@
       <div class="col-12" v-if="type === 'video'">
         <q-input type="text" float-label="Video URL" v-model="videoURL" />
       </div>
-      <div class="col-12">
+      <div class="col-12" v-if="!(type === 'image' && imageType === 'upload')">
         <q-btn color="primary" class="float-right" @click.native="add" :disabled="loading">Add {{ type }}</q-btn>
         <q-spinner class="float-right" size="2rem" color="primary" style="margin-right: 20px;" v-if="loading" />
       </div>
@@ -101,6 +101,8 @@ export default {
           // Should do custom file upload or local storing here
           this.loading = true
           this.$database.add('image', { service: 'upload' }, (res) => {
+            // GA - Add image media event
+            this.$ga.event('media', 'add', 'image-upload')
             var uploadProcess = this.$firebase.imagesRef.child(res._id).put(file)
             uploadProcess.on('state_changed', (snapshot) => {
               progress(true, snapshot.bytesTransferred, snapshot.totalBytes)
@@ -157,25 +159,34 @@ export default {
       this.text = ''
     },
     add () {
-      this.loading = true
       console.log('add')
       if (this.types.includes(this.type)) {
         var obj = {}
         switch (this.type) {
           case 'quote':
+            if (this.quoteText === '') {
+              this.$q.notify('Please review fields again')
+              return
+            }
             obj.data = this.quoteText
             break
           case 'image':
             switch (this.imageType) {
               case 'wiki':
+                if (this.imageTitle === '') {
+                  this.$q.notify('Please review fields again')
+                  return
+                }
                 obj.data = this.imageTitle
                 obj.service = 'wiki'
                 break
               case 'upload':
-                obj.data = 'something'
-                obj.service = 'upload'
-                break
+                return
               case 'link':
+                if (this.imageURL === '') {
+                  this.$q.notify('Please review fields again')
+                  return
+                }
                 obj.data = this.imageURL
                 obj.service = 'link'
                 break
@@ -184,18 +195,34 @@ export default {
             }
             break
           case 'illustration':
+            if (this.illustrationTitle === '') {
+              this.$q.notify('Please review fields again')
+              return
+            }
             obj.data = this.illustrationTitle
             break
           case 'lyric':
+            if (this.lyricTitle === '') {
+              this.$q.notify('Please review fields again')
+              return
+            }
             obj.data = this.lyricTitle
             break
           case 'video':
+            if (this.videoURL === '') {
+              this.$q.notify('Please review fields again')
+              return
+            }
             obj.data = this.videoURL
             break
           default:
-            console.error('invalid add media type')
+            console.error('Invalid media type')
+            this.$q.notify('Invalid media type')
         }
+        this.loading = true
         this.$database.add(this.type, obj, (res) => {
+          // GA - Add media event
+          this.$ga.event('media', 'add', this.type)
           this.showAddMedia = false
           this.loading = false
           this.addNew(res)

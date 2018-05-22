@@ -6,11 +6,12 @@
           <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Edit</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
               <q-item link @click.native="remove(id)">Delete</q-item>
             </q-list>
           </q-popover>
         </q-icon>
-        <q-icon name="fas fa-align-left" color="primary" size="2rem" />&nbsp;&nbsp;&nbsp;
+        <span style="font-style: bold; font-size: 2rem; vertical-align: middle;">{{ data.order+1 }}.&nbsp;&nbsp;</span>
         {{ data.title }}
       </q-card-title>
       <q-card-main>
