@@ -12,19 +12,31 @@ const fbapp = firebase.initializeApp({
   messagingSenderId: '644396278678'
 })
 
-function dbref (type, selection, id) {
+function dbref (type, selection, id, seriesid, lessonid) {
   console.log('run dbref')
-  var cur = type.charAt(0)
-  var media = type.slice(1)
-  if (media !== 'series') {
-    return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
+  if (type === 'rdevo') {
+    return devoContent(seriesid, lessonid, id).child(selection)
   } else {
-    return fbapp.database().ref(cur + '/' + media + '/' + id + '/' + selection)
+    var cur = type.charAt(0)
+    var media = type.slice(1)
+    if (media !== 'series') {
+      return fbapp.database().ref(cur + '/' + media + 's/' + id + '/' + selection)
+    } else {
+      return fbapp.database().ref(cur + '/' + media + '/' + id + '/' + selection)
+    }
   }
 }
 
 function lessons (seriesid) {
   return fbapp.database().ref('r/lessons/' + seriesid)
+}
+
+function devos (seriesid, lessonid) {
+  return fbapp.database().ref('r/devos/' + seriesid + '/' + lessonid)
+}
+
+function devoContent (seriesid, lessonid, devoid) {
+  return fbapp.database().ref('r/devoContent/' + seriesid + '/' + lessonid + '/' + devoid)
 }
 
 function user (uid) {
@@ -47,6 +59,8 @@ export default ({ app, router, Vue }) => {
     ref: dbref,
     user: user,
     imagesRef: fbapp.storage().ref('images'),
-    lessonsRef: lessons
+    lessonsRef: lessons,
+    devosRef: devos,
+    devoContentRef: devoContent
   }
 }

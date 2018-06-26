@@ -160,7 +160,7 @@ export default {
   firebase () {
     return {
       structure: {
-        source: this.$firebase.ref(this.type, 'structure', this.id),
+        source: this.$firebase.ref(this.type, 'structure', this.id, this.$route.params.seriesid, this.$route.params.lessonid),
         asObject: true,
         readyCallback: function (val) {
           console.log('structure ready')

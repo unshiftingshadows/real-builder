@@ -108,7 +108,12 @@ export default {
             type: 'positive',
             position: 'bottom-left'
           })
-          this.$router.push({ name: this.type, params: { id: res._id } })
+          console.log('add content', res, this.type)
+          if (this.type === 'rseries') {
+            this.$router.push({ name: this.type, params: { seriesid: res._id } })
+          } else {
+            this.$router.push({ name: this.type, params: { id: res._id } })
+          }
         })
       }
     },

@@ -14,14 +14,14 @@
         <q-toolbar-title>
           <img src="statics/logo.png" style="max-height: 40px" />
         </q-toolbar-title>
-        <!-- <q-btn
+        <q-btn
           flat
           round
           dense
           icon="menu"
           @click="rightDrawer = !rightDrawer"
           v-if="showRightDrawer"
-        /> -->
+        />
       </q-toolbar>
     </q-layout-header>
 
@@ -71,16 +71,16 @@
       </q-scroll-area>
     </q-layout-drawer>
 
-    <!-- <q-layout-drawer
+    <q-layout-drawer
       side="right"
       v-model="rightDrawer"
-      content-class="bg-grey-9 lg-drawer"
+      content-class="bg-grey-9 md-drawer"
       :breakpoint="1200"
     >
       <q-scroll-area class="fit q-pa-sm">
-        <resources v-if="$route.name === 'olesson'" />
+        <component v-bind:is="pageType.slice(1) + '-drawer'" class="drawer" v-if="rightDrawer"></component>
       </q-scroll-area>
-    </q-layout-drawer> -->
+    </q-layout-drawer>
 
     <q-page-container>
       <!-- This is where pages get injected -->
@@ -91,18 +91,26 @@
 </template>
 
 <script>
-import Resources from 'components/Resources.vue'
+import SeriesDrawer from 'components/drawers/RSeries.vue'
+import LessonDrawer from 'components/drawers/RLesson.vue'
+import ResearchDrawer from 'components/drawers/RResearch.vue'
+import DevoDrawer from 'components/drawers/RDevo.vue'
+
+const rightPages = ['rseries', 'rlesson', 'rresearch', 'rdevo']
 
 export default {
   components: {
-    Resources
+    SeriesDrawer,
+    LessonDrawer,
+    ResearchDrawer,
+    DevoDrawer
   },
   // name: 'LayoutName',
   data () {
     return {
-      leftDrawer: this.$route.name !== 'olesson',
-      // rightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
-      // showRightDrawer: this.$route.name === 'olesson' && this.$q.platform.is.desktop,
+      leftDrawer: true,
+      rightDrawer: rightPages.includes(this.$route.name) && this.$q.platform.is.desktop,
+      showRightDrawer: rightPages.includes(this.$route.name),
       pageType: this.$route.name
     }
   },
@@ -110,9 +118,9 @@ export default {
     '$route.name': function (val) {
       console.log('page change')
       this.pageType = val
-      this.leftDrawer = val !== 'olesson'
-      // this.rightDrawer = val === 'olesson' && this.$q.platform.is.desktop
-      // this.showRightDrawer = val === 'olesson' && this.$q.platform.is.desktop
+      this.leftDrawer = true
+      this.rightDrawer = rightPages.includes(this.$route.name) && this.$q.platform.is.desktop
+      this.showRightDrawer = rightPages.includes(this.$route.name)
     }
   },
   methods: {
@@ -136,6 +144,10 @@ export default {
 
 .menu-item:hover > i, .router-link-active > i {
   color: $primary !important
+}
+
+.drawer {
+  padding: 10px
 }
 
 </style>

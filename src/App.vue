@@ -191,7 +191,7 @@ export default {
 } */
 
 /* Style content and background */
-.q-layout-page, .modal-content, .q-popover  {
+.q-layout-page, .modal-content, .q-popover {
   color: var(--color);
   background-color: var(--background-color);
 }
@@ -213,12 +213,13 @@ export default {
 }
 
 /* Style drawer background color */
-.sm-drawer, .lg-drawer {
+.sm-drawer, .md-drawer, .lg-drawer {
   background-color: var(--drawer-background);
+  color: var(--color);
 }
 
 /* Style drawer icon color */
-.sm-drawer i, .lg-drawer i {
+.sm-drawer i, .md-drawer i, .lg-drawer i {
   color: var(--drawer-icons);
 }
 
@@ -227,11 +228,18 @@ export default {
   width: 75px;
 }
 
+.md-drawer {
+  width: 100%;
+}
+
 .lg-drawer {
   width: 100%;
 }
 
 @media screen and (min-width: 1200px) {
+  .md-drawer {
+    width: 25%;
+  }
   .lg-drawer {
     width: 35%;
   }

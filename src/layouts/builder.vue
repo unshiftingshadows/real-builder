@@ -114,7 +114,7 @@
       :breakpoint="1200"
     >
       <q-scroll-area class="fit q-pa-sm">
-        <resources v-if="$route.name === 'olesson' || $route.name === 'osermon'" />
+        <resources v-if="$route.name === 'olesson' || $route.name === 'osermon'" add />
       </q-scroll-area>
     </q-layout-drawer>
 

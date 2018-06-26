@@ -1,6 +1,30 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.24 - 2018-06-20
+### Added
+- REAL lesson page with title and main idea
+- shell for devo list inside lesson page
+- devosRef and devoContent path for $firebase plugin
+- DevoList shows devos for a lesson
+- Lesson page properly displays devos w/ info
+- RDevo page for editing devo content
+    - works like OLesson or OSermon
+    - module based
+    - set passages are shown at the top of the modules
+- drawers specific to the different REAL builder pages (series, lesson, research, devo) -- devo will be used for the guide and review pages
+- firebase plugin methods for getting the devos ref and the devoContent ref
+
+### Changed
+- deleting lesson on Series page will also delete all devos associated with that lesson
+- adding an RSeries now routes with the param "seriesid" instead of "id"
+- adding a lesson to a series automatically generates a default structure for the 7 devos
+- changed the names of various menu items
+
+### Fixed
+- fixed errors thrown when lesson has no bibleRefs in Lesson component
+- missing Activity and Question module options when adding a new module
+
 ## 0.0.23 - 2018-05-22
 ### Added
 - Google analytics plugin

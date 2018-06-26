@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
-    <q-resize-observable @resize="onResize" />
+    <!-- <q-resize-observable @resize="onResize" /> -->
     <div v-if="$root.user.nqUser">
-      <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" />
+      <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" v-if="add === ''" />
       <n-q-list :items="resources" :width="size.width/2" :addModule="addModule" />
     </div>
     <div v-if="!$root.user.nqUser">
@@ -24,6 +24,7 @@ export default {
     AddResearch
   },
   // name: 'ComponentName',
+  props: ['add'],
   data () {
     return {
       type: this.$route.name,

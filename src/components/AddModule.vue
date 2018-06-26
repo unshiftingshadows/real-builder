@@ -2,6 +2,7 @@
   <div class="col-12 relative-position" style="height: 70px">
     <q-btn round color="primary" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
     <add-media :type="type" ref="addMedia" :add-new="addNewMedia" />
+    <!-- TODO: Add a new component here like add-media but that uses the NQ database -->
   </div>
 </template>
 
@@ -23,7 +24,6 @@ export default {
   },
   methods: {
     showAdd () {
-      // NOTE: Need to split list for lessons vs sermons
       var actions = [
         {
           label: 'Section',
@@ -53,29 +53,27 @@ export default {
           }
         }
       ]
-      if (this.contentType === 'olesson') {
-        actions.push([
-          {
-            label: 'Activity',
-            color: 'primary',
-            icon: 'fa-trophy',
-            handler: () => {
-              console.log('activity!')
-              this.addModule('activity')
-            }
-          },
-          {
-            label: 'Question',
-            color: 'primary',
-            icon: 'fa-question',
-            handler: () => {
-              console.log('question!')
-              this.addModule('question')
-            }
+      if (this.contentType === 'olesson' || this.contentType === 'rdevo') {
+        actions.push({
+          label: 'Activity',
+          color: 'primary',
+          icon: 'fa-trophy',
+          handler: () => {
+            console.log('activity!')
+            this.addModule('activity')
           }
-        ])
+        })
+        actions.push({
+          label: 'Question',
+          color: 'primary',
+          icon: 'fa-question',
+          handler: () => {
+            console.log('question!')
+            this.addModule('question')
+          }
+        })
       }
-      if (this.$root.user.prefs.mediaType.quote) {
+      if (this.$root.user.prefs.mediaType.quote && this.contentType !== 'rdevo') {
         actions.push({
           label: 'Quote',
           color: 'primary',
@@ -87,7 +85,7 @@ export default {
           }
         })
       }
-      if (this.$root.user.prefs.mediaType.image) {
+      if (this.$root.user.prefs.mediaType.image && this.contentType !== 'rdevo') {
         actions.push({
           label: 'Image',
           color: 'primary',
@@ -99,7 +97,7 @@ export default {
           }
         })
       }
-      if (this.$root.user.prefs.mediaType.illustration) {
+      if (this.$root.user.prefs.mediaType.illustration && this.contentType !== 'rdevo') {
         actions.push({
           label: 'Illustration',
           color: 'primary',
@@ -111,7 +109,7 @@ export default {
           }
         })
       }
-      if (this.$root.user.prefs.mediaType.lyric) {
+      if (this.$root.user.prefs.mediaType.lyric && this.contentType !== 'rdevo') {
         actions.push({
           label: 'Lyric',
           color: 'primary',
@@ -123,7 +121,7 @@ export default {
           }
         })
       }
-      if (this.$root.user.prefs.mediaType.video) {
+      if (this.$root.user.prefs.mediaType.video && this.contentType !== 'rdevo') {
         actions.push({
           label: 'Video',
           color: 'primary',

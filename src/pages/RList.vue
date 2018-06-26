@@ -12,9 +12,7 @@
         </q-card-main>
       </q-card>
     </div>
-    <q-modal ref="addModal" v-model="showAdd" content-classes="add-media-modal">
-      <add-content :modal-fin="closeAdd" :type="'r' + type" ref="addContent" />
-    </q-modal>
+    <add-content :type="'r' + type" ref="addContent" />
   </q-page>
 </template>
 
@@ -30,8 +28,7 @@ export default {
     return {
       type: this.$route.params.type,
       items: [],
-      loading: false,
-      showAdd: false
+      loading: false
     }
   },
   mounted () {
@@ -51,17 +48,14 @@ export default {
       console.log(this.type)
       switch (this.type) {
         case 'series':
-          this.$router.push({ name: 'rseries', params: { id: id } })
+          this.$router.push({ name: 'rseries', params: { seriesid: id } })
           break
         default:
           console.error('Incorrect item type for routing')
       }
     },
     openAdd () {
-      this.showAdd = true
-    },
-    closeAdd () {
-      this.showAdd = false
+      this.$refs.addContent.show()
     }
   }
 }
@@ -75,7 +69,7 @@ export default {
   cursor: pointer;
 }
 
-.add-media-modal {
+.add-content-modal {
   padding: 30px;
   width: 100%;
 }
@@ -89,7 +83,7 @@ export default {
   .media-card {
     width: 31%;
   }
-  .add-media-modal {
+  .add-content-modal {
     min-width: 500px;
     width: 500px;
   }

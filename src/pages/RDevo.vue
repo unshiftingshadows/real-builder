@@ -2,10 +2,10 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-xs-12 col-md-6">
-        <h3>{{ lesson.title }}</h3>
+        <h3>{{ devo.title }}</h3>
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px;">
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
           <q-popover anchor="bottom right" self="top right">
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
@@ -18,10 +18,14 @@
             </q-list>
           </q-popover>
         </q-btn>
-        <p>{{ lesson.mainIdea }}</p>
+        <p>{{ devo.mainIdea }}</p>
+      </div>
+      <div class="col-12" v-if="passageList.length > 0">
+        <h4 style="margin-top: 0;">Passages</h4>
+        <p v-for="passage in passageList" :key="passage.ref"><b>{{ passage.readable }}</b><br/>{{ passage.text }}</p>
       </div>
       <div class="col-12">
-        <devo-list :id="id" :seriesid="seriesid" />
+        <module-list type="rdevo" :id="id" @modules-init="modulesInit" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -37,7 +41,7 @@
           <h4>Edit Title</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="lesson.title" />
+          <q-input v-model="devo.title" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="update">Save</q-btn>
@@ -57,7 +61,7 @@
           <h4>Edit Main Idea</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="lesson.mainIdea" />
+          <q-input v-model="devo.mainIdea" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="update">Save</q-btn>
@@ -69,35 +73,46 @@
 
 <script>
 import { Notify } from 'quasar'
-import DevoList from 'components/DevoList.vue'
+import ModuleList from 'components/ModuleList.vue'
+import RenderModules from 'components/preview/RenderModules.vue'
 
 export default {
   components: {
-    DevoList
+    ModuleList,
+    RenderModules
   },
   // name: 'PageName',
   data () {
     return {
       seriesid: this.$route.params.seriesid,
-      id: this.$route.params.lessonid,
-      lesson: {},
+      lessonid: this.$route.params.lessonid,
+      id: this.$route.params.devoid,
+      devo: {},
       editTitle: false,
-      editMainIdea: false
+      editMainIdea: false,
+      passageList: []
     }
   },
   firebase () {
     return {
-      lesson: {
-        source: this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid),
+      devo: {
+        source: this.$firebase.devosRef(this.$route.params.seriesid, this.$route.params.lessonid).child(this.$route.params.devoid),
         asObject: true,
         readyCallback: function (val) {
           console.log('ran!', val)
+          this.devo.bibleRefs.split(',').forEach(ref => {
+            var readable = this.$bible.readable(ref)
+            this.$database.bible(ref, 'esv', (res) => {
+              this.passageList.push({
+                ref: ref,
+                readable: readable,
+                text: res.text
+              })
+            })
+          })
         }
       }
     }
-  },
-  mounted () {
-    this.init()
   },
   methods: {
     init () {
@@ -105,17 +120,22 @@ export default {
       //   this.series = res
       // })
     },
+    modulesInit (structure) {
+      this.updating = true
+      this.structure = structure
+      this.updating = false
+    },
     update () {
       this.editTitle = false
       this.editMainIdea = false
       var obj = {
-        title: this.lesson.title,
-        mainIdea: this.lesson.mainIdea
+        title: this.devo.title,
+        mainIdea: this.devo.mainIdea
       }
-      this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid).update(obj).then(() => {
+      this.$firebase.devosRef(this.$route.params.seriesid, this.$route.params.lessonid).child(this.$route.params.devoid).update(obj).then(() => {
         Notify.create({
           type: 'positive',
-          message: 'Lesson updated!',
+          message: 'Devo updated!',
           position: 'bottom-left'
         })
       })

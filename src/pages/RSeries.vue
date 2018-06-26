@@ -17,7 +17,7 @@
         <h3>{{ series.title }}</h3>
       </div>
       <div class="col-12">
-        <q-input v-model="series.mainIdea" float-label="Main Idea" type="textarea" :max-height="150" :min-rows="3" @blur="update" />
+        <q-input v-model="series.mainIdea" float-label="Main Idea" type="textarea" :max-height="150" :min-rows="3" @blur="update()" />
       </div>
       <div class="col-12">
         <lesson-list :id="id" />
@@ -88,8 +88,8 @@ export default {
         title: this.series.title,
         mainIdea: this.series.mainIdea
       }
-      this.$database.update('rseries', this.id, obj, (res) => {
-        console.log(res)
+      this.$firebase.ref('rseries', '', this.id).update(obj).then(() => {
+        // console.log(res)
         Notify.create({
           type: 'positive',
           message: 'Series updated!',

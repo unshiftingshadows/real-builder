@@ -5,6 +5,88 @@
 </template>
 
 <script>
+var defaultDevos = {
+  '1': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '2': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '3': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '4': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '5': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '6': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  },
+  '7': {
+    editing: false,
+    title: '',
+    mainIdea: '',
+    bibleRefs: '',
+    notes: ''
+  }
+}
+
+var defaultContent = {
+  structure: {
+    hook: {
+      title: '',
+      text: '',
+      wordcount: 0,
+      time: 0,
+      editing: false,
+      show: true
+    },
+    application: {
+      title: '',
+      today: '',
+      thisweek: '',
+      thought: '',
+      wordcount: 0,
+      time: 0,
+      editing: false,
+      show: true
+    },
+    prayer: {
+      text: '',
+      wordcount: 0,
+      time: 0,
+      editing: false,
+      show: true
+    }
+  }
+}
+
 export default {
   // name: 'ComponentName',
   props: [ 'nextLessonOrder', 'close', 'edit' ],
@@ -28,6 +110,10 @@ export default {
         prayer: '',
         application: ''
       })
+      this.$firebase.devosRef(this.$parent.id, newRef.key).set(defaultDevos)
+      for (var x = 1; x <= 7; x++) {
+        this.$firebase.devoContentRef(this.$parent.id, newRef.key, x).set(defaultContent)
+      }
       this.edit(newRef.key)
     }
   }

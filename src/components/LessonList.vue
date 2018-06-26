@@ -13,14 +13,12 @@
 
 <script>
 import Draggable from 'vuedraggable'
-import Editor from 'components/Editor.vue'
 import AddLesson from 'components/AddLesson.vue'
 import ModLesson from 'components/modules/Lesson.vue'
 
 export default {
   components: {
     Draggable,
-    Editor,
     AddLesson,
     ModLesson
   },
@@ -119,6 +117,14 @@ export default {
     },
     lessonDelete (id) {
       this.$firebase.lessonsRef(this.id).child(id).remove()
+      this.$firebase.devosRef(this.id, id).once('value').then((snap) => {
+        // NOTE: This will delete all subsequent devos -- any progress will be lost
+        snap.forEach((devoSnap) => {
+          this.$firebase.devoContentRef(this.id, id, devoSnap.key).remove()
+        })
+        this.$firebase.devosRef(this.id, id).remove()
+        this.reorder()
+      })
     },
     getLessonById (id) {
       return this.lessons.find((element) => {

@@ -6,13 +6,11 @@
           <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Design</q-item>
-              <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
-              <q-item link>Research</q-item>
-              <q-item link @click.native="remove(id)">Delete</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rdevo', params: { seriesid: $route.params.seriesid, lessonid: $route.params.lessonid, devoid: id } })">Write</q-item>
             </q-list>
           </q-popover>
         </q-icon>
-        <span style="font-style: bold; font-size: 2rem; vertical-align: middle;">{{ data.order+1 }}.&nbsp;&nbsp;</span>
+        <span style="font-style: bold; font-size: 2rem; vertical-align: middle;">{{ id }}.&nbsp;&nbsp;</span>
         {{ data.title }}
       </q-card-title>
       <q-card-main>
@@ -44,7 +42,6 @@
           </div>
           <div class="col-12">
             <q-btn color="primary" @click.native="save(id)">Save</q-btn>
-            <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
       </q-card-main>
@@ -54,8 +51,8 @@
 
 <script>
 export default {
-  name: 'mod-lesson',
-  props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
+  name: 'mod-devo',
+  props: [ 'id', 'data', 'edit', 'save', 'close' ],
   data () {
     return {
       readableRefs: []
