@@ -172,7 +172,7 @@ export default {
         }
       },
       modules: {
-        source: this.$firebase.ref(this.type, 'modules', this.id).orderByChild('order'),
+        source: this.$firebase.ref(this.type, 'modules', this.id, this.$route.params.seriesid, this.$route.params.lessonid).orderByChild('order'),
         readyCallback: function (val) {
           // this.$root.dim = false
           // var check = this.modules.find((element) => {

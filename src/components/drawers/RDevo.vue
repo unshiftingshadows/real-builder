@@ -5,17 +5,11 @@
     <hr/>
     <q-input v-model="devo.notes" float-label="Devo Notes" type="textarea" :max-height="150" :min-rows="3" />
     <hr/>
-    <resources />
   </div>
 </template>
 
 <script>
-import Resources from 'components/Resources.vue'
-
 export default {
-  components: {
-    Resources
-  },
   // name: 'ComponentName',
   firebase () {
     return {

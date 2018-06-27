@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-xs-12 col-md-6">
-        <h3>{{ lesson.title }}</h3>
+        <h3>{{ lesson.title }} <span class="q-headline text-weight-light">Devos</span></h3>
       </div>
       <div class="col-xs-12 col-md-6">
         <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
@@ -11,6 +11,8 @@
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
               <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
               <q-item link v-close-overlay @click.native="$router.push({ name: 'rresearch', params: { seriesid: $route.params.seriesid, lessonid: id } })">Research</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rguide', params: { seriesid: $route.params.seriesid, lessonid: id } })">Guides</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rreview', params: { seriesid: $route.params.seriesid, lessonid: id } })">Review</q-item>
               <!-- <q-item-separator /> -->
               <!-- <q-item v-close-overlay>Archive</q-item> -->
               <!-- <q-item v-close-overlay>Share...</q-item> -->

@@ -39,6 +39,14 @@ function devoContent (seriesid, lessonid, devoid) {
   return fbapp.database().ref('r/devoContent/' + seriesid + '/' + lessonid + '/' + devoid)
 }
 
+function guides (seriesid, lessonid, guideType) {
+  return fbapp.database().ref('r/guides/' + seriesid + '/' + lessonid + '/' + guideType)
+}
+
+function review (seriesid, lessonid) {
+  return fbapp.database().ref('r/review/' + seriesid + '/' + lessonid)
+}
+
 function user (uid) {
   if (uid) {
     console.log('valid uid', uid)
@@ -61,6 +69,8 @@ export default ({ app, router, Vue }) => {
     imagesRef: fbapp.storage().ref('images'),
     lessonsRef: lessons,
     devosRef: devos,
-    devoContentRef: devoContent
+    devoContentRef: devoContent,
+    guides: guides,
+    review: review
   }
 }

@@ -61,7 +61,7 @@ export default {
       this.$database.search('topic', this.searchTerm, {}, (res) => {
         this.searchResults = res.filter((element) => {
           return !this.currentResearch.map((el) => {
-            return el._id
+            return el.media._id
           }).includes(element._id)
         })
         this.searching = false

@@ -1,6 +1,19 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.26 - 2018-06-27
+### Added
+- methods in the firebase plugin to get the reference for guides and reviews
+- RGuide and RReview drawers
+- subtitles for pages related to RLesson (Guide, Review, Research)
+
+### Removed
+- resources from RDevo drawer -- needs to be a new custom component that combines resources from the parent lesson and from the devo itself
+
+### Fixed
+- when adding research with AddResearch, already added research topics no longer show up in the search list - should prevent duplicate topics
+- devo modules should populate properly now from ModuleList
+
 ## 0.0.25 - 2018-06-26
 ### Added
 - RResearch page

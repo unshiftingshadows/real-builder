@@ -95,15 +95,19 @@ import SeriesDrawer from 'components/drawers/RSeries.vue'
 import LessonDrawer from 'components/drawers/RLesson.vue'
 import ResearchDrawer from 'components/drawers/RResearch.vue'
 import DevoDrawer from 'components/drawers/RDevo.vue'
+import GuideDrawer from 'components/drawers/RGuide.vue'
+import ReviewDrawer from 'components/drawers/RReview.vue'
 
-const rightPages = ['rseries', 'rlesson', 'rresearch', 'rdevo']
+const rightPages = ['rseries', 'rlesson', 'rresearch', 'rdevo', 'rguide', 'rreview']
 
 export default {
   components: {
     SeriesDrawer,
     LessonDrawer,
     ResearchDrawer,
-    DevoDrawer
+    DevoDrawer,
+    GuideDrawer,
+    ReviewDrawer
   },
   // name: 'LayoutName',
   data () {
