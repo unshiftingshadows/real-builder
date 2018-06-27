@@ -5,11 +5,12 @@
         <h3>{{ lesson.title }}</h3>
       </div>
       <div class="col-xs-12 col-md-6">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px;">
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
           <q-popover anchor="bottom right" self="top right">
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
               <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rresearch', params: { seriesid: $route.params.seriesid, lessonid: id } })">Research</q-item>
               <!-- <q-item-separator /> -->
               <!-- <q-item v-close-overlay>Archive</q-item> -->
               <!-- <q-item v-close-overlay>Share...</q-item> -->

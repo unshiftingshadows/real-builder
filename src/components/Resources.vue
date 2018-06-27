@@ -55,7 +55,7 @@ export default {
       if (!this.$root.user.nqUser) {
       } else {
         this.resources = []
-        this.$database.resources(this.type, this.id, (res) => {
+        this.$database.resources(this.type, this.id, 'list', {}, (res) => {
           console.log('response', res)
           this.research = res.research
           res.research.forEach((research) => {

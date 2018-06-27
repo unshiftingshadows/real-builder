@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-12">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
           <q-popover anchor="bottom right" self="top right">
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>

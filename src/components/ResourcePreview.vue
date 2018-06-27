@@ -1,6 +1,6 @@
 <template>
   <div class="resource-preview">
-    <q-btn color="primary" class="float-right" @click.native="addClicked">Add</q-btn>
+    <q-btn color="primary" class="float-right" @click.native="addClicked" v-if="addModule !== undefined">Add</q-btn>
     <div class="row gutter-sm">
       <div class="col-xs-12 col-md-4">
         <img v-if="type !== 'note' && type !== 'document'" :src="media.thumbURL" style="width: 100%;" />

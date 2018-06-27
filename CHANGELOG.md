@@ -1,6 +1,28 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.25 - 2018-06-26
+### Added
+- RResearch page
+- menu item in RLesson to go to RResearch
+- RResearch page shows currently added resources
+- new resources can be added to a lesson throug the RResearch page
+- the RResearch drawer now shows series title and main idea, Bible refs, and notes
+- RGuide page
+- RReview page
+- button in NQList items for adding - shows only on boolean value
+- init function to NQList to display items immediately after mounting
+- ResearchList component for displaying currently added resources for RResearch
+
+### Changed
+- updated database plugin to handle new resource requirements - action and resource
+- various graphical updates
+- NQList now updates when item list is changed
+- removed unnessasary commented code from various places
+- NQList defaults to all types of media showing
+- ResourcePreview add button only shows when addModule function is defined
+- various updates to reflect the change in the database plugin
+
 ## 0.0.24 - 2018-06-20
 ### Added
 - REAL lesson page with title and main idea

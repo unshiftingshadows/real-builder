@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-xs-12 col-md-6">
-        <h3>{{ devo.title }}</h3>
+        <h3>{{ lesson.title }}</h3>
       </div>
       <div class="col-xs-12 col-md-6">
         <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
@@ -10,6 +10,7 @@
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
               <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
               <!-- <q-item-separator /> -->
               <!-- <q-item v-close-overlay>Archive</q-item> -->
               <!-- <q-item v-close-overlay>Share...</q-item> -->
@@ -18,14 +19,19 @@
             </q-list>
           </q-popover>
         </q-btn>
-        <p>{{ devo.mainIdea }}</p>
-      </div>
-      <div class="col-12" v-if="passageList.length > 0">
-        <h4 style="margin-top: 0;">Passages</h4>
-        <p v-for="passage in passageList" :key="passage.ref"><b>{{ passage.readable }}</b><br/>{{ passage.text }}</p>
+        <p>{{ lesson.mainIdea }}</p>
       </div>
       <div class="col-12">
-        <module-list type="rdevo" :id="id" @modules-init="modulesInit" />
+        <q-input type="text" v-model="searchTerms" float-label="Search" clearable @keyup.enter="search" />
+      </div>
+      <div class="col-12">
+        <q-spinner size="4rem" color="primary" class="absolute-center" v-if="loading" />
+      </div>
+      <div class="col-12" v-if="searchTerms !== '' && searchItems.length > 0">
+        <n-q-list v-if="searchTerms !== ''" :items="searchItems" :add-module="addResource" add-button />
+      </div>
+      <div class="col-12" v-show="searchTerms === ''">
+        <resource-list :id="id" type="rlesson" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -41,7 +47,7 @@
           <h4>Edit Title</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="devo.title" />
+          <q-input v-model="lesson.title" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="update">Save</q-btn>
@@ -61,7 +67,7 @@
           <h4>Edit Main Idea</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="devo.mainIdea" />
+          <q-input v-model="lesson.mainIdea" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="update">Save</q-btn>
@@ -73,89 +79,79 @@
 
 <script>
 import { Notify } from 'quasar'
-import ModuleList from 'components/ModuleList.vue'
-import RenderModules from 'components/preview/RenderModules.vue'
+import NQList from 'components/NQList.vue'
+import ResourceList from 'components/ResourceList.vue'
 
 export default {
   components: {
-    ModuleList,
-    RenderModules
+    NQList,
+    ResourceList
   },
   // name: 'PageName',
   data () {
     return {
       seriesid: this.$route.params.seriesid,
-      lessonid: this.$route.params.lessonid,
-      id: this.$route.params.devoid,
-      devo: {},
+      id: this.$route.params.lessonid,
+      lesson: {},
       editTitle: false,
       editMainIdea: false,
-      passageList: []
+      searchTerms: '',
+      searchItems: [],
+      loading: false
     }
   },
   firebase () {
     return {
-      devo: {
-        source: this.$firebase.devosRef(this.$route.params.seriesid, this.$route.params.lessonid).child(this.$route.params.devoid),
+      lesson: {
+        source: this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid),
         asObject: true,
         readyCallback: function (val) {
           console.log('ran!', val)
-          this.devo.bibleRefs.split(',').forEach(ref => {
-            var readable = this.$bible.readable(ref)
-            this.$database.bible(ref, 'esv', (res) => {
-              this.passageList.push({
-                ref: ref,
-                readable: readable,
-                text: res.text
-              })
-            })
-          })
         }
       }
     }
   },
+  watch: {
+    'searchTerms': function (value) {
+      if (value === '') this.searchItems = []
+    }
+  },
   methods: {
-    init () {
-      // this.$database.view('rseries', this.id, (res) => {
-      //   this.series = res
-      // })
-    },
-    modulesInit (structure) {
-      this.updating = true
-      this.structure = structure
-      this.updating = false
-    },
     update () {
       this.editTitle = false
       this.editMainIdea = false
       var obj = {
-        title: this.devo.title,
-        mainIdea: this.devo.mainIdea
+        title: this.lesson.title,
+        mainIdea: this.lesson.mainIdea
       }
-      this.$firebase.devosRef(this.$route.params.seriesid, this.$route.params.lessonid).child(this.$route.params.devoid).update(obj).then(() => {
+      this.$firebase.ref('rlesson', this.$route.params.lessonid, this.$route.params.seriesid).update(obj).then(() => {
         Notify.create({
           type: 'positive',
-          message: 'Devo updated!',
+          message: 'Lesson updated!',
           position: 'bottom-left'
         })
       })
+    },
+    search () {
+      if (this.searchTerms !== '') {
+        this.searchItems = []
+        this.loading = true
+        this.$database.search('nqmedia', this.searchTerms, {}, (res) => {
+          this.searchItems = res
+          this.loading = false
+        })
+      }
+    },
+    addResource (id, type) {
+      this.$database.resources('rlesson', this.id, 'add', { id: id, type: type }, (res) => {
+        console.log('RResearch', res)
+      })
+    },
+    addResearch () {
     }
   }
 }
 </script>
 
 <style>
-
-.edit-title-modal {
-  padding: 30px;
-  width: 100%;
-}
-
-@media screen and (min-width: 1200px) {
-  .edit-title-modal {
-    min-width: 500px;
-    width: 500px;
-  }
-}
-
 </style>

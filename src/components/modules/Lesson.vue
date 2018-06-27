@@ -7,7 +7,7 @@
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Design</q-item>
               <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
-              <q-item link>Research</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rresearch', params: { seriesid: $route.params.seriesid, lessonid: id } })">Research</q-item>
               <q-item link @click.native="remove(id)">Delete</q-item>
             </q-list>
           </q-popover>

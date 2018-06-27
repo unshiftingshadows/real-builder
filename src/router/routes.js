@@ -30,6 +30,9 @@ export default [
       { path: 'list/:type', name: 'rlist', component: () => import('pages/RList') },
       { path: 'series/:seriesid', name: 'rseries', component: () => import('pages/RSeries') },
       { path: 'series/:seriesid/lesson/:lessonid', name: 'rlesson', component: () => import('pages/RLesson') },
+      { path: 'series/:seriesid/lesson/:lessonid/research', name: 'rresearch', component: () => import('pages/RResearch') },
+      { path: 'series/:seriesid/lesson/:lessonid/guide', name: 'rguide', component: () => import('pages/RGuide') },
+      { path: 'series/:seriesid/lesson/:lessonid/review', name: 'rreview', component: () => import('pages/RReview') },
       { path: 'series/:seriesid/lesson/:lessonid/devo/:devoid', name: 'rdevo', component: () => import('pages/RDevo') },
       { path: 'settings', name: 'rsettings', component: () => import('pages/Settings') }
     ],

@@ -109,11 +109,13 @@ function bible (ref, version, callback) {
   })
 }
 
-function resources (type, id, callback) {
+function resources (type, id, action, resource, callback) {
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
     axios.post('/resources', {
       type: type,
       id: id,
+      action: action,
+      resource: resource,
       token: idToken
     })
       .then((res) => {
