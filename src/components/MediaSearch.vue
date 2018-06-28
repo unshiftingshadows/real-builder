@@ -33,7 +33,7 @@
       </div>
     </div>
     <q-modal v-model="mediaOpen" content-classes="media-modal" v-if="types.map(e => { return e.value }).includes(mediaType)">
-      <component v-bind:is="'media-' + mediaType" :data="media" :addModule="addModule" :open="mediaOpen" :close="closeMedia" />
+      <component v-if="types.map(e => { return e.value }).includes(mediaType)" v-bind:is="'media-' + mediaType" :data="media" :addModule="addModule" :open="mediaOpen" :close="closeMedia" />
     </q-modal>
   </div>
 </template>

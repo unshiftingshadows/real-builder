@@ -1,6 +1,14 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.27 - 2018-06-27
+### Changed
+- using "All" on NQList will clear out all other filters
+
+### Fixed
+- removed error thrown when going to a lesson's research page for the first time
+- removed error thrown when reloading a sermon/lesson when logged in as an NQ user
+
 ## 0.0.26 - 2018-06-27
 ### Added
 - methods in the firebase plugin to get the reference for guides and reviews

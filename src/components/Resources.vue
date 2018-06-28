@@ -1,13 +1,12 @@
 <template>
   <div>
     <!-- <q-btn color="primary" label="Refresh" @click.native="init" /> -->
-    <!-- <q-resize-observable @resize="onResize" /> -->
-    <div v-if="$root.user.nqUser">
+    <div v-if="$root.user && $root.user.nqUser">
       <add-research :currentResearch="research" :id="id" :type="type" :reinit="init" v-if="add === ''" />
-      <n-q-list :items="resources" :width="size.width/2" :addModule="addModule" />
+      <n-q-list :items="resources" :addModule="addModule" />
     </div>
-    <div v-if="!$root.user.nqUser">
-      <media-search :width="size.width/2" :addModule="addModule" />
+    <div v-if="$root.user && !$root.user.nqUser">
+      <media-search :width="size.width/2" :addModule="addModule" v-if="$root.user && !$root.user.nqUser && $root.user.prefs" />
     </div>
   </div>
 </template>
@@ -16,6 +15,8 @@
 import MediaSearch from 'components/MediaSearch.vue'
 import NQList from 'components/NQList.vue'
 import AddResearch from 'components/AddResearch.vue'
+
+var mediaTypes = ['quote', 'image', 'illustration', 'lyric', 'video']
 
 export default {
   components: {
@@ -30,11 +31,7 @@ export default {
       type: this.$route.name,
       id: this.$route.params.id,
       resources: [],
-      research: [],
-      size: {
-        width: 0,
-        height: 0
-      }
+      research: []
     }
   },
   mounted () {
@@ -56,7 +53,7 @@ export default {
       } else {
         this.resources = []
         this.$database.resources(this.type, this.id, 'list', {}, (res) => {
-          console.log('response', res)
+          console.log('resources response', res)
           this.research = res.research
           res.research.forEach((research) => {
             this.resources = this.resources.concat(research.media.resources)
@@ -75,70 +72,21 @@ export default {
       })
       return items
     },
-    onResize (size) {
-      this.size = size
-    },
     addModule (id, type) {
-      var newRef = this.$firebase.ref(this.type, 'modules', this.id).push()
-      switch (type) {
-        case 'quote':
-          newRef.set({
-            type: 'quote',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: 'new',
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'image':
-          newRef.set({
-            type: 'image',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: 'new',
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'video':
-          newRef.set({
-            type: 'video',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: 'new',
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'lyric':
-          newRef.set({
-            type: 'lyric',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: 'new',
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'illustration':
-          newRef.set({
-            type: 'illustration',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: 'new',
-            time: 0,
-            wordcount: 0
-          })
-          break
-        default:
-          console.error('incorrect new module type')
-          return false
+      if (mediaTypes.includes(type)) {
+        var newRef = this.$firebase.ref(this.type, 'modules', this.id).push()
+        var obj = {
+          mediaid: id,
+          editing: false,
+          slide: false,
+          order: 'new',
+          time: 0,
+          wordcount: 0
+        }
+        obj.type = type
+        newRef.set(obj)
+      } else {
+        console.error('Incorrect media type for module add')
       }
     }
   }

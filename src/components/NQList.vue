@@ -129,7 +129,10 @@ export default {
   },
   watch: {
     'selectedTypes': function () {
-      if (this.selectedTypes[0] === 'all') {
+      if (this.selectedTypes.includes('all')) {
+        if (this.selectedTypes.length > 1) {
+          this.selectedTypes = ['all']
+        }
         this.showItems = this.items
       } else {
         this.showItems = this.items.filter(this.checkType)

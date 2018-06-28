@@ -24,7 +24,7 @@
         <p>{{ lesson.mainIdea }}</p>
       </div>
       <div class="col-12">
-        <q-input type="text" v-model="searchTerms" float-label="Search" clearable @keyup.enter="search" />
+        <q-input type="text" v-model="searchTerms" float-label="Search for resources" clearable @keyup.enter="search" />
       </div>
       <div class="col-12">
         <q-spinner size="4rem" color="primary" class="absolute-center" v-if="loading" />
@@ -83,11 +83,13 @@
 import { Notify } from 'quasar'
 import NQList from 'components/NQList.vue'
 import ResourceList from 'components/ResourceList.vue'
+import AddResearch from 'components/AddResearch.vue'
 
 export default {
   components: {
     NQList,
-    ResourceList
+    ResourceList,
+    AddResearch
   },
   // name: 'PageName',
   data () {
