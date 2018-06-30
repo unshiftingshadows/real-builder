@@ -9,6 +9,10 @@
     </ul>
     <hr/>
     <q-input v-model="lesson.notes" float-label="Lesson Notes" type="textarea" :max-height="150" :min-rows="3" />
+    <div class="fixed-bottom bg-primary drawer-overlay" style="padding: 10px;" v-bind:class="{ 'full-height': showResources }">
+      <q-btn class="float-right" color="dark" @click.native="showResources = showResources ? false : true">{{ showResources ? 'Hide' : 'Show' }}</q-btn>
+      <h5 style="margin: 0;">Resources</h5>
+    </div>
   </div>
 </template>
 
@@ -42,11 +46,23 @@ export default {
   },
   data () {
     return {
-      lessonRefs: []
+      lessonRefs: [],
+      showResources: false
     }
   }
 }
 </script>
 
 <style>
+
+.drawer-overlay {
+  height: 60px;
+  -webkit-transition: height 1s, -webkit-transform 1s;
+  transition: height 1s, transform 1s;
+}
+
+.full-height {
+  height: 100%;
+}
+
 </style>

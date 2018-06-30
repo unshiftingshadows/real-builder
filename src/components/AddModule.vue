@@ -1,6 +1,6 @@
 <template>
   <div class="col-12 relative-position" style="height: 70px">
-    <q-btn round color="primary" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
+    <q-btn round :color="color" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
     <add-media :type="type" ref="addMedia" :add-new="addNewMedia" />
     <!-- TODO: Add a new component here like add-media but that uses the NQ database -->
   </div>
@@ -14,26 +14,48 @@ export default {
     AddMedia
   },
   // name: 'ComponentName',
-  props: [ 'nextModOrder', 'nextSectionOrder', 'close', 'edit', 'contentType' ],
+  props: [ 'nextModOrder', 'sectionid', 'close', 'edit', 'contentType', 'dark' ],
   data () {
     return {
-      mediaTypes: ['quote', 'image', 'illustration', 'lyric', 'video'],
+      moduleTypes: ['activity', 'bible', 'question', 'text'],
+      omediaTypes: ['quote', 'image', 'illustration', 'lyric', 'video'],
+      nqmediaTypes: ['book', 'movie', 'video', 'image', 'article', 'composition', 'document', 'discourse', 'note', 'quote', 'illustration', 'outline', 'idea'],
       showAddMedia: false,
-      type: ''
+      type: '',
+      color: 'primary'
     }
   },
+  watch: {
+    'dark': function (val) {
+      if (val === '') {
+        this.color = 'dark'
+      } else {
+        this.color = 'primary'
+      }
+    }
+  },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      if (this.dark === '') {
+        this.color = 'dark'
+      } else {
+        this.color = 'primary'
+      }
+    },
     showAdd () {
       var actions = [
-        {
-          label: 'Section',
-          color: 'primary',
-          icon: 'fa-list-ol',
-          handler: () => {
-            console.log('section!')
-            this.addModule('section')
-          }
-        },
+        // {
+        //   label: 'Section',
+        //   color: 'primary',
+        //   icon: 'fa-list-ol',
+        //   handler: () => {
+        //     console.log('section!')
+        //     this.addModule('section')
+        //   }
+        // },
         {
           label: 'Text',
           color: 'primary',
@@ -53,7 +75,7 @@ export default {
           }
         }
       ]
-      if (this.contentType === 'olesson' || this.contentType === 'rdevo') {
+      if (this.contentType === 'olesson' || this.contentType === 'rdevo' || this.contentType === 'rguide') {
         actions.push({
           label: 'Activity',
           color: 'primary',
@@ -73,65 +95,68 @@ export default {
           }
         })
       }
-      if (this.$root.user.prefs.mediaType.quote && this.contentType !== 'rdevo') {
-        actions.push({
-          label: 'Quote',
-          color: 'primary',
-          icon: 'fa-quote-left',
-          handler: () => {
-            console.log('quote!')
-            this.type = 'quote'
-            this.$refs.addMedia.show()
-          }
-        })
-      }
-      if (this.$root.user.prefs.mediaType.image && this.contentType !== 'rdevo') {
-        actions.push({
-          label: 'Image',
-          color: 'primary',
-          icon: 'fa-image',
-          handler: () => {
-            console.log('image!')
-            this.type = 'image'
-            this.$refs.addMedia.show()
-          }
-        })
-      }
-      if (this.$root.user.prefs.mediaType.illustration && this.contentType !== 'rdevo') {
-        actions.push({
-          label: 'Illustration',
-          color: 'primary',
-          icon: 'fa-paint-brush',
-          handler: () => {
-            console.log('illustration!')
-            this.type = 'illustration'
-            this.$refs.addMedia.show()
-          }
-        })
-      }
-      if (this.$root.user.prefs.mediaType.lyric && this.contentType !== 'rdevo') {
-        actions.push({
-          label: 'Lyric',
-          color: 'primary',
-          icon: 'fa-music',
-          handler: () => {
-            console.log('lyric!')
-            this.type = 'lyric'
-            this.$refs.addMedia.show()
-          }
-        })
-      }
-      if (this.$root.user.prefs.mediaType.video && this.contentType !== 'rdevo') {
-        actions.push({
-          label: 'Video',
-          color: 'primary',
-          icon: 'fa-play',
-          handler: () => {
-            console.log('video!')
-            this.type = 'video'
-            this.$refs.addMedia.show()
-          }
-        })
+      if (this.contentType.charAt(0) !== 'r') {
+        console.log('running', this.contentType.charAt(0))
+        if (this.$root.user.prefs.mediaType.quote) {
+          actions.push({
+            label: 'Quote',
+            color: 'primary',
+            icon: 'fa-quote-left',
+            handler: () => {
+              console.log('quote!')
+              this.type = 'quote'
+              this.$refs.addMedia.show()
+            }
+          })
+        }
+        if (this.$root.user.prefs.mediaType.image) {
+          actions.push({
+            label: 'Image',
+            color: 'primary',
+            icon: 'fa-image',
+            handler: () => {
+              console.log('image!')
+              this.type = 'image'
+              this.$refs.addMedia.show()
+            }
+          })
+        }
+        if (this.$root.user.prefs.mediaType.illustration) {
+          actions.push({
+            label: 'Illustration',
+            color: 'primary',
+            icon: 'fa-paint-brush',
+            handler: () => {
+              console.log('illustration!')
+              this.type = 'illustration'
+              this.$refs.addMedia.show()
+            }
+          })
+        }
+        if (this.$root.user.prefs.mediaType.lyric) {
+          actions.push({
+            label: 'Lyric',
+            color: 'primary',
+            icon: 'fa-music',
+            handler: () => {
+              console.log('lyric!')
+              this.type = 'lyric'
+              this.$refs.addMedia.show()
+            }
+          })
+        }
+        if (this.$root.user.prefs.mediaType.video) {
+          actions.push({
+            label: 'Video',
+            color: 'primary',
+            icon: 'fa-play',
+            handler: () => {
+              console.log('video!')
+              this.type = 'video'
+              this.$refs.addMedia.show()
+            }
+          })
+        }
       }
       this.$q.actionSheet({
         title: 'Add Module',
@@ -144,131 +169,36 @@ export default {
       // GA - Add module event
       this.$ga.event('module', 'add', type)
       this.close()
-      var newRef = this.$firebase.ref(this.$parent.type, 'modules', this.$parent.id).push()
-      switch (type) {
-        case 'section':
-          newRef.set({
-            type: 'section',
-            title: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            number: this.nextSectionOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'text':
-          newRef.set({
-            type: 'text',
-            title: '',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'bible':
-          newRef.set({
-            type: 'bible',
-            text: '',
-            bibleRef: '',
-            translation: this.$root.user.prefs.bibleTranslation,
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'activity':
-          newRef.set({
-            type: 'activity',
-            title: '',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'question':
-          newRef.set({
-            type: 'question',
-            text: '',
-            editing: this.$firebase.auth.currentUser.uid,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'quote':
-          newRef.set({
-            type: 'quote',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'image':
-          newRef.set({
-            type: 'image',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'illustration':
-          newRef.set({
-            type: 'illustration',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'lyric':
-          newRef.set({
-            type: 'lyric',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        case 'video':
-          newRef.set({
-            type: 'video',
-            mediaid: id,
-            editing: false,
-            slide: false,
-            order: this.nextModOrder,
-            time: 0,
-            wordcount: 0
-          })
-          break
-        default:
-          console.error('incorrect new module type')
-          return false
-      }
-      if (this.mediaTypes.includes(type)) {
-        this.edit('')
+      // var newRef = this.$firebase.ref(this.$parent.type, 'modules', this.$parent.id).push()
+      if (this.moduleTypes.includes(type) || this.omediaTypes.includes(type) || this.nqmediaTypes.includes(type)) {
+        var obj = {
+          type: type,
+          editing: false,
+          slide: false,
+          order: this.nextModOrder,
+          time: 0,
+          wordcount: 0
+        }
+        if (type === 'text' || type === 'activity') {
+          obj.title = ''
+          obj.text = ''
+        }
+        if (type === 'question') {
+          obj.text = ''
+        }
+        if (type === 'bible') {
+          obj.text = ''
+          obj.bibleRef = ''
+          obj.translation = this.$root.user.prefs.bibleTranslation
+        }
+        // if (this.omediaTypes.includes(type) || this.nqmediaTypes.includes(type)) {
+        //   this.edit('')
+        // } else {
+        //   this.edit(newRef.key, this.sectionid)
+        // }
+        this.$root.$emit('add-module', obj, this.sectionid)
       } else {
-        this.edit(newRef.key)
+        console.error('Invalid new module type')
       }
     },
     addNewMedia (media) {

@@ -106,7 +106,7 @@ export default {
         this.data.translation = this.translation
         this.data.bibleRef = this.$bible.readable(this.data.bibleRef)
         this.loading = false
-        this.save(this.id)
+        this.save(this.id, this.data)
       })
     }
   }

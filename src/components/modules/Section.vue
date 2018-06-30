@@ -22,7 +22,7 @@
             <q-input v-model="data.title" float-label="Title" @keyup.enter="save(id)" class="dark-label" autofocus />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="primary" @click.native="save(id, data)">Save</q-btn>
             <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>

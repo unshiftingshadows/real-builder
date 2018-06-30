@@ -26,10 +26,10 @@
             <q-input v-model="data.title" float-label="Title" autofocus />
           </div>
           <div class="col-12">
-            <editor :text.sync="data.text" :save="autoSave" />
+            <editor :text.sync="data.text" :auto-save="textSave" />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="primary" @click.native="save(id, data)">Save</q-btn>
             <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
@@ -46,16 +46,13 @@ export default {
     Editor
   },
   name: 'mod-text',
-  props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
+  props: [ 'id', 'data', 'edit', 'save', 'autosave', 'close', 'remove' ],
   data () {
     return {}
   },
   methods: {
-    autoSave () {
-      console.log('auto save text')
-      this.$firebase.ref(this.$parent.$parent.type, 'modules', this.$parent.$parent.id).child(this.id).update({
-        text: this.data.text
-      })
+    textSave (text) {
+      this.autosave(this.id, text)
     }
   }
 }

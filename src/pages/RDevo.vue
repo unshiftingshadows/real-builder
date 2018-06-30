@@ -25,7 +25,7 @@
         <p v-for="passage in passageList" :key="passage.ref"><b>{{ passage.readable }}</b><br/>{{ passage.text }}</p>
       </div>
       <div class="col-12">
-        <module-list type="rdevo" :id="id" @modules-init="modulesInit" />
+        <module-list type="rdevo" :id="id" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">

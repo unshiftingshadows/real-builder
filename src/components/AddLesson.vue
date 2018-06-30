@@ -59,33 +59,38 @@ var defaultDevos = {
 
 var defaultContent = {
   structure: {
-    hook: {
-      title: '',
-      text: '',
-      wordcount: 0,
-      time: 0,
-      editing: false,
-      show: true
+    before: {
+      hook: {
+        title: '',
+        wordcount: 0,
+        time: 0,
+        editing: false,
+        show: true
+      }
     },
-    application: {
-      title: '',
-      today: '',
-      thisweek: '',
-      thought: '',
-      wordcount: 0,
-      time: 0,
-      editing: false,
-      show: true
-    },
-    prayer: {
-      text: '',
-      wordcount: 0,
-      time: 0,
-      editing: false,
-      show: true
+    after: {
+      application: {
+        title: '',
+        today: '',
+        thisweek: '',
+        thought: '',
+        wordcount: 0,
+        time: 0,
+        editing: false,
+        show: true
+      },
+      prayer: {
+        text: '',
+        wordcount: 0,
+        time: 0,
+        editing: false,
+        show: true
+      }
     }
   }
 }
+
+var guideTypes = ['lecture', 'discussion', 'questions', 'answers', 'expositional']
 
 export default {
   // name: 'ComponentName',
@@ -114,6 +119,9 @@ export default {
       for (var x = 1; x <= 7; x++) {
         this.$firebase.devoContentRef(this.$parent.id, newRef.key, x).set(defaultContent)
       }
+      guideTypes.forEach((type) => {
+        this.$firebase.guides(this.$parent.id, newRef.key, type).set(defaultContent)
+      })
       this.edit(newRef.key)
     }
   }

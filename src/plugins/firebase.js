@@ -16,6 +16,10 @@ function dbref (type, selection, id, seriesid, lessonid) {
   console.log('run dbref')
   if (type === 'rdevo') {
     return devoContent(seriesid, lessonid, id).child(selection)
+  } else if (type === 'rguide') {
+    return guides(seriesid, lessonid, id).child(selection)
+  } else if (type === 'rreview') {
+    return review(seriesid, lessonid).child(selection)
   } else {
     var cur = type.charAt(0)
     var media = type.slice(1)
@@ -47,6 +51,24 @@ function review (seriesid, lessonid) {
   return fbapp.database().ref('r/review/' + seriesid + '/' + lessonid)
 }
 
+function sectionModules (type, id, sectionid, seriesid, lessonid) {
+  if (type === 'rdevo') {
+    return devoContent(seriesid, lessonid, id).child('sectionModules').child(sectionid)
+  } else if (type === 'rguide') {
+    return guides(seriesid, lessonid, id).child('sectionModules').child(sectionid)
+  } else if (type === 'rreview') {
+    return review(seriesid, lessonid).child('sectionModules').child(sectionid)
+  } else {
+    var cur = type.charAt(0)
+    var media = type.slice(1)
+    if (media !== 'series') {
+      return fbapp.database().ref(cur + '/' + media + 's/' + id + '/sectionModules/' + sectionid)
+    } else {
+      return fbapp.database().ref(cur + '/' + media + '/' + id + '/sectionModules/' + sectionid)
+    }
+  }
+}
+
 function user (uid) {
   if (uid) {
     console.log('valid uid', uid)
@@ -71,6 +93,7 @@ export default ({ app, router, Vue }) => {
     devosRef: devos,
     devoContentRef: devoContent,
     guides: guides,
-    review: review
+    review: review,
+    sectionModules: sectionModules
   }
 }

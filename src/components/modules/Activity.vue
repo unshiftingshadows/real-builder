@@ -32,7 +32,7 @@
             <editor :text.sync="data.text" :save="autoSave" />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="primary" @click.native="save(id, data)">Save</q-btn>
             <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>
@@ -48,7 +48,7 @@ export default {
   components: {
     Editor
   },
-  name: 'mod-text',
+  name: 'mod-activity',
   props: [ 'id', 'data', 'edit', 'save', 'close', 'remove' ],
   data () {
     return {}

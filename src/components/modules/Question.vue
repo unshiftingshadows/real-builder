@@ -26,7 +26,7 @@
             <q-input type="number" v-model="data.time" float-label="Estimated Time (in minutes)" />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="primary" @click.native="save(id, data)">Save</q-btn>
             <q-btn outline color="negative" @click.native="remove(id)">Delete</q-btn>
           </div>
         </div>

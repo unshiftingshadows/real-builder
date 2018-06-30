@@ -24,6 +24,14 @@
         <p>{{ lesson.mainIdea }}</p>
       </div>
       <div class="col-12">
+        <q-btn-toggle
+          v-model="guideType"
+          toggle-color="primary"
+          :options="guideOptions"
+        />
+      </div>
+      <div class="col-12" v-if="guideType !== ''">
+        <content-editor :key="guideType" :id="guideType" type="rguide" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -71,8 +79,12 @@
 
 <script>
 import { Notify } from 'quasar'
+import ContentEditor from 'components/ContentEditor.vue'
 
 export default {
+  components: {
+    ContentEditor
+  },
   // name: 'PageName',
   data () {
     return {
@@ -80,7 +92,30 @@ export default {
       id: this.$route.params.lessonid,
       lesson: {},
       editTitle: false,
-      editMainIdea: false
+      editMainIdea: false,
+      guideType: '',
+      guideOptions: [
+        {
+          label: 'Lecture',
+          value: 'lecture'
+        },
+        {
+          label: 'Discussion',
+          value: 'discussion'
+        },
+        {
+          label: 'Questions',
+          value: 'questions'
+        },
+        {
+          label: 'Answers',
+          value: 'answers'
+        },
+        {
+          label: 'Expositional',
+          value: 'expositional'
+        }
+      ]
     }
   },
   firebase () {
@@ -134,6 +169,14 @@ export default {
     min-width: 500px;
     width: 500px;
   }
+}
+
+.q-btn-group {
+  width: 100%;
+}
+
+.q-btn-group button {
+  width: 20%;
 }
 
 </style>

@@ -18,7 +18,7 @@ export default {
     VueEditor
   },
   // name: 'ComponentName',
-  props: [ 'text', 'save' ],
+  props: [ 'text', 'autoSave' ],
   data () {
     return {
       content: this.text,
@@ -53,8 +53,8 @@ export default {
     clearInterval(this.saveInterval)
   },
   methods: {
-    autoSave () {
-      this.save()
+    save () {
+      this.autoSave(this.text)
       Notify.create({
         type: 'positive',
         message: 'Auto saving...',

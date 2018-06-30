@@ -1,6 +1,22 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.28 - 2018-06-29
+MODULE OVERHAUL
+
+### Added
+- ContentEditor to replace ModuleList
+- ModuleSection to allow for sections that hold modules
+- Resources "drawer overlay" for the RGuide drawer -- will need to also add to RDevo and RReview
+- Guide type selector on RGuide
+- separate module for Activity, Prayer, and Repeated Thought
+- AddSection component to add new sections with a title
+- firebase plugin method for retrieving sectionModules
+
+### Changed
+- Updated modules to use new save method
+- Autosave feature for Editor works better
+
 ## 0.0.27 - 2018-06-27
 ### Changed
 - using "All" on NQList will clear out all other filters

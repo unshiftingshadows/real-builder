@@ -41,7 +41,7 @@
             />
           </div>
           <div class="col-12">
-            <q-btn color="primary" @click.native="save(id)">Save</q-btn>
+            <q-btn color="primary" @click.native="save(id, data)">Save</q-btn>
           </div>
         </div>
       </q-card-main>
