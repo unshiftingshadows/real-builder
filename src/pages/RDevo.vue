@@ -25,7 +25,8 @@
         <p v-for="passage in passageList" :key="passage.ref"><b>{{ passage.readable }}</b><br/>{{ passage.text }}</p>
       </div>
       <div class="col-12">
-        <module-list type="rdevo" :id="id" />
+        <!-- <module-list type="rdevo" :id="id" /> -->
+        <content-editor :key="id" :id="id" type="rdevo" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -73,12 +74,14 @@
 
 <script>
 import { Notify } from 'quasar'
-import ModuleList from 'components/ModuleList.vue'
+// import ModuleList from 'components/ModuleList.vue'
+import ContentEditor from 'components/ContentEditor.vue'
 import RenderModules from 'components/preview/RenderModules.vue'
 
 export default {
   components: {
-    ModuleList,
+    // ModuleList,
+    ContentEditor,
     RenderModules
   },
   // name: 'PageName',

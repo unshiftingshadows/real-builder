@@ -46,7 +46,8 @@
         <bible-passage-list :passages="bibleRefs" />
       </div> -->
       <div class="col-12">
-        <module-list type="osermon" :id="id" @modules-init="modulesInit" />
+        <!-- <module-list type="osermon" :id="id" @modules-init="modulesInit" /> -->
+        <content-editor :key="id" :id="id" type="osermon" @modules-init="modulesInit" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -96,13 +97,15 @@
 <script>
 import { Notify } from 'quasar'
 // import BiblePassageList from 'components/BiblePassageList.vue'
-import ModuleList from 'components/ModuleList.vue'
+// import ModuleList from 'components/ModuleList.vue'
+import ContentEditor from 'components/ContentEditor.vue'
 import RenderModules from 'components/preview/RenderModules.vue'
 
 export default {
   components: {
     // BiblePassageList,
-    ModuleList,
+    // ModuleList,
+    ContentEditor,
     RenderModules
   },
   // name: 'PageName',

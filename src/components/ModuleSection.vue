@@ -1,16 +1,51 @@
 <template>
   <q-card flat class="bg-primary">
-    <q-card-title><h5 style="margin: 0;">{{ id === 'hook' ? 'Hook' : data.title }}</h5></q-card-title>
-    <div class="row gutter-sm" style="padding-left: 10px; padding-right: 10px;">
+    <q-card-title>
+      <q-btn color="dark" icon="fas fa-ellipsis-v" class='float-right' v-if="id !== 'hook'">
+        <q-popover anchor="bottom right" self="top right">
+          <q-list>
+            <q-item link v-close-overlay @click.native="editTitle = true">Edit</q-item>
+            <q-item link @click.native="remove(id)">Delete</q-item>
+          </q-list>
+        </q-popover>
+      </q-btn>
+      <h5 style="margin: 0;">
+        <q-icon v-if="!open" name="fas fa-caret-right cursor-pointer" style="margin-top: -5px; padding-left: 4px; padding-right: 4px;" size="2rem" @click.native="open = true" />
+        <q-icon v-if="open" name="fas fa-caret-down cursor-pointer" style="margin-top: -5px;" size="2rem" @click.native="open = false" />
+        &nbsp;
+        {{ id === 'hook' ? 'Hook' : data.title }}
+      </h5>
+    </q-card-title>
+    <div class="row gutter-sm" style="padding-left: 10px; padding-right: 10px;" v-if="open">
       <div class="col-12">
-        <draggable :list="modules" @start="drag=true" @end="onDrag" @add="onAdd" @remove="onRemove" ref="secModuleDrag" :options="{ group: 'modules', disabled: disabled || $q.platform.is.mobile }">
+        <draggable style="min-height: 20px;" :list="modules" @start="drag=true" @change="onChange" @add="onAdd" @remove="onRemove" ref="secModuleDrag" :options="{ group: { name: 'modules', pull: 'clone' }, ghostClass: 'sortable-ghost', handle: '.drag-handle', disabled: disabled || ($q.platform.is.mobile && !$q.platform.is.ipad) }">
           <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" :edit="editModule" :save="saveModule" :autosave="autoSaveModule" :close="closeModule" :remove="removeModule" class="module-card" v-bind:class="{ 'active-card': mod.editing === $firebase.auth.currentUser.uid }" />
         </draggable>
       </div>
-      <div class="col-12">
+      <div class="col-12" style="padding-top: 0;">
         <add-module :next-mod-order="nextModOrder" :sectionid="id" :edit="editModule" :close="closeModule" :content-type="contentType" dark />
       </div>
     </div>
+    <q-modal v-model="editTitle" ref="editSectionTitle" content-classes="edit-section-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="editTitle = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Edit Title</h4>
+        </div>
+        <div class="col-12">
+          <q-input v-model="newTitle" float-label="Title" type="text" @keyup.enter="edit(id, { title: newTitle }); editTitle=false" />
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="edit(id, { title: newTitle }); editTitle=false">Save</q-btn>
+        </div>
+      </div>
+    </q-modal>
   </q-card>
 </template>
 
@@ -46,16 +81,19 @@ export default {
     ModIllustration
   },
   // name: 'ComponentName',
-  props: ['id', 'data', 'disabled', 'contentType', 'contentid'],
+  props: ['id', 'data', 'edit', 'remove', 'disabled', 'contentType', 'contentid'],
   data () {
     return {
-      drag: false
+      drag: false,
+      editTitle: false,
+      newTitle: '',
+      open: true
     }
   },
   firebase () {
     return {
       'modules': {
-        source: this.$firebase.sectionModules(this.contentType, this.contentid, this.id, this.$route.params.seriesid, this.$route.params.lessonid),
+        source: this.$firebase.sectionModules(this.contentType, this.contentid, this.id, this.$route.params.seriesid, this.$route.params.lessonid).orderByChild('order'),
         readyCallback: function (val) {
           console.log('section modules loaded')
           this.modules.forEach((mod) => {
@@ -67,12 +105,20 @@ export default {
   },
   computed: {
     nextModOrder: function () {
-      if (this.data.modules) {
-        return this.data.modules.length
+      if (this.modules) {
+        return this.modules.length
       } else {
         return 0
       }
     }
+  },
+  watch: {
+    'data.title': function (newVal) {
+      this.newTitle = newVal
+    }
+  },
+  mounted () {
+    this.newTitle = this.data.title
   },
   methods: {
     editModule (moduleid) {
@@ -90,19 +136,66 @@ export default {
     removeModule (moduleid) {
       this.$emit('remove', moduleid, this.id)
     },
-    onAdd () {
-
+    onAdd (val) {
+      console.log('module added', this.id, val)
+      var newItem = {...this.modules[val.newIndex]}
+      newItem.order = val.newIndex
+      delete newItem['.key']
+      console.log('new item', newItem)
+      this.modules.splice(val.newIndex, 1)
+      console.log('new item', newItem)
+      var updatedMods = {}
+      this.modules.slice(val.newIndex).forEach((item, index) => {
+        console.log('add cycle item')
+        updatedMods[item['.key']] = {...item}
+        updatedMods[item['.key']].order = index + val.newIndex + 1
+        delete updatedMods[item['.key']]['.key']
+      })
+      this.$firebaseRefs.modules.update(updatedMods)
+      this.$firebaseRefs.modules.push(newItem)
     },
-    onRemove () {
-
+    onRemove (val) {
+      console.log('module removed', this.id, val)
+      var updatedMods = {}
+      this.modules.forEach((item, index) => {
+        if (index !== val.oldIndex) {
+          updatedMods[item['.key']] = {...item}
+          updatedMods[item['.key']].order = index
+          delete updatedMods[item['.key']]['.key']
+        }
+      })
+      this.$firebaseRefs.modules.set(updatedMods)
     },
-    onDrag () {
-      this.drag = false
-      console.log('dragged')
+    onChange (val) {
+      if (val.moved) {
+        var updatedMods = {}
+        this.modules.forEach((item, index) => {
+          updatedMods[item['.key']] = {...item}
+          updatedMods[item['.key']].order = index
+          delete updatedMods[item['.key']]['.key']
+        })
+        this.$firebaseRefs.modules.set(updatedMods)
+      }
+    },
+    reorder () {
+      console.log('module list', this.modules)
     }
   }
 }
 </script>
 
 <style>
+
+.edit-section-modal {
+  padding: 20px;
+}
+
+.q-card-title {
+  height: 36px;
+}
+
+.sortable-ghost {
+  opacity: 0.5;
+}
+
 </style>

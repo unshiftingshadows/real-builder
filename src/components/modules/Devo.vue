@@ -1,15 +1,18 @@
 <template>
   <q-card>
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
+      <div class="round-borders bg-primary drag-handle" v-if="!$q.platform.is.mobile || $q.platform.is.ipad">
+        <q-icon name="fas fa-arrows-alt" size="1rem" />
+      </div>
       <q-card-title>
-        <q-icon v-show="!data.editing" class="float-right cursor-pointer" name="fas fa-ellipsis-v" color="primary" size="1rem">
+        <q-btn v-show="!data.editing" class="float-right cursor-pointer" icon="fas fa-ellipsis-v" color="primary" size="sm">
           <q-popover anchor="bottom right" self="top right">
             <q-list>
               <q-item link v-close-overlay @click.native="edit(id)">Design</q-item>
               <q-item link v-close-overlay @click.native="$router.push({ name: 'rdevo', params: { seriesid: $route.params.seriesid, lessonid: $route.params.lessonid, devoid: id } })">Write</q-item>
             </q-list>
           </q-popover>
-        </q-icon>
+        </q-btn>
         <span style="font-style: bold; font-size: 2rem; vertical-align: middle;">{{ id }}.&nbsp;&nbsp;</span>
         {{ data.title }}
       </q-card-title>
@@ -21,9 +24,9 @@
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">
       <q-card-main>
-        <q-icon link class="float-right cursor-pointer" name="fas fa-times" size="1rem" @click.native="close" />
         <div class="row gutter-sm">
           <div class="col-12">
+            <q-btn link class="float-right cursor-pointer" icon="fas fa-times" size="sm" @click.native="close" />
             <q-input v-model="data.title" float-label="Title" />
           </div>
           <div class="col-12">

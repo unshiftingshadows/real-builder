@@ -24,6 +24,7 @@
         <p>{{ lesson.mainIdea }}</p>
       </div>
       <div class="col-12">
+        <content-editor :key="id" :id="id" type="rreview" />
       </div>
     </div>
     <q-modal v-model="editTitle" ref="editTitleModal" content-classes="edit-title-modal">
@@ -71,8 +72,12 @@
 
 <script>
 import { Notify } from 'quasar'
+import ContentEditor from 'components/ContentEditor.vue'
 
 export default {
+  components: {
+    ContentEditor
+  },
   // name: 'PageName',
   data () {
     return {

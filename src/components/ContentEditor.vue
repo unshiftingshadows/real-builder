@@ -3,18 +3,18 @@
     <div class="row gutter-sm">
       <!-- Before -->
       <div class="col-12" v-if="structure.before && structure.before.hook.show">
-        <module-section id="hook" :data="structure.before.hook" :content-type="type" :contentid="id" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" class="section-card" />
+        <module-section id="hook" :data="structure.before.hook" :content-type="type" :contentid="id" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" />
       </div>
       <!-- Sections -->
       <div class="col-12" v-if="sections.length > 0">
-        <draggable :list="sections" @start="drag=true" @end="onSectionDrag" ref="sectionDrag" :options="{ group: 'sections', disabled: $q.platform.is.mobile }">
-          <module-section v-for="section in sections" :key="section['.key']" :id="section['.key']" :data="section" :content-type="type" :contentid="id" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" class="section-card" />
+        <draggable :list="sections" @start="drag=true" @change="onSectionDrag" ref="sectionDrag" :options="{ group: 'sections', disabled: $q.platform.is.mobile }">
+          <module-section v-for="section in sections" :key="section['.key']" :id="section['.key']" :data="section" :content-type="type" :contentid="id" :edit="editSection" :remove="removeSection" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" class="section-card" />
         </draggable>
       </div>
       <add-section :add-section="addSection" :close="closeModule" />
       <!-- Modules -->
       <div class="col-12" v-if="modules.length > 0">
-        <draggable :list="modules" @start="drag=true" @end="onModuleDrag" ref="indModuleDrag" :options="{ group: 'modules', disabled: editingid !== '' || $q.platform.is.mobile }">
+        <draggable :list="modules" @start="drag=true" @change="onChangeMod" @add="onAddMod" @remove="onRemoveMod" ref="indModuleDrag" :options="{ group: { name: 'modules', pull: 'clone' }, handle: '.drag-handle', disabled: editingid !== '' || ($q.platform.is.mobile && !$q.platform.is.ipad) }">
           <component v-for="mod in modules" :key="mod['.key']" v-bind:is="'mod-' + mod.type" :id="mod['.key']" :data="mod" class="module-card" :edit="editModule" :save="saveModule" :autosave="autoSaveModule" :close="closeModule" :remove="removeModule" v-bind:class="{ 'active-card': mod.editing === $firebase.auth.currentUser.uid }" />
         </draggable>
       </div>
@@ -183,7 +183,7 @@ export default {
         }
       },
       versions: {
-        source: this.$firebase.ref(this.type, 'versions', this.id, this.$route.params.seriesid, this.$route.params.lessonid).orderByChild('order'),
+        source: this.$firebase.ref(this.type, 'versions', this.id, this.$route.params.seriesid, this.$route.params.lessonid),
         readyCallback: function (val) {
           console.log('versions loaded')
         }
@@ -339,6 +339,13 @@ export default {
       }
       this.$firebaseRefs.sections.push(obj)
     },
+    editSection (sectionid, updates) {
+      this.$firebaseRefs.sections.child(sectionid).update(updates)
+    },
+    removeSection (sectionid) {
+      this.$firebase.sectionModules(this.type, this.id, sectionid, this.$route.params.seriesid, this.$route.params.lessonid).remove()
+      this.$firebaseRefs.sections.child(sectionid).remove()
+    },
     getModuleById (moduleid, sectionid) {
       if (sectionid) {
         return this.sections.find((element) => {
@@ -360,11 +367,56 @@ export default {
     },
     onSectionDrag (val) {
       this.drag = false
-      console.log('dragged', val)
+      if (val.moved) {
+        var updatedMods = {}
+        this.sections.forEach((item, index) => {
+          updatedMods[item['.key']] = {...item}
+          updatedMods[item['.key']].order = index
+          delete updatedMods[item['.key']]['.key']
+        })
+        this.$firebaseRefs.sections.set(updatedMods)
+      }
     },
-    onModuleDrag (val) {
-      this.drag = false
-      console.log('dragged', val)
+    onAddMod (val) {
+      console.log('module added', this.id, val)
+      var newItem = {...this.modules[val.newIndex]}
+      newItem.order = val.newIndex
+      delete newItem['.key']
+      console.log('new item', newItem)
+      this.modules.splice(val.newIndex, 1)
+      console.log('new item', newItem)
+      var updatedMods = {}
+      this.modules.slice(val.newIndex).forEach((item, index) => {
+        console.log('add cycle item')
+        updatedMods[item['.key']] = {...item}
+        updatedMods[item['.key']].order = index + val.newIndex + 1
+        delete updatedMods[item['.key']]['.key']
+      })
+      this.$firebaseRefs.modules.update(updatedMods)
+      this.$firebaseRefs.modules.push(newItem)
+    },
+    onRemoveMod (val) {
+      console.log('module removed', this.id, val)
+      var updatedMods = {}
+      this.modules.forEach((item, index) => {
+        if (index !== val.oldIndex) {
+          updatedMods[item['.key']] = {...item}
+          updatedMods[item['.key']].order = index
+          delete updatedMods[item['.key']]['.key']
+        }
+      })
+      this.$firebaseRefs.modules.set(updatedMods)
+    },
+    onChangeMod (val) {
+      if (val.moved) {
+        var updatedMods = {}
+        this.modules.forEach((item, index) => {
+          updatedMods[item['.key']] = {...item}
+          updatedMods[item['.key']].order = index
+          delete updatedMods[item['.key']]['.key']
+        })
+        this.$firebaseRefs.modules.set(updatedMods)
+      }
     }
   }
 }
@@ -376,8 +428,27 @@ export default {
   margin-bottom: 20px;
 }
 
+.section-card {
+  margin-bottom: 20px;
+}
+
 .add-module-modal {
   padding: 20px;
+}
+
+.drag-handle {
+  float: left;
+  height: 60px;
+  margin-right: -5px;
+  padding-top: 20px;
+  padding-left: 4px;
+  padding-right: 4px;
+  opacity: 0.5;
+  cursor: move;
+}
+
+.drag-handle:hover {
+  opacity: .7;
 }
 
 </style>

@@ -14,7 +14,7 @@
           <h4>Add Section</h4>
         </div>
         <div class="col-12">
-          <q-input v-model="newTitle" float-label="Title" type="text" />
+          <q-input v-model="newTitle" float-label="Title" type="text" @keyup.enter="add" />
         </div>
         <div class="col-12">
           <q-btn color="primary" @click.native="add">Save</q-btn>

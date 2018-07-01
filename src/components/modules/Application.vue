@@ -2,7 +2,7 @@
   <q-card>
     <div v-if="!data.editing">
       <q-card-title>
-        <q-icon class="float-right cursor-sectioner" name="fas fa-edit" color="primary" size="1rem" @click.native="edit(id)" />
+        <q-btn class="float-right cursor-sectioner" icon="fas fa-edit" color="primary" size="sm" @click.native="edit(id)" />
         <span class="float-right" style="font-size: .8rem; vertical-align: top; line-height: 1rem;">{{ data.time }} minutes&nbsp;&nbsp;&nbsp;</span>
         Application
         <span slot="subtitle" v-if="data.title !== ''">{{ data.title }}</span>
@@ -13,7 +13,7 @@
     </div>
     <div v-if="data.editing">
       <q-card-title>
-        <q-icon link class="float-right cursor-sectioner" name="fas fa-times" color="primary" size="1rem" @click.native="close" />
+        <q-btn link class="float-right cursor-sectioner" icon="fas fa-times" color="primary" size="sm" @click.native="close" />
         Application
       </q-card-title>
       <q-card-main>

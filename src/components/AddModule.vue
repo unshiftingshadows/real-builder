@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 relative-position" style="height: 70px">
+  <div class="col-12 relative-position" style="height: 30px; margin-bottom: 20px;">
     <q-btn round :color="color" icon="fa-plus" class="absolute-center" @click.native="showAdd" />
     <add-media :type="type" ref="addMedia" :add-new="addNewMedia" />
     <!-- TODO: Add a new component here like add-media but that uses the NQ database -->
@@ -185,6 +185,7 @@ export default {
         }
         if (type === 'question') {
           obj.text = ''
+          obj.notes = ''
         }
         if (type === 'bible') {
           obj.text = ''

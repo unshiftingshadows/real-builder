@@ -1,6 +1,21 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.29 - 2018-06-30
+MODULE OVERHAUL PT2
+
+### Added
+- methods for managing drags - adding and removing
+- sections handle adding and removing of modules during moving
+- handles for moving modules (now works with iPads)
+
+### Changed
+- module edit and close icons are now buttons
+- RDevo, RGuide, RReview, OLesson, and OSermon all now use the new module system
+
+### Fixed
+- modules can now be dragged into empty sections
+
 ## 0.0.28 - 2018-06-29
 MODULE OVERHAUL
 
