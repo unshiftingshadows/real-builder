@@ -11,8 +11,9 @@
               <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.hook" /></q-item>
               <q-item v-close-overlay><q-toggle label="Application" v-model="structure.application" /></q-item>
               <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.prayer" /></q-item>
-              <!-- <q-item v-close-overlay>Archive</q-item> -->
-              <!-- <q-item v-close-overlay>Share...</q-item> -->
+              <q-item-separator />
+              <q-item v-close-overlay @click.native="archiveConfirmation = true">Archive...</q-item>
+              <q-item v-close-overlay>Collaborate...</q-item>
               <!-- <q-item v-close-overlay>Print...</q-item> -->
               <!-- <q-item v-close-overlay>Present...</q-item> -->
             </q-list>
@@ -91,6 +92,26 @@
         </div>
       </div>
     </q-modal>
+    <q-modal v-model="archiveConfirmation" ref="archiveConfirmationModal" content-classes="edit-title-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="archiveConfirmation = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Confirm Archive...</h4>
+        </div>
+        <div class="col-12">
+          <p>Are you sure you want to archive this lesson? It will still be accessible from the archive menu, but you will no longer be able to edit, share, or present.</p>
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="archive">Archive</q-btn>
+        </div>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 
@@ -125,7 +146,8 @@ export default {
         prayer: true
       },
       updating: true,
-      showPreview: false
+      showPreview: false,
+      archiveConfirmation: false
     }
   },
   mounted () {
@@ -193,6 +215,14 @@ export default {
           message: 'Lesson Updated!',
           position: 'bottom-left'
         })
+      })
+    },
+    archive () {
+      console.log('archive!')
+      this.archiveConfirmation = false
+      this.$database.archive('olesson', this.id, (res) => {
+        console.log(res)
+        this.$router.push({ name: 'olist', params: { type: 'lesson' } })
       })
     }
   }

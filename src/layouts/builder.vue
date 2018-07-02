@@ -100,6 +100,10 @@
           <q-item-tile icon="fa-cog" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Settings</q-tooltip>
         </q-item>
+        <q-item to="/support" class="menu-item">
+          <q-item-tile icon="fa-question" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Support</q-tooltip>
+        </q-item>
         <q-item link @click.native="logout" class="menu-item">
           <q-item-tile icon="fa-sign-out-alt fab" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Log Out</q-tooltip>
@@ -157,6 +161,8 @@ export default {
   methods: {
     logout () {
       console.log('signing out')
+      window.fcWidget.user.clear()
+      window.fcWidget.destroy()
       this.$firebase.auth.signOut().then(() => {
         this.$router.replace({ path: '/login' })
       })

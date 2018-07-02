@@ -44,6 +44,7 @@ var initUser = {
   newUser: true,
   nqUser: false,
   realUser: false,
+  supportRestore: '',
   theme: '',
   name: {
     first: '',
@@ -134,6 +135,7 @@ export default {
   },
   methods: {
     init () {
+      console.log(window.fcWidget)
       this.newPassword = ''
       this.newPasswordCheck = ''
       this.$firebase.auth.onAuthStateChanged((user) => {
@@ -141,8 +143,23 @@ export default {
         if (!user) {
           console.log('no user')
           this.user.theme = 'light'
+          window.fcWidget.init({
+            token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
+            host: 'https://wchat.freshchat.com'
+          })
         } else {
-          this.$bindAsObject('user', this.$firebase.user() || initUser)
+          this.$bindAsObject('user', this.$firebase.user() || initUser, null, () => {
+            window.fcWidget.init({
+              token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
+              host: 'https://wchat.freshchat.com',
+              externalId: user.uid,
+              restoreId: this.user.supportRestore,
+              firstName: this.user.name.first,
+              lastName: this.user.name.last,
+              email: user.email,
+              phone: user.phone
+            })
+          })
         }
       })
     },

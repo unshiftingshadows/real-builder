@@ -38,6 +38,12 @@
             if (file.match(/\.(js|css)$/)) { %>
       <link rel="<%= chunk.initial ? 'preload' : 'prefetch' %>" href="<%= file %>" as="<%= file.match(/\.css$/)? 'style' : 'script' %>">
     <% }}}} %>
+    <!-- FreshChat Implementation -->
+    <script src="https://wchat.freshchat.com/js/widget.js"></script>
+    <!-- FreshMarketer Implementation -->
+    <script src='//cdn.freshmarketer.com/239758/828325.js'></script>
+    <!-- FreshDesk Implementation -->
+    <script type="text/javascript" src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"></script>
   </head>
   <body>
     <% if (!htmlWebpackPlugin.options.ctx.mode.electron) { %>

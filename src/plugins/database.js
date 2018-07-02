@@ -73,6 +73,23 @@ function update (type, id, data, callback) {
   })
 }
 
+function archive (type, id, callback) {
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    axios.post('/archive', {
+      type: type,
+      id: id,
+      token: idToken
+    })
+      .then((res) => {
+        console.log(res.data)
+        callback(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
+}
+
 function search (type, terms, options, callback) {
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
     axios.post('/search', {
@@ -180,6 +197,7 @@ export default ({ app, router, Vue }) => {
     list: list,
     view: view,
     update: update,
+    archive: archive,
     search: search,
     bible: bible,
     resources: resources,

@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h3>{{ capitalizeTitle(type) }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="openAdd()" /></h3>
+    <h3>{{ capitalizeTitle(type) + (type === 'lesson' || type === 'sermon' ? 's' :  type === 'scratch' ? ' Pad' : '') }} <q-btn size="sm" icon="fa-plus" color="primary" @click.native="openAdd()" /></h3>
     <div v-if="loading">
       <q-spinner color="primary" class="absolute-center" size="3rem" />
     </div>

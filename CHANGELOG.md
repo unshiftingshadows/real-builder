@@ -1,6 +1,16 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.30 - 2018-07-02
+### Added
+- can archive lessons/sermons
+- support chat
+- started Support page for submissions -- still needs work
+
+### Changed
+- pluralized lessons/sermons on OList
+- added 'Pad' to scratch on OList
+
 ## 0.0.29 - 2018-06-30
 MODULE OVERHAUL PT2
 

@@ -106,8 +106,13 @@ export default {
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         Notify.create('Please review fields again.')
+        window.fcWidget.init({
+          token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
+          host: 'https://wchat.freshchat.com'
+        })
         return
       }
+      window.fcWidget.destroy()
       this.$firebase.auth.signInWithEmailAndPassword(this.form.email, this.form.pswd)
         .then((user) => {
           this.$router.replace('/')

@@ -91,6 +91,26 @@
         </div>
       </div>
     </q-modal>
+    <q-modal v-model="archiveConfirmation" ref="archiveConfirmationModal" content-classes="edit-title-modal">
+      <div class="row gutter-md">
+        <div class="col-12">
+          <q-btn
+            color="primary"
+            @click.native="archiveConfirmation = false"
+            icon="fas fa-times"
+            class="float-right"
+            size="sm"
+          />
+          <h4>Confirm Archive...</h4>
+        </div>
+        <div class="col-12">
+          <p>Are you sure you want to archive this sermon? It will still be accessible from the archive menu, but you will no longer be able to edit, share, or present.</p>
+        </div>
+        <div class="col-12">
+          <q-btn color="primary" @click.native="archive">Archive</q-btn>
+        </div>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 
@@ -125,7 +145,8 @@ export default {
         prayer: true
       },
       updating: true,
-      showPreview: false
+      showPreview: false,
+      archiveConfirmation: false
     }
   },
   mounted () {
@@ -193,6 +214,14 @@ export default {
           message: 'Sermon Updated!',
           position: 'bottom-left'
         })
+      })
+    },
+    archive () {
+      console.log('archive!')
+      this.archiveConfirmation = false
+      this.$database.archive('osermon', this.id, (res) => {
+        console.log(res)
+        this.$router.push({ name: 'olist', params: { type: 'sermon' } })
       })
     }
   }
