@@ -167,6 +167,24 @@ function research (action, type, id, researchtype, researchid, callback) {
   })
 }
 
+function poll (action, data, callback) {
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    axios.post('/poll', {
+      action: action,
+      data: data,
+      token: idToken
+    })
+      .then((res) => {
+        console.log(res.data)
+        callback(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+        callback()
+      })
+  })
+}
+
 function addUser (email, first, last, group, callback) {
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
     axios.get('/user', {
@@ -202,6 +220,7 @@ export default ({ app, router, Vue }) => {
     bible: bible,
     resources: resources,
     research: research,
+    poll: poll,
     addUser: addUser
   }
 }

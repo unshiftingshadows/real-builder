@@ -6,7 +6,7 @@
     </div>
     <div v-if="!loading && contentTypes.includes(type)">
       <q-card inline v-for="item in items" :key="item._id" class="content-card" @click.native="openItem(item._id)">
-        <q-card-title>{{ item.title }}</q-card-title>
+        <q-card-title>{{ item.title }} <span v-if="type === 'archive'" class="text-weight-light uppercase q-caption">{{ capitalizeTitle(item.type) }}</span></q-card-title>
         <q-card-main>
           <p>{{ item.mainIdea }}</p>
           <br/>
@@ -32,7 +32,7 @@ export default {
   // name: 'PageName',
   data () {
     return {
-      contentTypes: ['series', 'lesson', 'sermon', 'scratch'],
+      contentTypes: ['series', 'lesson', 'sermon', 'scratch', 'archive'],
       type: this.$route.params.type,
       items: [],
       loading: false
@@ -56,9 +56,6 @@ export default {
         this.items = data
         this.loading = false
       })
-      if (type === 'scratch') {
-        window.FMApi.triggerPoll()
-      }
     },
     openItem (id, item) {
       console.log(id)

@@ -96,6 +96,10 @@
           </q-item>
         </div>
         <q-item-separator v-if="$root.user.nqUser === false" />
+        <q-item :to="{ name: 'olist', params: { type: 'archive' }}" class="menu-item" v-if="$root.user.prefs.contentType.scratch">
+          <q-item-tile icon="fa-archive" />
+          <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Archive</q-tooltip>
+        </q-item>
         <q-item to="/settings" class="menu-item">
           <q-item-tile icon="fa-cog" />
           <q-tooltip anchor="center left" self="center right" :disable="$q.platform.is.mobile">Settings</q-tooltip>
@@ -125,6 +129,7 @@
     <q-page-container>
       <!-- This is where pages get injected -->
       <router-view />
+      <polls />
     </q-page-container>
 
   </q-layout>
@@ -132,10 +137,12 @@
 
 <script>
 import Resources from 'components/Resources.vue'
+import Polls from 'components/Polls.vue'
 
 export default {
   components: {
-    Resources
+    Resources,
+    Polls
   },
   // name: 'LayoutName',
   data () {

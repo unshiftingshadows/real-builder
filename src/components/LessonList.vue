@@ -163,4 +163,19 @@ export default {
   margin-bottom: 20px;
 }
 
+.drag-handle {
+  float: left;
+  height: 60px;
+  margin-right: -5px;
+  padding-top: 20px;
+  padding-left: 4px;
+  padding-right: 4px;
+  opacity: 0.5;
+  cursor: move;
+}
+
+.drag-handle:hover {
+  opacity: .7;
+}
+
 </style>

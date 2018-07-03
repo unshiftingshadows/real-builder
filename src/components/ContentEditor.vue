@@ -163,9 +163,13 @@ export default {
           console.log('structure loaded')
           if (this.type.charAt(0) === 'o') {
             this.$emit('modules-init', {
-              hook: this.structure.hook.show,
-              application: this.structure.application.show,
-              prayer: this.structure.prayer.show
+              before: {
+                hook: this.structure.before.hook.show
+              },
+              after: {
+                application: this.structure.after.application.show,
+                prayer: this.structure.after.prayer.show
+              }
             })
           }
         }

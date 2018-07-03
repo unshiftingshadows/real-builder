@@ -75,6 +75,18 @@ var initUser = {
       lyric: true,
       video: true
     }
+  },
+  stats: {
+    lastPagePath: '',
+    numSermon: 0,
+    numLesson: 0,
+    numScratch: 0,
+    numArchive: 0,
+    numQuote: 0,
+    numImage: 0,
+    numVideo: 0,
+    numLyric: 0,
+    numIllustration: 0
   }
 }
 
@@ -131,6 +143,11 @@ export default {
       if (val === true) {
         this.showNewUser = true
       }
+    },
+    '$route': function (val) {
+      this.$firebase.user().child('stats').update({
+        lastPagePath: val.path
+      })
     }
   },
   methods: {
@@ -145,13 +162,15 @@ export default {
           this.user.theme = 'light'
           window.fcWidget.init({
             token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
-            host: 'https://wchat.freshchat.com'
+            host: 'https://wchat.freshchat.com',
+            tags: ['info']
           })
         } else {
           this.$bindAsObject('user', this.$firebase.user() || initUser, null, () => {
             window.fcWidget.init({
               token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
               host: 'https://wchat.freshchat.com',
+              tags: ['info'],
               externalId: user.uid,
               restoreId: this.user.supportRestore,
               firstName: this.user.name.first,

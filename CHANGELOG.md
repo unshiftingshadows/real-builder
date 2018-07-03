@@ -1,6 +1,21 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.32 - 2018-07-03
+### Added
+- Archive menu item
+- Archive and collaboration on OSermon menu
+- OArchive page
+- Outline and Idea previews
+- Outline and Idea modules
+- Poll component to notify users of polls and then display accpeted polls
+
+### Changed
+- content previews now work with the new module system
+
+### Fixed
+- some issues with structure in ocontent
+
 ## 0.0.31 - 2018-07-02
 ### Added
 - restoreId updated when users start a support chat

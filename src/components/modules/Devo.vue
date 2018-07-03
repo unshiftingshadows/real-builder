@@ -1,9 +1,6 @@
 <template>
   <q-card>
     <div v-show="!data.editing || data.editing !== $firebase.auth.currentUser.uid">
-      <div class="round-borders bg-primary drag-handle" v-if="!$q.platform.is.mobile || $q.platform.is.ipad">
-        <q-icon name="fas fa-arrows-alt" size="1rem" />
-      </div>
       <q-card-title>
         <q-btn v-show="!data.editing" class="float-right cursor-pointer" icon="fas fa-ellipsis-v" color="primary" size="sm">
           <q-popover anchor="bottom right" self="top right">
@@ -13,7 +10,7 @@
             </q-list>
           </q-popover>
         </q-btn>
-        <span style="font-style: bold; font-size: 2rem; vertical-align: middle;">{{ id }}.&nbsp;&nbsp;</span>
+        <span style="font-style: bold; font-size: 1.5rem; vertical-align: middle;">Day {{ id }}:&nbsp;&nbsp;</span>
         {{ data.title }}
       </q-card-title>
       <q-card-main>

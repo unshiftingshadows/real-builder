@@ -8,11 +8,12 @@
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
               <q-item v-close-overlay @click.native="showPreview = true">Preview</q-item>
               <q-item-separator />
-              <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.hook" /></q-item>
-              <q-item v-close-overlay><q-toggle label="Application" v-model="structure.application" /></q-item>
-              <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.prayer" /></q-item>
-              <!-- <q-item v-close-overlay>Archive</q-item> -->
-              <!-- <q-item v-close-overlay>Share...</q-item> -->
+              <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.before.hook" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Application" v-model="structure.after.application" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.after.prayer" /></q-item>
+              <q-item-separator />
+              <q-item v-close-overlay @click.native="archiveConfirmation = true">Archive...</q-item>
+              <q-item v-close-overlay>Collaborate...</q-item>
               <!-- <q-item v-close-overlay>Print...</q-item> -->
               <!-- <q-item v-close-overlay>Present...</q-item> -->
             </q-list>
@@ -87,7 +88,7 @@
           <h6>{{ sermon.mainIdea }}</h6>
         </div>
         <div class="col-xs-12 col-md-8">
-          <render-modules :id="id" type="osermon" />
+          <content-preview :id="id" type="osermon" />
         </div>
       </div>
     </q-modal>
@@ -119,14 +120,14 @@ import { Notify } from 'quasar'
 // import BiblePassageList from 'components/BiblePassageList.vue'
 // import ModuleList from 'components/ModuleList.vue'
 import ContentEditor from 'components/ContentEditor.vue'
-import RenderModules from 'components/preview/RenderModules.vue'
+import ContentPreview from 'components/ContentPreview.vue'
 
 export default {
   components: {
     // BiblePassageList,
     // ModuleList,
     ContentEditor,
-    RenderModules
+    ContentPreview
   },
   // name: 'PageName',
   data () {
@@ -140,9 +141,13 @@ export default {
       readableRefs: [],
       editTitle: false,
       structure: {
-        hook: true,
-        application: true,
-        prayer: true
+        before: {
+          hook: true
+        },
+        after: {
+          application: true,
+          prayer: true
+        }
       },
       updating: true,
       showPreview: false,
@@ -153,14 +158,14 @@ export default {
     this.init()
   },
   watch: {
-    'structure.hook': function (newHook) {
-      this.$firebase.ref('osermon', 'structure', this.id).child('hook').update({ show: newHook })
+    'structure.before.hook': function (newHook) {
+      this.$firebase.ref('osermon', 'structure/before', this.id).child('hook').update({ show: newHook })
     },
-    'structure.application': function (newApplication) {
-      this.$firebase.ref('osermon', 'structure', this.id).child('application').update({ show: newApplication })
+    'structure.after.application': function (newApplication) {
+      this.$firebase.ref('osermon', 'structure/after', this.id).child('application').update({ show: newApplication })
     },
-    'structure.prayer': function (newPrayer) {
-      this.$firebase.ref('osermon', 'structure', this.id).child('prayer').update({ show: newPrayer })
+    'structure.after.prayer': function (newPrayer) {
+      this.$firebase.ref('osermon', 'structure/after', this.id).child('prayer').update({ show: newPrayer })
     }
   },
   methods: {

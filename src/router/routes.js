@@ -13,6 +13,7 @@ export default [
       { path: 'lesson/:id', name: 'olesson', component: () => import('pages/OLesson') },
       { path: 'sermon/:id', name: 'osermon', component: () => import('pages/OSermon') },
       { path: 'scratch/:id', name: 'oscratch', component: () => import('pages/OScratchPad') },
+      { path: 'archive/:id', name: 'oarchive', component: () => import('pages/OArchive') },
       { path: 'settings', name: 'osettings', component: () => import('pages/Settings') },
       { path: 'support', name: 'osupport', component: () => import('pages/Support') },
       { path: 'addusers', name: 'addusers', component: () => import('pages/AddUsers') }
