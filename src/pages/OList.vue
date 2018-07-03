@@ -56,6 +56,9 @@ export default {
         this.items = data
         this.loading = false
       })
+      if (type === 'scratch') {
+        window.FMApi.triggerPoll()
+      }
     },
     openItem (id, item) {
       console.log(id)

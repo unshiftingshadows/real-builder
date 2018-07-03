@@ -159,6 +159,14 @@ export default {
               email: user.email,
               phone: user.phone
             })
+            window.fcWidget.on('user:created', (resp) => {
+              console.log('user created', resp)
+              if (resp.status === 200) {
+                this.$firebase.user().update({
+                  supportRestore: resp.data.restoreId
+                })
+              }
+            })
           })
         }
       })

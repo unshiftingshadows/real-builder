@@ -158,6 +158,13 @@ export default {
     //   this.rightDrawer = this.$route.name === 'olesson' && this.$q.platform.is.desktop && val
     // }
   },
+  mounted () {
+    window.fcWidget.setConfig({
+      headerProperty: {
+        hideChatButton: false
+      }
+    })
+  },
   methods: {
     logout () {
       console.log('signing out')

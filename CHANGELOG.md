@@ -1,6 +1,10 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.31 - 2018-07-02
+### Added
+- restoreId updated when users start a support chat
+
 ## 0.0.30 - 2018-07-02
 ### Added
 - can archive lessons/sermons

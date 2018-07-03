@@ -127,6 +127,13 @@ export default {
       this.showRightDrawer = rightPages.includes(this.$route.name)
     }
   },
+  mounted () {
+    window.fcWidget.setConfig({
+      headerProperty: {
+        hideChatButton: true
+      }
+    })
+  },
   methods: {
     logout () {
       console.log('signing out')
