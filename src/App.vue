@@ -163,14 +163,14 @@ export default {
           window.fcWidget.init({
             token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
             host: 'https://wchat.freshchat.com',
-            tags: ['info']
+            tags: ['builder']
           })
         } else {
           this.$bindAsObject('user', this.$firebase.user() || initUser, null, () => {
             window.fcWidget.init({
               token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
               host: 'https://wchat.freshchat.com',
-              tags: ['info'],
+              tags: ['builder'],
               externalId: user.uid,
               restoreId: this.user.supportRestore,
               firstName: this.user.name.first,

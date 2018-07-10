@@ -108,7 +108,8 @@ export default {
         Notify.create('Please review fields again.')
         window.fcWidget.init({
           token: '55c46336-2b5d-490b-b528-54f45f5b97b5',
-          host: 'https://wchat.freshchat.com'
+          host: 'https://wchat.freshchat.com',
+          tags: ['builder']
         })
         return
       }

@@ -150,15 +150,15 @@ export default {
         position: 'bottom-left',
         actions: [
           {
-            label: poll.rejectMessage,
-            icon: 'fas fa-close',
+            label: poll.acceptMessage,
+            icon: 'fas fa-thumbs-up',
             handler: () => {
               console.log('poll dismissed')
             }
           },
           {
-            label: poll.acceptMessage,
-            icon: 'fas fa-close',
+            label: poll.rejectMessage,
+            icon: 'fas fa-times',
             handler: () => {
               console.log('poll dismissed')
             }

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.33 - 2018-07-10
+### Changed
+- minor updates to polls component
+- chat on login screen only provides 'builder' tag
+
 ## 0.0.32 - 2018-07-03
 ### Added
 - Archive menu item
