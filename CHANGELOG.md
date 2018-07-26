@@ -1,6 +1,22 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.34 - 2018-07-11
+TESTING FOR RELEASE
+### Added
+- input for notes in question module
+
+### Changed
+- OList tags and bible refs are much more readable
+- Devo and Lesson module bible refs are much more readable
+- OList and OMedia cards now have an opacity effect when hovering
+- text and bible modules now update wordcount and estimated time on save (will not update if user changes their preference)
+
+### Fixed
+- closing modules without saving would produce errors
+- editing a module when another module is open would not close the original module
+- issue when saving modules that would cause other modules in that section to appear as duplications of the saved module
+
 ## 0.0.33 - 2018-07-10
 ### Changed
 - minor updates to polls component

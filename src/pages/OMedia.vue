@@ -120,6 +120,13 @@ export default {
   margin: 10px;
   width: 95%;
   cursor: pointer;
+  opacity: 0.6;
+  -webkit-transition-duration: .5s;
+  transition-duration: .5s;
+}
+
+.media-card:hover {
+  opacity: 1;
 }
 
 .add-media-modal {

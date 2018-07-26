@@ -122,14 +122,14 @@ export default {
   watch: {
     '$route': function (val) {
       this.page = val.name
-      this.notification()
+      // this.notification()
     }
   },
   mounted () {
     this.init()
     // this.notify(this.testPoll)
-    this.poll = this.testPoll
-    this.showPoll = true
+    // this.poll = this.testPoll
+    // this.showPoll = true
   },
   methods: {
     init () {

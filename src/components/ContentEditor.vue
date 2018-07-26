@@ -222,6 +222,10 @@ export default {
     },
     editModule (moduleid, sectionid) {
       console.log('edit module', moduleid, sectionid)
+      if (this.editingid !== moduleid && this.editingid !== '') {
+        console.log('close module before edit')
+        this.closeModule(this.editingid, this.editingSection)
+      }
       this.editingid = moduleid
       this.editingSection = sectionid
       if (sectionid) {
@@ -265,20 +269,41 @@ export default {
     },
     saveModule (moduleid, sectionid, data) {
       console.log('save module', moduleid, sectionid, data)
-      data.editing = false
-      delete data['.key']
+      var saveData = {...data}
+      saveData.editing = false
+      delete saveData['.key']
+      if (saveData.type === 'text' || saveData.type === 'bible') {
+        saveData.wordcount = this.getWordCount(saveData.text)
+        saveData.time = this.getEstTime(saveData.wordcount)
+      }
+      console.log('save data', saveData)
       if (sectionid) {
-        this.$firebase.sectionModules(this.type, this.id, sectionid, this.$route.params.seriesid, this.$route.params.lessonid).child(moduleid).update(data)
+        this.$firebase.sectionModules(this.type, this.id, sectionid, this.$route.params.seriesid, this.$route.params.lessonid).child(moduleid).update(saveData)
       } else if (moduleid === 'application' || moduleid === 'prayer') {
-        this.$firebaseRefs.structure.child('after').child(moduleid).update(data)
+        this.$firebaseRefs.structure.child('after').child(moduleid).update(saveData)
       } else {
-        this.$firebaseRefs.modules.child(moduleid).update(data)
+        this.$firebaseRefs.modules.child(moduleid).update(saveData)
       }
       this.editingid = ''
     },
-    closeModule () {
-      console.log('close module')
-      if (this.editingid !== '') {
+    closeModule (moduleid, sectionid) {
+      console.log('closing', moduleid, sectionid)
+      console.log('current', this.editingid, this.editingSection)
+      if (moduleid !== undefined && typeof moduleid === 'string') {
+        if (sectionid !== undefined) {
+          this.$firebase.sectionModules(this.type, this.id, sectionid, this.$route.params.seriesid, this.$route.params.lessonid).child(moduleid).update({
+            editing: false
+          })
+        } else if (moduleid === 'application' || moduleid === 'prayer') {
+          this.$firebaseRefs.structure.child('after').child(moduleid).update({
+            editing: false
+          })
+        } else {
+          this.$firebaseRefs.modules.child(moduleid).update({
+            editing: false
+          })
+        }
+      } else if (this.editingid !== '') {
         if (this.editingSection !== undefined) {
           this.$firebase.sectionModules(this.type, this.id, this.editingSection, this.$route.params.seriesid, this.$route.params.lessonid).child(this.editingid).update({
             editing: false
@@ -301,6 +326,8 @@ export default {
             this.editingSection = undefined
           })
         }
+      } else {
+        console.log('no current module to close')
       }
     },
     removeModule (moduleid, sectionid) {

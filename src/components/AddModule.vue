@@ -95,7 +95,7 @@ export default {
           }
         })
       }
-      if (this.contentType.charAt(0) !== 'r') {
+      if (this.contentType.charAt(0) !== 'r' && !this.$root.user.nqUser) {
         console.log('running', this.contentType.charAt(0))
         if (this.$root.user.prefs.mediaType.quote) {
           actions.push({
@@ -161,6 +161,7 @@ export default {
       this.$q.actionSheet({
         title: 'Add Module',
         grid: true,
+        dismissLabel: 'Cancel',
         actions: actions
       })
     },

@@ -29,6 +29,9 @@
             <q-input v-model="data.text" float-label="Question" type="textarea" :max-height="100" :min-rows="1" autofocus />
           </div>
           <div class="col-12">
+            <q-input v-model="data.notes" float-label="Notes" type="textarea" :max-height="100" :min-rows="1" />
+          </div>
+          <div class="col-12">
             <q-input type="number" v-model="data.time" float-label="Estimated Time (in minutes)" />
           </div>
           <div class="col-12">

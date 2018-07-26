@@ -16,7 +16,7 @@
       <q-card-main>
         <p>{{ data.mainIdea }}</p>
         <p class="q-caption">{{ data.notes }}</p>
-        <q-chip v-for="ref in readableRefs" :key="ref" color="secondary">{{ ref }}</q-chip>
+        <q-chip v-for="ref in readableRefs" :key="ref" color="secondary" small style="margin-right: 5px;">{{ ref }}</q-chip>
       </q-card-main>
     </div>
     <div v-if="data.editing === $firebase.auth.currentUser.uid">

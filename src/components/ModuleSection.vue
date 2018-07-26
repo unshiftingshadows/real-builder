@@ -97,7 +97,10 @@ export default {
         readyCallback: function (val) {
           console.log('section modules loaded')
           this.modules.forEach((mod) => {
-            mod.editing = false
+            if (mod.editing === this.$firebase.auth.currentUser.uid) {
+              console.log('closed previously open module', mod['.key'])
+              this.closeModule(mod['.key'])
+            }
           })
         }
       }

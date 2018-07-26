@@ -9,10 +9,9 @@
         <q-card-title>{{ item.title }} <span v-if="type === 'archive'" class="text-weight-light uppercase q-caption">{{ capitalizeTitle(item.type) }}</span></q-card-title>
         <q-card-main>
           <p>{{ item.mainIdea }}</p>
-          <br/>
-          <q-chip v-for="tag in item.tags" :key="tag" color="primary">{{ tag }}</q-chip>
-          &nbsp;|&nbsp;
-          <q-chip v-for="ref in item.bibleRefs" :key="ref" color="secondary">{{ $bible.readable(ref) }}</q-chip>
+          <span v-if="item.tags.length > 0">Tags: <q-chip v-for="tag in item.tags" :key="tag" color="primary" class="list-chip" dense>{{ tag }}</q-chip></span>
+          <br v-if="item.tags.length > 0 && Object.keys(item.bibleRefs).length > 0" />
+          <span v-if="Object.keys(item.bibleRefs).length > 0">Bible Refs: <q-chip v-for="ref in item.bibleRefs" :key="ref" color="secondary" class="list-chip" dense>{{ $bible.readable(ref) }}</q-chip></span>
         </q-card-main>
       </q-card>
     </div>
@@ -84,6 +83,19 @@ export default {
   margin: 10px;
   width: 95%;
   cursor: pointer;
+  opacity: 0.6;
+  -webkit-transition-duration: .5s;
+  transition-duration: .5s;
+}
+
+.content-card:hover {
+  opacity: 1;
+}
+
+.list-chip {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 2px;
 }
 
 .add-content-modal {
