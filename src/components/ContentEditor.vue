@@ -3,7 +3,7 @@
     <div class="row gutter-sm">
       <!-- Before -->
       <div class="col-12" v-if="structure.before && structure.before.hook.show">
-        <module-section id="hook" :data="structure.before.hook" :content-type="type" :contentid="id" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" />
+        <module-section id="hook" :data="structure.before.hook" :content-type="type" :contentid="id" @edit="editModule" @save="saveModule" @autosave="autoSaveModule" @close="closeModule" @remove="removeModule" class="section-card" />
       </div>
       <!-- Sections -->
       <div class="col-12" v-if="sections.length > 0">
@@ -459,9 +459,9 @@ export default {
   margin-bottom: 20px;
 }
 
-.section-card {
+/* .section-card {
   margin-bottom: 20px;
-}
+} */
 
 .add-module-modal {
   padding: 20px;

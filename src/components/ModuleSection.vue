@@ -1,5 +1,5 @@
 <template>
-  <q-card flat class="bg-primary">
+  <q-card flat>
     <q-card-title>
       <q-btn color="dark" icon="fas fa-ellipsis-v" class='float-right' v-if="id !== 'hook'">
         <q-popover anchor="bottom right" self="top right">
@@ -199,6 +199,11 @@ export default {
 
 .sortable-ghost {
   opacity: 0.5;
+}
+
+.section-card {
+  background-color: inherit;
+  border: 2px dashed var(--q-color-primary);
 }
 
 </style>

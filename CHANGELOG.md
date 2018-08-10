@@ -1,6 +1,12 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.35 - 2018-08-10
+### Changed
+- removed solid background for sections -- changed to dashed border
+- moved OLesson title and menu icon into a toolbar -- main idea shows up in a box after scrolling for referral
+- various css changes for positioning purposes
+
 ## 0.0.34 - 2018-07-11
 TESTING FOR RELEASE
 ### Added

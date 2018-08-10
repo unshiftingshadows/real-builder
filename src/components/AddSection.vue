@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 relative-position" style="height: 70px">
+  <div class="col-12 relative-position" style="height: 70px; margin-top: 20px;">
     <q-btn color="primary" class="absolute-center" @click.native="showAddSection = true">Add Section</q-btn>
     <q-modal v-model="showAddSection" ref="addNewSection" content-classes="add-section-modal">
       <div class="row gutter-md">

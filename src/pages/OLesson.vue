@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row gutter-md items-center">
       <div class="col-xs-12">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+        <!-- <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
           <q-popover anchor="bottom right" self="top right">
             <q-list link>
               <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
@@ -14,12 +14,12 @@
               <q-item-separator />
               <q-item v-close-overlay @click.native="archiveConfirmation = true">Archive...</q-item>
               <q-item v-close-overlay>Collaborate...</q-item>
-              <!-- <q-item v-close-overlay>Print...</q-item> -->
-              <!-- <q-item v-close-overlay>Present...</q-item> -->
+              <q-item v-close-overlay>Print...</q-item>
+              <q-item v-close-overlay>Present...</q-item>
             </q-list>
           </q-popover>
-        </q-btn>
-        <h3>{{ lesson.title }}</h3>
+        </q-btn> -->
+        <!-- <h3>{{ lesson.title }}</h3> -->
         <!-- <q-input v-model="seriesName" float-label="Series">
           <q-autocomplete
             @search="search"
@@ -112,6 +112,34 @@
         </div>
       </div>
     </q-modal>
+    <q-page-sticky position="top">
+      <q-toolbar color="secondary" style="z-index: 10;">
+        <q-toolbar-title>
+          {{ lesson.title }}
+        </q-toolbar-title>
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay @click.native="showPreview = true">Preview</q-item>
+              <q-item-separator />
+              <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.before.hook" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Application" v-model="structure.after.application" /></q-item>
+              <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.after.prayer" /></q-item>
+              <q-item-separator />
+              <q-item v-close-overlay @click.native="archiveConfirmation = true">Archive...</q-item>
+              <q-item v-close-overlay>Collaborate...</q-item>
+              <!-- <q-item v-close-overlay>Print...</q-item> -->
+              <!-- <q-item v-close-overlay>Present...</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
+      </q-toolbar>
+      <div class="bg-faded main-idea-tab float-right" v-bind:class="{ 'main-idea-show': showMainIdea }">
+        {{ lesson.mainIdea }}
+      </div>
+    </q-page-sticky>
+    <q-scroll-observable @scroll="userHasScrolled" />
   </q-page>
 </template>
 
@@ -151,7 +179,8 @@ export default {
       },
       updating: true,
       showPreview: false,
-      archiveConfirmation: false
+      archiveConfirmation: false,
+      showMainIdea: false
     }
   },
   mounted () {
@@ -228,12 +257,50 @@ export default {
         console.log(res)
         this.$router.push({ name: 'olist', params: { type: 'lesson' } })
       })
+    },
+    userHasScrolled (scroll) {
+      if (scroll.position < 30) {
+        this.showMainIdea = false
+      } else {
+        this.showMainIdea = true
+      }
     }
   }
 }
 </script>
 
 <style>
+
+.q-page-sticky span {
+  width: 100%;
+}
+
+.main-idea-tab {
+  z-index: 5;
+  width: 100%;
+  padding: 20px;
+  margin-top: -200px;
+  opacity: 0;
+  transition: margin-top 2s, opacity 2s;
+  -webkit-transition: margin-top 2s, opacity 2s;
+}
+
+.main-idea-show {
+  margin-top: 0px;
+  opacity: 1;
+}
+
+@media screen and (min-width: 800px) {
+  .main-idea-tab {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .main-idea-tab {
+    width: 30%;
+  }
+}
 
 .edit-title-modal, .preview-modal {
   padding: 30px;
