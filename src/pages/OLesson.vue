@@ -2,31 +2,6 @@
   <q-page padding>
     <div class="row gutter-md items-center">
       <div class="col-xs-12">
-        <!-- <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
-          <q-popover anchor="bottom right" self="top right">
-            <q-list link>
-              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
-              <q-item v-close-overlay @click.native="showPreview = true">Preview</q-item>
-              <q-item-separator />
-              <q-item v-close-overlay><q-toggle label="Hook" v-model="structure.before.hook" /></q-item>
-              <q-item v-close-overlay><q-toggle label="Application" v-model="structure.after.application" /></q-item>
-              <q-item v-close-overlay><q-toggle label="Prayer" v-model="structure.after.prayer" /></q-item>
-              <q-item-separator />
-              <q-item v-close-overlay @click.native="archiveConfirmation = true">Archive...</q-item>
-              <q-item v-close-overlay>Collaborate...</q-item>
-              <q-item v-close-overlay>Print...</q-item>
-              <q-item v-close-overlay>Present...</q-item>
-            </q-list>
-          </q-popover>
-        </q-btn> -->
-        <!-- <h3>{{ lesson.title }}</h3> -->
-        <!-- <q-input v-model="seriesName" float-label="Series">
-          <q-autocomplete
-            @search="search"
-            :min-characters="3"
-            @selected="selected"
-          />
-        </q-input> -->
       </div>
       <div class="col-12">
         <q-input v-model="lesson.mainIdea" float-label="Main Idea" type="textarea" :max-height="100" :min-rows="1" @blur="update" />
@@ -43,11 +18,7 @@
       <div class="col-xs-12 col-md-6">
         <q-chips-input v-model="lesson.tags" float-label="Tags" @blur="update" />
       </div>
-      <!-- <div class="col-12">
-        <bible-passage-list :passages="bibleRefs" />
-      </div> -->
       <div class="col-12">
-        <!-- <module-list type="olesson" :id="id" @modules-init="modulesInit" /> -->
         <content-editor :key="id" :id="id" type="olesson" @modules-init="modulesInit" />
       </div>
     </div>
@@ -145,19 +116,15 @@
 
 <script>
 import { Notify } from 'quasar'
-// import BiblePassageList from 'components/BiblePassageList.vue'
-// import ModuleList from 'components/ModuleList.vue'
 import ContentEditor from 'components/ContentEditor.vue'
 import ContentPreview from 'components/ContentPreview.vue'
 
 export default {
   components: {
-    // BiblePassageList,
-    // ModuleList,
     ContentEditor,
     ContentPreview
   },
-  // name: 'PageName',
+  name: 'OLesson',
   data () {
     return {
       id: this.$route.params.id,

@@ -1,6 +1,12 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.36 - 2018-08-21
+### Changed
+- OSermons and OScratchPads changed to match the new OLesson style
+- RSeries, RLesson, and RDevo changed to match the new OLesson style
+- RResearch, RGuide, and RReview changed to match the new OLesson style
+
 ## 0.0.35 - 2018-08-10
 ### Changed
 - removed solid background for sections -- changed to dashed border

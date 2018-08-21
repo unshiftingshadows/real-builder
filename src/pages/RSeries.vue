@@ -2,19 +2,6 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-12">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
-          <q-popover anchor="bottom right" self="top right">
-            <q-list link>
-              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
-              <!-- <q-item-separator /> -->
-              <!-- <q-item v-close-overlay>Archive</q-item> -->
-              <!-- <q-item v-close-overlay>Share...</q-item> -->
-              <!-- <q-item v-close-overlay>Print...</q-item> -->
-              <!-- <q-item v-close-overlay>Present...</q-item> -->
-            </q-list>
-          </q-popover>
-        </q-btn>
-        <h3>{{ series.title }}</h3>
       </div>
       <div class="col-12">
         <q-input v-model="series.mainIdea" float-label="Main Idea" type="textarea" :max-height="150" :min-rows="3" @blur="update()" />
@@ -43,6 +30,29 @@
         </div>
       </div>
     </q-modal>
+    <q-page-sticky position="top">
+      <q-toolbar color="secondary" style="z-index: 10;">
+        <q-toolbar-title>
+          {{ series.title }}
+        </q-toolbar-title>
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <!-- <q-item-separator /> -->
+              <!-- <q-item v-close-overlay>Archive</q-item> -->
+              <!-- <q-item v-close-overlay>Share...</q-item> -->
+              <!-- <q-item v-close-overlay>Print...</q-item> -->
+              <!-- <q-item v-close-overlay>Present...</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
+      </q-toolbar>
+      <div class="bg-faded main-idea-tab float-right" v-bind:class="{ 'main-idea-show': showMainIdea }">
+        {{ series.mainIdea }}
+      </div>
+    </q-page-sticky>
+    <q-scroll-observable @scroll="userHasScrolled" />
   </q-page>
 </template>
 
@@ -59,7 +69,8 @@ export default {
     return {
       id: this.$route.params.seriesid,
       series: {},
-      editTitle: false
+      editTitle: false,
+      showMainIdea: false
     }
   },
   firebase () {
@@ -96,12 +107,50 @@ export default {
           position: 'bottom-left'
         })
       })
+    },
+    userHasScrolled (scroll) {
+      if (scroll.position < 30) {
+        this.showMainIdea = false
+      } else {
+        this.showMainIdea = true
+      }
     }
   }
 }
 </script>
 
 <style>
+
+.q-page-sticky span {
+  width: 100%;
+}
+
+.main-idea-tab {
+  z-index: 5;
+  width: 100%;
+  padding: 20px;
+  margin-top: -200px;
+  opacity: 0;
+  transition: margin-top 2s, opacity 2s;
+  -webkit-transition: margin-top 2s, opacity 2s;
+}
+
+.main-idea-show {
+  margin-top: 0px;
+  opacity: 1;
+}
+
+@media screen and (min-width: 800px) {
+  .main-idea-tab {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .main-idea-tab {
+    width: 30%;
+  }
+}
 
 .edit-title-modal {
   padding: 30px;

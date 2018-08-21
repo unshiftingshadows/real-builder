@@ -2,17 +2,6 @@
   <q-page padding>
     <div class="row gutter-md">
       <div class="col-12">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
-          <q-popover anchor="bottom right" self="top right">
-            <q-list link>
-              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
-              <q-item v-close-overlay>Convert to Sermon</q-item>
-              <q-item v-close-overlay>Convert to Lesson</q-item>
-              <!-- <q-item v-close-overlay>Archive</q-item> -->
-            </q-list>
-          </q-popover>
-        </q-btn>
-        <h3>{{ scratch.title }}</h3>
       </div>
       <div class="col-12">
         <editor :text.sync="scratch.text" :save="update" />
@@ -50,6 +39,23 @@
         </div>
       </div>
     </q-modal>
+    <q-page-sticky position="top">
+      <q-toolbar color="secondary" style="z-index: 10;">
+        <q-toolbar-title>
+          {{ scratch.title }}
+        </q-toolbar-title>
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay>Convert to Sermon</q-item>
+              <q-item v-close-overlay>Convert to Lesson</q-item>
+              <!-- <q-item v-close-overlay>Archive</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
+      </q-toolbar>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -110,4 +116,9 @@ export default {
 </script>
 
 <style>
+
+.q-page-sticky span {
+  width: 100%;
+}
+
 </style>

@@ -1,27 +1,7 @@
 <template>
   <q-page padding>
     <div class="row gutter-md">
-      <div class="col-xs-12 col-md-6">
-        <h3>{{ lesson.title }} <span class="q-headline text-weight-light">Research</span></h3>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right" style="margin-left: 10px; margin-bottom: 10px;">
-          <q-popover anchor="bottom right" self="top right">
-            <q-list link>
-              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
-              <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
-              <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
-              <q-item link v-close-overlay @click.native="$router.push({ name: 'rguide', params: { seriesid: $route.params.seriesid, lessonid: id } })">Guides</q-item>
-              <q-item link v-close-overlay @click.native="$router.push({ name: 'rreview', params: { seriesid: $route.params.seriesid, lessonid: id } })">Review</q-item>
-              <!-- <q-item-separator /> -->
-              <!-- <q-item v-close-overlay>Archive</q-item> -->
-              <!-- <q-item v-close-overlay>Share...</q-item> -->
-              <!-- <q-item v-close-overlay>Print...</q-item> -->
-              <!-- <q-item v-close-overlay>Present...</q-item> -->
-            </q-list>
-          </q-popover>
-        </q-btn>
-        <p>{{ lesson.mainIdea }}</p>
+      <div class="col-xs-12" style="height: 130px;">
       </div>
       <div class="col-12">
         <q-input type="text" v-model="searchTerms" float-label="Search for resources" clearable @keyup.enter="search" />
@@ -76,6 +56,32 @@
         </div>
       </div>
     </q-modal>
+    <q-page-sticky position="top">
+      <q-toolbar color="secondary" style="z-index: 10;">
+        <q-toolbar-title>
+          {{ lesson.title }} <span class="q-headline-text text-weight-light">| Research</span>
+        </q-toolbar-title>
+        <q-btn icon="fas fa-ellipsis-v" color="primary" class="float-right">
+          <q-popover anchor="bottom right" self="top right">
+            <q-list link>
+              <q-item v-close-overlay @click.native="editTitle = true">Rename...</q-item>
+              <q-item v-close-overlay @click.native="editMainIdea = true">Main Idea</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rlesson', params: { seriesid: $route.params.seriesid, lessonid: id } })">Devos</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rguide', params: { seriesid: $route.params.seriesid, lessonid: id } })">Guides</q-item>
+              <q-item link v-close-overlay @click.native="$router.push({ name: 'rreview', params: { seriesid: $route.params.seriesid, lessonid: id } })">Review</q-item>
+              <!-- <q-item-separator /> -->
+              <!-- <q-item v-close-overlay>Archive</q-item> -->
+              <!-- <q-item v-close-overlay>Share...</q-item> -->
+              <!-- <q-item v-close-overlay>Print...</q-item> -->
+              <!-- <q-item v-close-overlay>Present...</q-item> -->
+            </q-list>
+          </q-popover>
+        </q-btn>
+      </q-toolbar>
+      <div class="bg-faded main-idea-tab float-right main-idea-show">
+        {{ lesson.mainIdea }}
+      </div>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -158,4 +164,30 @@ export default {
 </script>
 
 <style>
+
+.q-page-sticky span {
+  width: 100%;
+}
+
+.main-idea-tab {
+  z-index: 5;
+  width: 100%;
+  padding: 20px;
+  margin-top: -200px;
+  opacity: 0;
+  transition: margin-top 2s, opacity 2s;
+  -webkit-transition: margin-top 2s, opacity 2s;
+}
+
+.main-idea-show {
+  margin-top: 0px;
+  opacity: 1;
+}
+
+@media screen and (min-width: 800px) {
+  .main-idea-tab {
+    width: 50%;
+  }
+}
+
 </style>
