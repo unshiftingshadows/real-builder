@@ -1,5 +1,5 @@
 <template>
-  <q-card color="primary">
+  <q-card flat>
     <q-card-title>
       <h4 style="margin: 0;">
         <q-icon v-if="!open" name="fas fa-caret-right cursor-pointer" style="margin-top: -5px; padding-left: 4px; padding-right: 4px;" size="2rem" @click.native="open = true" />
@@ -62,4 +62,10 @@ export default {
 </script>
 
 <style>
+
+.section-preview {
+  background-color: inherit;
+  border: 2px dashed var(--q-color-primary);
+}
+
 </style>

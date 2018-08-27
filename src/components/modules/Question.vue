@@ -26,7 +26,7 @@
         <div class="row gutter-sm">
           <div class="col-12">
             <q-btn link class="float-right cursor-pointer" icon="fas fa-times" size="sm" @click.native="close" />
-            <q-input v-model="data.text" float-label="Question" type="textarea" :max-height="100" :min-rows="1" autofocus />
+            <q-input v-model="data.text" float-label="Question" type="text" autofocus />
           </div>
           <div class="col-12">
             <q-input v-model="data.notes" float-label="Notes" type="textarea" :max-height="100" :min-rows="1" />

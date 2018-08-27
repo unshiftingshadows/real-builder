@@ -8,7 +8,18 @@
         <span slot="subtitle" v-if="data.title !== ''">{{ data.title }}</span>
       </q-card-title>
       <q-card-main>
-        <p><span v-html="data.text" /></p>
+        <div v-if="data.thought !== ''">
+          <p><b>Thought</b></p>
+          <p>{{ data.thought }}</p>
+        </div>
+        <div v-if="data.today !== ''">
+          <p><b>Today</b></p>
+          <p>{{ data.today }}</p>
+        </div>
+        <div v-if="data.thisweek !== ''">
+          <p><b>This Week</b></p>
+          <p>{{ data.thisweek }}</p>
+        </div>
       </q-card-main>
     </div>
     <div v-if="data.editing">

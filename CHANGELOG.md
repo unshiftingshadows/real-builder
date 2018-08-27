@@ -1,6 +1,12 @@
 # Changelog
 All notable changes for this project will be documented in this file.
 
+## 0.0.37 - 2018-08-27
+### Fixed
+- section preview now has a dashed border rather than a solid fill
+- application module now saves and displays texts properly
+- question module uses a single line input rather than a multi-line input for editing the question text
+
 ## 0.0.36 - 2018-08-21
 ### Changed
 - OSermons and OScratchPads changed to match the new OLesson style
